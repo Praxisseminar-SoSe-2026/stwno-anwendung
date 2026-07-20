@@ -1,4 +1,14 @@
 services:
+  backend:
+    build: .
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql+pg8000://stwno:stwno@db:5432/stwno_db
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+
   db:
     image: postgres:16
     restart: unless-stopped
