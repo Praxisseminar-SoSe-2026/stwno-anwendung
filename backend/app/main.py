@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy import text
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import Session
@@ -16,6 +16,6 @@ app.include_router(permission.router)
 def health_check(db: Session = Depends(get_db)):
     try:
         db.execute(text("SELECT 1"))
-    except OperationalError:
-        raise HTTPException(status_code=503, detail="Database unavailable")
+    except OperationalError as exc:
+        raise HTTPException(status_code=503, detail="Database unavailable") from exc
     return {"status": "ok"}
