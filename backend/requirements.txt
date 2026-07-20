@@ -1,3 +1,9 @@
+colorama==0.4.6
+iniconfig==2.3.0
+packaging==26.2
+pluggy==1.6.0
+Pygments==2.20.0
+pytest==9.1.1
 fastapi~=0.139.2
 uvicorn[standard]
 sqlalchemy~=2.0.51
