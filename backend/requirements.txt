@@ -1,5 +1,6 @@
-fastapi
+fastapi~=0.139.2
 uvicorn[standard]
-sqlalchemy
+sqlalchemy~=2.0.51
 pydantic-settings
 python-dotenv
+pydantic~=2.13.4
