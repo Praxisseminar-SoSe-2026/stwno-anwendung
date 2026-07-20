@@ -4,5 +4,5 @@ sqlalchemy~=2.0.51
 pydantic-settings
 python-dotenv
 pydantic~=2.13.4
-psycopg2~=2.9.12
+pg8000
 alembic~=1.18.5
