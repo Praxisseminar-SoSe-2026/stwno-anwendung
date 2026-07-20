@@ -5,3 +5,4 @@ pydantic-settings
 python-dotenv
 pydantic~=2.13.4
 psycopg2~=2.9.12
+alembic~=1.18.5
