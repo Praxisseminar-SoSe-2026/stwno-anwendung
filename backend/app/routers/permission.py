@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.db.database import get_db
-from app.schemas.permission import PermissionCreate, PermissionRead
+from app.schemas.permission import PermissionRead
 from app.services import permission_service
 
 router = APIRouter(prefix="/permissions", tags=["permissions"])
