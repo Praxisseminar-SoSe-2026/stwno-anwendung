@@ -5,7 +5,8 @@ export async function checkHealth(): Promise<boolean> {
   try {
     const res = await fetch(`${BASE_URL}/health`)
     return res.ok
-  } catch {
+  } catch (err) {
+    console.error('Health check failed:', err)
     return false
   }
 }
