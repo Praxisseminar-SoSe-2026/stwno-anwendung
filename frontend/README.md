@@ -2,6 +2,10 @@
 
 ## Setup
 
+### Prerequisites
+
+- Node v24.18.0
+
 ### Install Dependencies
 
 ```
