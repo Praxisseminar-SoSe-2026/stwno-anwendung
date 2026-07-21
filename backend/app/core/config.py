@@ -6,6 +6,7 @@ class Settings(BaseSettings):
 
     app_name: str = "STWNO Anwendung Backend"
     database_url: str
+    frontend_url: str
 
 
 settings = Settings()
