@@ -5,10 +5,11 @@ existieren in der DB). Ausfuehren mit:
 
     python -m app.db.seed
 """
+
 from __future__ import annotations
 
 import hashlib
-from datetime import date, datetime, timedelta, timezone
+from datetime import UTC, date, datetime, timedelta
 
 from app.db.database import SessionLocal
 from app.models import (
@@ -23,8 +24,8 @@ from app.models import (
     RolePermission,
     User,
     UserRole,
-    WashRoom,
     WashingMachine,
+    WashRoom,
 )
 
 
@@ -42,7 +43,9 @@ def seed() -> None:
         # Roles & Permissions
         role_worker = Role(name="mitarbeiter", description="Studentenwerk-Mitarbeiter")
         role_admin = Role(name="admin", description="Entwickler")
-        role_facility_manager = Role(name="hausmeister", description="Hausmeister / Facility Manager")
+        role_facility_manager = Role(
+            name="hausmeister", description="Hausmeister / Facility Manager"
+        )
         role_resident = Role(name="bewohner", description="Wohnheim-Bewohner")
         db.add_all([role_worker, role_admin, role_facility_manager, role_resident])
         db.flush()
@@ -57,15 +60,31 @@ def seed() -> None:
         perm_edit_announcement = Permission(
             name="edit_announcement", description="Ankuendigungen bearbeiten"
         )
-        perm_manage_users = Permission(name="manage_users", description="Nutzer verwalten")
-        db.add_all([perm_manage_requests, perm_post_announcement, perm_manage_users, perm_edit_announcement])
+        perm_manage_users = Permission(
+            name="manage_users", description="Nutzer verwalten"
+        )
+        db.add_all(
+            [
+                perm_manage_requests,
+                perm_post_announcement,
+                perm_manage_users,
+                perm_edit_announcement,
+            ]
+        )
         db.flush()
 
         db.add_all(
             [
-                RolePermission(role_id=role_facility_manager.id, permission_id=perm_manage_requests.id),
-                RolePermission(role_id=role_admin.id, permission_id=perm_post_announcement.id),
-                RolePermission(role_id=role_admin.id, permission_id=perm_manage_users.id),
+                RolePermission(
+                    role_id=role_facility_manager.id,
+                    permission_id=perm_manage_requests.id,
+                ),
+                RolePermission(
+                    role_id=role_admin.id, permission_id=perm_post_announcement.id
+                ),
+                RolePermission(
+                    role_id=role_admin.id, permission_id=perm_manage_users.id
+                ),
             ]
         )
 
@@ -149,18 +168,20 @@ def seed() -> None:
 
         db.add_all(
             [
-                WashingMachine(wash_room_id=wash_room.id, label="Maschine 1", status="Frei"),
+                WashingMachine(
+                    wash_room_id=wash_room.id, label="Maschine 1", status="Frei"
+                ),
                 WashingMachine(
                     wash_room_id=wash_room.id,
                     label="Maschine 2",
                     status="Belegt",
-                    last_signal_at=datetime.now(timezone.utc),
+                    last_signal_at=datetime.now(UTC),
                 ),
                 WashingMachine(
                     wash_room_id=wash_room.id,
                     label="Maschine 3",
                     status="Belegt",
-                    last_signal_at=datetime.now(timezone.utc),
+                    last_signal_at=datetime.now(UTC),
                 ),
             ]
         )
@@ -169,14 +190,16 @@ def seed() -> None:
         db.add(
             FaqEntry(
                 question="Wie trenne ich meinen Müll?",
-                answer="Bitte Plastik und Metall in die gelben Säcke, Papier in die grüne Tonne und Restmüll in die schwarze Tonne",
+                answer="Bitte Plastik und Metall in die gelben Säcke, "
+                       "Papier in die grüne Tonne und Restmüll in die schwarze Tonne",
                 created_by_id=admin.id,
             )
         )
         db.add(
             Announcement(
                 title="Kontrolle Feuermelder",
-                text="Am Montag werden von 9-12 Uhr die Feuermelder in den Wohnungen überprüft.",
+                text="Am Montag werden von 9-12 Uhr "
+                     "die Feuermelder in den Wohnungen überprüft.",
                 important=True,
                 author_id=admin.id,
                 dormitory_id=dorm.id,

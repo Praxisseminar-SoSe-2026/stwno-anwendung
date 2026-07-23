@@ -1,18 +1,18 @@
 """initial
 
 Revision ID: d9af27259c92
-Revises: 
+Revises:
 Create Date: 2026-07-20 16:15:33.336302
 
 """
+
 from typing import Sequence, Union
 
 from alembic import op
 import sqlalchemy as sa
 
-
 # revision identifiers, used by Alembic.
-revision: str = 'd9af27259c92'
+revision: str = "d9af27259c92"
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -61,18 +61,29 @@ def upgrade() -> None:
         sa.Column("language", sa.String(), nullable=True, server_default="de"),
         sa.Column("is_locked", sa.Boolean(), nullable=True, server_default=sa.false()),
         sa.Column("locked_at", sa.DateTime(), nullable=True),
-        sa.Column("dormitory_id", sa.Integer(), sa.ForeignKey("dormitories.id"), nullable=True),
-        sa.Column("created_at", sa.DateTime(), nullable=True, server_default=sa.func.now()),
+        sa.Column(
+            "dormitory_id", sa.Integer(), sa.ForeignKey("dormitories.id"), nullable=True
+        ),
+        sa.Column(
+            "created_at", sa.DateTime(), nullable=True, server_default=sa.func.now()
+        ),
     )
     op.create_index(op.f("ix_users_id"), "users", ["id"])
     op.create_index(op.f("ix_users_email"), "users", ["email"], unique=True)
-    op.create_index(op.f("ix_users_person_number"), "users", ["person_number"], unique=True)
+    op.create_index(
+        op.f("ix_users_person_number"), "users", ["person_number"], unique=True
+    )
 
     op.create_table(
         "role_permissions",
         sa.Column("id", sa.Integer(), sa.Identity(), primary_key=True),
         sa.Column("role_id", sa.Integer(), sa.ForeignKey("roles.id"), nullable=False),
-        sa.Column("permission_id", sa.Integer(), sa.ForeignKey("permissions.id"), nullable=False),
+        sa.Column(
+            "permission_id",
+            sa.Integer(),
+            sa.ForeignKey("permissions.id"),
+            nullable=False,
+        ),
     )
     op.create_index(op.f("ix_role_permissions_id"), "role_permissions", ["id"])
     op.create_index(
@@ -90,13 +101,21 @@ def upgrade() -> None:
     )
     op.create_index(op.f("ix_user_roles_id"), "user_roles", ["id"])
     op.create_index(
-        "ix_user_roles_user_id_role_id", "user_roles", ["user_id", "role_id"], unique=True
+        "ix_user_roles_user_id_role_id",
+        "user_roles",
+        ["user_id", "role_id"],
+        unique=True,
     )
 
     op.create_table(
         "dormitory_facility_managers",
         sa.Column("id", sa.Integer(), sa.Identity(), primary_key=True),
-        sa.Column("dormitory_id", sa.Integer(), sa.ForeignKey("dormitories.id"), nullable=False),
+        sa.Column(
+            "dormitory_id",
+            sa.Integer(),
+            sa.ForeignKey("dormitories.id"),
+            nullable=False,
+        ),
         sa.Column("user_id", sa.Integer(), sa.ForeignKey("users.id"), nullable=False),
     )
     op.create_index(
@@ -112,7 +131,12 @@ def upgrade() -> None:
     op.create_table(
         "community_rooms",
         sa.Column("id", sa.Integer(), sa.Identity(), primary_key=True),
-        sa.Column("dormitory_id", sa.Integer(), sa.ForeignKey("dormitories.id"), nullable=False),
+        sa.Column(
+            "dormitory_id",
+            sa.Integer(),
+            sa.ForeignKey("dormitories.id"),
+            nullable=False,
+        ),
         sa.Column("name", sa.String(), nullable=False),
         sa.Column("description", sa.String(), nullable=True),
     )
@@ -121,7 +145,12 @@ def upgrade() -> None:
     op.create_table(
         "item_types",
         sa.Column("id", sa.Integer(), sa.Identity(), primary_key=True),
-        sa.Column("dormitory_id", sa.Integer(), sa.ForeignKey("dormitories.id"), nullable=False),
+        sa.Column(
+            "dormitory_id",
+            sa.Integer(),
+            sa.ForeignKey("dormitories.id"),
+            nullable=False,
+        ),
         sa.Column("name", sa.String(), nullable=False),
         sa.Column("total_count", sa.Integer(), nullable=False, server_default="0"),
     )
@@ -130,10 +159,16 @@ def upgrade() -> None:
     op.create_table(
         "item_reservations",
         sa.Column("id", sa.Integer(), sa.Identity(), primary_key=True),
-        sa.Column("item_type_id", sa.Integer(), sa.ForeignKey("item_types.id"), nullable=False),
-        sa.Column("resident_id", sa.Integer(), sa.ForeignKey("users.id"), nullable=False),
+        sa.Column(
+            "item_type_id", sa.Integer(), sa.ForeignKey("item_types.id"), nullable=False
+        ),
+        sa.Column(
+            "resident_id", sa.Integer(), sa.ForeignKey("users.id"), nullable=False
+        ),
         sa.Column("status", sa.String(), nullable=False, server_default="Reserviert"),
-        sa.Column("reserved_at", sa.DateTime(), nullable=True, server_default=sa.func.now()),
+        sa.Column(
+            "reserved_at", sa.DateTime(), nullable=True, server_default=sa.func.now()
+        ),
         sa.Column("picked_up_at", sa.DateTime(), nullable=True),
         sa.Column("returned_at", sa.DateTime(), nullable=True),
     )
@@ -142,7 +177,12 @@ def upgrade() -> None:
     op.create_table(
         "wash_rooms",
         sa.Column("id", sa.Integer(), sa.Identity(), primary_key=True),
-        sa.Column("dormitory_id", sa.Integer(), sa.ForeignKey("dormitories.id"), nullable=False),
+        sa.Column(
+            "dormitory_id",
+            sa.Integer(),
+            sa.ForeignKey("dormitories.id"),
+            nullable=False,
+        ),
         sa.Column("name", sa.String(), nullable=False),
     )
     op.create_index(op.f("ix_wash_rooms_id"), "wash_rooms", ["id"])
@@ -150,7 +190,9 @@ def upgrade() -> None:
     op.create_table(
         "washing_machines",
         sa.Column("id", sa.Integer(), sa.Identity(), primary_key=True),
-        sa.Column("wash_room_id", sa.Integer(), sa.ForeignKey("wash_rooms.id"), nullable=False),
+        sa.Column(
+            "wash_room_id", sa.Integer(), sa.ForeignKey("wash_rooms.id"), nullable=False
+        ),
         sa.Column("label", sa.String(), nullable=False),
         sa.Column("status", sa.String(), nullable=False, server_default="Unbekannt"),
         sa.Column("last_signal_at", sa.DateTime(), nullable=True),
@@ -162,7 +204,9 @@ def upgrade() -> None:
         sa.Column("id", sa.Integer(), sa.Identity(), primary_key=True),
         sa.Column("question", sa.String(), nullable=False),
         sa.Column("answer", sa.Text(), nullable=False),
-        sa.Column("created_by_id", sa.Integer(), sa.ForeignKey("users.id"), nullable=True),
+        sa.Column(
+            "created_by_id", sa.Integer(), sa.ForeignKey("users.id"), nullable=True
+        ),
         sa.Column("updated_at", sa.DateTime(), nullable=True),
     )
     op.create_index(op.f("ix_faq_entries_id"), "faq_entries", ["id"])
@@ -175,8 +219,12 @@ def upgrade() -> None:
         sa.Column("image_url", sa.String(), nullable=True),
         sa.Column("important", sa.Boolean(), nullable=True, server_default=sa.false()),
         sa.Column("author_id", sa.Integer(), sa.ForeignKey("users.id"), nullable=False),
-        sa.Column("dormitory_id", sa.Integer(), sa.ForeignKey("dormitories.id"), nullable=True),
-        sa.Column("created_at", sa.DateTime(), nullable=True, server_default=sa.func.now()),
+        sa.Column(
+            "dormitory_id", sa.Integer(), sa.ForeignKey("dormitories.id"), nullable=True
+        ),
+        sa.Column(
+            "created_at", sa.DateTime(), nullable=True, server_default=sa.func.now()
+        ),
     )
     op.create_index(op.f("ix_announcements_id"), "announcements", ["id"])
 
@@ -189,7 +237,9 @@ def upgrade() -> None:
         sa.Column("related_entity_type", sa.String(), nullable=True),
         sa.Column("related_entity_id", sa.Integer(), nullable=True),
         sa.Column("is_read", sa.Boolean(), nullable=True, server_default=sa.false()),
-        sa.Column("created_at", sa.DateTime(), nullable=True, server_default=sa.func.now()),
+        sa.Column(
+            "created_at", sa.DateTime(), nullable=True, server_default=sa.func.now()
+        ),
     )
     op.create_index(op.f("ix_notifications_id"), "notifications", ["id"])
 
@@ -197,9 +247,13 @@ def upgrade() -> None:
         "requests",
         sa.Column("id", sa.Integer(), sa.Identity(), primary_key=True),
         sa.Column("type", sa.String(), nullable=False),
-        sa.Column("resident_id", sa.Integer(), sa.ForeignKey("users.id"), nullable=False),
+        sa.Column(
+            "resident_id", sa.Integer(), sa.ForeignKey("users.id"), nullable=False
+        ),
         sa.Column("status", sa.String(), nullable=False, server_default="Offen"),
-        sa.Column("created_at", sa.DateTime(), nullable=True, server_default=sa.func.now()),
+        sa.Column(
+            "created_at", sa.DateTime(), nullable=True, server_default=sa.func.now()
+        ),
     )
     op.create_index(op.f("ix_requests_id"), "requests", ["id"])
 
@@ -209,9 +263,14 @@ def upgrade() -> None:
         sa.Column("description", sa.Text(), nullable=False),
         sa.Column("location", sa.String(), nullable=False),
         sa.Column("image_url", sa.String(), nullable=True),
-        sa.Column("entry_permission", sa.Boolean(), nullable=True, server_default=sa.false()),
         sa.Column(
-            "assigned_dormitory_id", sa.Integer(), sa.ForeignKey("dormitories.id"), nullable=True
+            "entry_permission", sa.Boolean(), nullable=True, server_default=sa.false()
+        ),
+        sa.Column(
+            "assigned_dormitory_id",
+            sa.Integer(),
+            sa.ForeignKey("dormitories.id"),
+            nullable=True,
         ),
     )
 
@@ -219,11 +278,16 @@ def upgrade() -> None:
         "room_requests",
         sa.Column("id", sa.Integer(), sa.ForeignKey("requests.id"), primary_key=True),
         sa.Column(
-            "community_room_id", sa.Integer(), sa.ForeignKey("community_rooms.id"), nullable=False
+            "community_room_id",
+            sa.Integer(),
+            sa.ForeignKey("community_rooms.id"),
+            nullable=False,
         ),
         sa.Column("start_datetime", sa.DateTime(), nullable=False),
         sa.Column("end_datetime", sa.DateTime(), nullable=False),
-        sa.Column("decided_by_id", sa.Integer(), sa.ForeignKey("users.id"), nullable=True),
+        sa.Column(
+            "decided_by_id", sa.Integer(), sa.ForeignKey("users.id"), nullable=True
+        ),
         sa.Column("decided_at", sa.DateTime(), nullable=True),
     )
 
@@ -257,8 +321,12 @@ def upgrade() -> None:
             nullable=False,
         ),
         sa.Column("status", sa.String(), nullable=False),
-        sa.Column("changed_by_id", sa.Integer(), sa.ForeignKey("users.id"), nullable=False),
-        sa.Column("changed_at", sa.DateTime(), nullable=True, server_default=sa.func.now()),
+        sa.Column(
+            "changed_by_id", sa.Integer(), sa.ForeignKey("users.id"), nullable=False
+        ),
+        sa.Column(
+            "changed_at", sa.DateTime(), nullable=True, server_default=sa.func.now()
+        ),
     )
     op.create_index(
         op.f("ix_repair_request_status_histories_id"),
@@ -269,20 +337,30 @@ def upgrade() -> None:
     op.create_table(
         "request_comments",
         sa.Column("id", sa.Integer(), sa.Identity(), primary_key=True),
-        sa.Column("request_id", sa.Integer(), sa.ForeignKey("requests.id"), nullable=False),
+        sa.Column(
+            "request_id", sa.Integer(), sa.ForeignKey("requests.id"), nullable=False
+        ),
         sa.Column("author_id", sa.Integer(), sa.ForeignKey("users.id"), nullable=False),
         sa.Column("text", sa.Text(), nullable=False),
-        sa.Column("created_at", sa.DateTime(), nullable=True, server_default=sa.func.now()),
+        sa.Column(
+            "created_at", sa.DateTime(), nullable=True, server_default=sa.func.now()
+        ),
     )
     op.create_index(op.f("ix_request_comments_id"), "request_comments", ["id"])
 
     op.create_table(
         "consents",
-        sa.Column("id", sa.Integer(), sa.ForeignKey("repair_requests.id"), primary_key=True),
-        sa.Column("resident_id", sa.Integer(), sa.ForeignKey("users.id"), nullable=False),
+        sa.Column(
+            "id", sa.Integer(), sa.ForeignKey("repair_requests.id"), primary_key=True
+        ),
+        sa.Column(
+            "resident_id", sa.Integer(), sa.ForeignKey("users.id"), nullable=False
+        ),
         sa.Column("consent_given", sa.Boolean(), nullable=False),
         sa.Column("consent_text_version", sa.String(), nullable=False),
-        sa.Column("timestamp", sa.DateTime(), nullable=True, server_default=sa.func.now()),
+        sa.Column(
+            "timestamp", sa.DateTime(), nullable=True, server_default=sa.func.now()
+        ),
     )
 
 

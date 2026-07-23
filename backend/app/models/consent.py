@@ -1,15 +1,19 @@
 from __future__ import annotations
 
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.database import Base
 
+if TYPE_CHECKING:
+    from app.models.repair_request import RepairRequest
+    from app.models.user import User
+
 
 class Consent(Base):
-
 
     __tablename__ = "consents"
 
@@ -20,5 +24,5 @@ class Consent(Base):
     # Sketch: kein NOT NULL, nur DEFAULT (now()) -> nullable
     timestamp: Mapped[datetime | None] = mapped_column(server_default=func.now())
 
-    repair_request: Mapped["RepairRequest"] = relationship(back_populates="consent")
-    resident: Mapped["User"] = relationship(back_populates="consents")
+    repair_request: Mapped[RepairRequest] = relationship(back_populates="consent")
+    resident: Mapped[User] = relationship(back_populates="consents")

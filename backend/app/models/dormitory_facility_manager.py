@@ -1,7 +1,13 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+if TYPE_CHECKING:
+    from app.models.dormitory import Dormitory
+    from app.models.user import User
 
 from app.db.database import Base
 
@@ -14,5 +20,5 @@ class DormitoryFacilityManager(Base):
     dormitory_id: Mapped[int] = mapped_column(ForeignKey("dormitories.id"))
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
 
-    dormitory: Mapped["Dormitory"] = relationship(back_populates="facility_managers")
-    user: Mapped["User"] = relationship(back_populates="facility_manager_of")
+    dormitory: Mapped[Dormitory] = relationship(back_populates="facility_managers")
+    user: Mapped[User] = relationship(back_populates="facility_manager_of")

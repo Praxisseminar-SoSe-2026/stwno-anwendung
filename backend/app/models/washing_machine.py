@@ -1,11 +1,15 @@
 from __future__ import annotations
 
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.database import Base
+
+if TYPE_CHECKING:
+    from app.models.wash_room import WashRoom
 
 
 class WashingMachine(Base):
@@ -17,4 +21,4 @@ class WashingMachine(Base):
     status: Mapped[str] = mapped_column(default="Unbekannt", server_default="Unbekannt")
     last_signal_at: Mapped[datetime | None] = mapped_column(default=None)
 
-    wash_room: Mapped["WashRoom"] = relationship(back_populates="washing_machines")
+    wash_room: Mapped[WashRoom] = relationship(back_populates="washing_machines")

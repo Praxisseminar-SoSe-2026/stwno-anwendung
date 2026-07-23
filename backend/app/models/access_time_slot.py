@@ -1,11 +1,15 @@
 from __future__ import annotations
 
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.database import Base
+
+if TYPE_CHECKING:
+    from app.models.repair_request import RepairRequest
 
 
 class AccessTimeSlot(Base):
@@ -18,4 +22,6 @@ class AccessTimeSlot(Base):
     start_time: Mapped[datetime]
     end_time: Mapped[datetime]
 
-    repair_request: Mapped["RepairRequest"] = relationship(back_populates="access_time_slot")
+    repair_request: Mapped[RepairRequest] = relationship(
+        back_populates="access_time_slot"
+    )

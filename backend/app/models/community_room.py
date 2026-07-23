@@ -1,9 +1,15 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.database import Base
+
+if TYPE_CHECKING:
+    from app.models.dormitory import Dormitory
+    from app.models.room_request import RoomRequest
 
 
 class CommunityRoom(Base):
@@ -14,5 +20,7 @@ class CommunityRoom(Base):
     name: Mapped[str]
     description: Mapped[str | None] = mapped_column(default=None)
 
-    dormitory: Mapped["Dormitory"] = relationship(back_populates="community_rooms")
-    room_requests: Mapped[list["RoomRequest"]] = relationship(back_populates="community_room")
+    dormitory: Mapped[Dormitory] = relationship(back_populates="community_rooms")
+    room_requests: Mapped[list[RoomRequest]] = relationship(
+        back_populates="community_room"
+    )
