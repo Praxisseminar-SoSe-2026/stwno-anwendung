@@ -7,6 +7,8 @@ class Settings(BaseSettings):
     app_name: str = "STWNO Anwendung Backend"
     database_url: str
     frontend_url: str
+    environment: str = "development"  # Use "production" in production usage
+    log_level: str = "INFO"
 
 
 settings = Settings()

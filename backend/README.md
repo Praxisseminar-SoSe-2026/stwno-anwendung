@@ -145,6 +145,9 @@ black app
 ruff check app 
 ```
 
+## Logging
+Logging is configured centrally in `app/core/logging.py`. Every request is logged automatically via a middleware, including method, path, status code, and response time.
+
 ## Project structure
 ```
 app/

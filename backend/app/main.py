@@ -5,8 +5,12 @@ from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
+from app.core.logging import setup_logging
+from app.core.middleware import RequestLoggingMiddleware
 from app.db.database import get_db
 from app.routers import permission
+
+setup_logging(level=settings.log_level, environment=settings.environment)
 
 app = FastAPI(title=settings.app_name)
 
@@ -18,6 +22,8 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["Authorization", "Content-Type"],
 )
+
+app.add_middleware(RequestLoggingMiddleware)
 
 app.include_router(permission.router)
 
