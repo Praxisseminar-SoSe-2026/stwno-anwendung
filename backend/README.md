@@ -131,6 +131,19 @@ docker compose exec backend alembic current
 alembic current
 ```
 
+## Seed data
+Populate the database with test data (roles, dormitories, users, sample repair/room requests, etc.). Run this **after** `alembic upgrade head`.
+
+**Option A (Docker):**
+```bash
+docker compose exec backend python -m app.db.seed
+```
+
+**Option B (local):**
+```bash
+python -m app.db.seed
+```
+
 ## Linting & Formatting
 
 **Option A (Docker):**

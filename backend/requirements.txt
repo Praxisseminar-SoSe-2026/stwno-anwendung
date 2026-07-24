@@ -12,3 +12,4 @@ python-dotenv
 pydantic~=2.13.4
 pg8000
 alembic~=1.18.5
+uliweb-alembic
