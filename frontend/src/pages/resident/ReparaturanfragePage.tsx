@@ -1,3 +1,3 @@
 export function ReparaturanfragePage() {
-  return <h1>Reparaturanfrage</h1>
+  return <h1>Neue Reparaturanfrage</h1>
 }
