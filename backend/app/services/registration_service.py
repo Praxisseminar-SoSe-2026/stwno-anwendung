@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from app.models.user import User
 from app.services.stwno_mock import (
     STWNONotFoundError,
+    STWNOUnavailableError,
     verify_person_number,
 )
 
@@ -35,6 +36,8 @@ def register_user(db: Session, person_number: str) -> User:
         master_data = verify_person_number(person_number)
     except STWNONotFoundError as exc:
         raise VerificationFailedError(str(exc)) from exc
+    except STWNOUnavailableError as exc:
+        raise VerificationUnavailableError(str(exc)) from exc
 
     user = User(
         person_number=person_number,
