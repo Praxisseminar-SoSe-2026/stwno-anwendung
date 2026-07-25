@@ -24,7 +24,8 @@ def set_password_endpoint(payload: SetPasswordRequest, db: Session = Depends(get
     try:
         user = set_password(db, payload.email, payload.password)
     except UserNotFoundError as exc:
-        raise HTTPException(status_code=404, detail="No account found for this email") from exc
+        raise HTTPException(status_code=404, detail="No account found "
+                                                    "for this email") from exc
     except CredentialsAlreadySetError as exc:
         raise HTTPException(status_code=409, detail=str(exc)) from exc
 

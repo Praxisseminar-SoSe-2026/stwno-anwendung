@@ -22,7 +22,8 @@ def set_password(db: Session, email: str, password: str) -> User:
         raise UserNotFoundError(f"No user found for email {email}")
 
     if user.password_hash is not None:
-        raise CredentialsAlreadySetError("Login credentials are already set for this account")
+        raise CredentialsAlreadySetError("Login credentials are already "
+                                         "set for this account")
 
     user.password_hash = hash_password(password)
     db.commit()
