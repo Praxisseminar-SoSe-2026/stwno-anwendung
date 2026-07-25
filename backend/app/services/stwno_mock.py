@@ -31,7 +31,7 @@ _MOCK_DATABASE = {
 }
 
 # Toggle to simulate an outage in tests/manual testing.
-SIMULATE_OUTAGE = True
+SIMULATE_OUTAGE = False
 
 def verify_person_number(person_number: str) -> dict:
     if SIMULATE_OUTAGE:
