@@ -1,3 +1,7 @@
+import { useTranslation } from 'react-i18next'
+
 export function RoomBookingPage() {
-  return <h1>Raumbuchung</h1>
+  const { t } = useTranslation()
+
+  return <h1>{t('roomBooking.title')}</h1>
 }

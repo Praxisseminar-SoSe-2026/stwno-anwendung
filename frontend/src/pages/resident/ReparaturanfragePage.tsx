@@ -1,3 +1,7 @@
+import { useTranslation } from 'react-i18next'
+
 export function ReparaturanfragePage() {
-  return <h1>Neue Reparaturanfrage</h1>
+  const { t } = useTranslation()
+
+  return <h1>{t('repairRequest.title')}</h1>
 }
