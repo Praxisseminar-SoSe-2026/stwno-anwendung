@@ -3,7 +3,10 @@ import logging
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from app.core.dependencies import get_current_user
+from app.core.security import create_access_token
 from app.db.database import get_db
+from app.models import User
 from app.schemas.auth import LoginRequest, LoginResponse, SetPasswordRequest
 from app.schemas.user import UserResponse
 from app.services.auth_service import (
@@ -40,4 +43,15 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
         logger.warning("Failed login attempt for email %s", payload.email)
         raise HTTPException(status_code=401, detail=str(exc)) from exc
 
-    return user
+    token = create_access_token(user.id)
+    return LoginResponse(
+        access_token=token,
+        id=user.id,
+        email=user.email,
+        first_name=user.first_name,
+        last_name=user.last_name,
+    )
+
+@router.get("/me", response_model=UserResponse)
+def get_me(current_user: User = Depends(get_current_user)):
+    return current_user
