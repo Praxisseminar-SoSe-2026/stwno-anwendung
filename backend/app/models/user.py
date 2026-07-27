@@ -31,7 +31,7 @@ class User(Base):
     first_name: Mapped[str]
     last_name: Mapped[str]
     email: Mapped[str] = mapped_column(unique=True, index=True)
-    password_hash: Mapped[str]
+    password_hash: Mapped[str | None] = mapped_column(default=None)
     person_number: Mapped[str] = mapped_column(unique=True, index=True)
     flat_number: Mapped[str | None] = mapped_column(default=None)
     contract_end: Mapped[date | None] = mapped_column(default=None)
