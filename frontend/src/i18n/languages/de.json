@@ -9,7 +9,17 @@
     "isLoading": "lädt..."
   },
   "faq": {
-    "title": "Häufig gestellte Fragen"
+    "title": "Häufig gestellte Fragen",
+    "searchPlaceholder": "Suche...",
+    "noSearchResults": "Keine Ergebnisse zu dieser Suche.",
+    "category": {
+      "general": "Allgemein",
+      "laundry": "Waschküche",
+      "recycling": "Müll & Recycling",
+      "roomBooking": "Gemeinschaftsraum",
+      "moving": "Ein- und Auszug",
+      "miscellaneous": "Sonstiges"
+    }
   },
   "laundry": {
     "title": "Waschküche",
