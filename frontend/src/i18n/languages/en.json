@@ -1,0 +1,36 @@
+{
+  "index": {
+    "title": "Welcome to the STWNO application"
+  },
+  "healthcheck": {
+    "desc": "The backend ",
+    "isAvailable": "is available.",
+    "isNotAvailable": "is not available.",
+    "isLoading": "is loading..."
+  },
+  "faq": {
+    "title": "Frequently Asked Questions"
+  },
+  "laundry": {
+    "title": "Laundry Machines"
+  },
+  "repairRequest": {
+    "title": "Repair Request"
+  },
+  "roomBooking": {
+    "title": "Community Room Booking"
+  },
+  "adminIndex": {
+    "title": "Hello Boss!"
+  },
+  "adminTicketOverview": {
+    "title": "Ticket Overview (Repair and Room Booking Requests)",
+    "titleShort": "Ticket Overview"
+  },
+  "login": {
+    "title": "Login"
+  },
+  "notFound": {
+    "title": "404 - This page unfortunately doesn't exist :("
+  }
+}

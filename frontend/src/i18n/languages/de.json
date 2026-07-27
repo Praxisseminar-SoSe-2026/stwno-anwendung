@@ -1,0 +1,36 @@
+{
+  "index": {
+    "title": "Willkommen in der STWNO-Anwendung"
+  },
+  "healthcheck": {
+    "desc": "Das Backend ",
+    "isAvailable": "ist erreichbar.",
+    "isNotAvailable": "ist nicht erreichbar.",
+    "isLoading": "lädt..."
+  },
+  "faq": {
+    "title": "Häufig gestellte Fragen"
+  },
+  "laundry": {
+    "title": "Waschmaschinen"
+  },
+  "repairRequest": {
+    "title": "Reparaturanfrage"
+  },
+  "roomBooking": {
+    "title": "Gemeinschaftsraumbuchung"
+  },
+  "adminIndex": {
+    "title": "Hallo Chef!"
+  },
+  "adminTicketOverview": {
+    "title": "Ticket Übersicht (Reparatur- und Raumbuchungsanfragen)",
+    "titleShort": "Ticket Übersicht"
+  },
+  "login": {
+    "title": "Login"
+  },
+  "notFound": {
+    "title": "404 - Diese Seite gibts leider nicht :("
+  }
+}
