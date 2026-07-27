@@ -12,7 +12,16 @@
     "title": "Häufig gestellte Fragen"
   },
   "laundry": {
-    "title": "Waschmaschinen"
+    "title": "Waschküche",
+    "washingmaschines": "Waschmaschinen",
+    "washingmaschine": "Waschmaschine",
+    "dryers": "Trockner",
+    "dryer": "Trockner",
+    "status": {
+      "running": "läuft",
+      "idle": "frei",
+      "defect": "defekt"
+    }
   },
   "repairRequest": {
     "title": "Reparaturanfrage"
