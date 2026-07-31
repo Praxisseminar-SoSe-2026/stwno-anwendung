@@ -16,3 +16,5 @@ class LoginResponse(BaseModel):
     email: str
     first_name: str
     last_name: str
+    access_token: str
+    token_type: str = "bearer"

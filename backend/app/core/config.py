@@ -9,6 +9,9 @@ class Settings(BaseSettings):
     frontend_url: str
     environment: str = "development"  # Use "production" in production usage
     log_level: str = "INFO"
+    jwt_secret_key: str
+    jwt_algorithm: str = "HS256"
+    access_token_expire_minutes: int = 30
 
 
 settings = Settings()
