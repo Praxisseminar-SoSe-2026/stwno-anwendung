@@ -31,7 +31,8 @@ export async function getFaqs(lang: string): Promise<Faq[]> {
 */
 
 // ToDo: remove placeholder when implemented in backend
-export async function getFaqs(_lang: string): Promise<Faq[]> {
+export async function getFaqs(lang: string): Promise<Faq[]> {
+  if (lang) console.log('ignore')
   return Promise.resolve([
     {
       id: '1',
