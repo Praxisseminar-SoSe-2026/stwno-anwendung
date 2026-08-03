@@ -1,0 +1,8 @@
+- Fehlende Daten sind auf jeden Fall nicht geil und ein Problem (Ungewissheit) → Verzögerung
+- MUI und I18n ist sehr schön für Frontend
+- Arbeitsaufteilung lief top
+	- Sind uns nicht in die Quere gekommen
+	- wenigen Abhängigkeiten von einander
+- Zeitplan wurde gut eingeladen 
+- Einmal gab es Misskommunikation bzgl eines Termin
+- → Absage vom STWNO bzgl. Deployment auf dem Server und Daten-Export-Job
