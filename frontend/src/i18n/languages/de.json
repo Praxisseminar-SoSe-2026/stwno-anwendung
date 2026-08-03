@@ -47,7 +47,14 @@
     "titleShort": "Ticket Übersicht"
   },
   "login": {
-    "title": "Login"
+    "title": "Bei STWNO-Anwendung anmelden",
+    "titleShort": "Anmelden",
+    "password": "Passwort",
+    "email": "E-Mail-Adresse",
+    "emailInvalid": "Bitte geben Sie eine gültige E-Mail Adresse an.",
+    "passwordInvalid": "Bitte geben Sie ein gültiges Passwort an.",
+    "signingIn": "wird angemeldet...",
+    "signIn": "Anmelden"
   },
   "notFound": {
     "title": "404 - Diese Seite gibts leider nicht :("
