@@ -1,4 +1,3 @@
-import { Link } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { useHealthCheck } from '../../hooks/useHealthCheck'
 import HomeIcon from '@mui/icons-material/Home'
@@ -23,10 +22,6 @@ export function IndexPage() {
           {healthStatus === 'online' && t('healthcheck.isAvailable')}
           {healthStatus === 'offline' && t('healthcheck.isNotAvailable')}
         </Typography>
-        <Link to="/faq">{t('faq.title')}</Link>
-        <Link to="/waschmaschinen">{t('laundry.title')}</Link>
-        <Link to="/reparaturanfrage">{t('repairRequest.title')}</Link>
-        <Link to="/gemeinschaftsraum">{t('roomBooking.title')}</Link>
       </Stack>
     </Stack>
   )

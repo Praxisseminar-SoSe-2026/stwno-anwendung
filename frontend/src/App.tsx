@@ -1,4 +1,7 @@
 import { Routes, Route } from 'react-router'
+
+//layout
+import { Layout } from './components/Layout.tsx'
 // resident pages
 import { IndexPage } from './pages/resident/IndexPage'
 import { FaqPage } from './pages/resident/FaqPage'
@@ -20,17 +23,19 @@ function App() {
   return (
     <Routes>
       {/* resident routes */}
-      <Route path="/" element={<IndexPage />} />
-      <Route path="/faq" element={<FaqPage />} />
-      <Route path="/waschmaschinen" element={<LaundryMachinesPage />} />
-      <Route path="/reparaturanfrage" element={<ReparaturanfragePage />} />
-      <Route path="/gemeinschaftsraum" element={<RoomBookingPage />} />
-      {/* admin routes */}
-      <Route path="/admin" element={<AdminIndexPage />} />
-      <Route path="/admin/tickets" element={<AdminTicketOverviewPage />} />
-      {/* general routes */}
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="*" element={<NotFoundPage />} />
+      <Route element={<Layout />}>
+        <Route path="/" element={<IndexPage />} />
+        <Route path="/faq" element={<FaqPage />} />
+        <Route path="/waschmaschinen" element={<LaundryMachinesPage />} />
+        <Route path="/reparaturanfrage" element={<ReparaturanfragePage />} />
+        <Route path="/gemeinschaftsraum" element={<RoomBookingPage />} />
+        {/* admin routes */}
+        <Route path="/admin" element={<AdminIndexPage />} />
+        <Route path="/admin/tickets" element={<AdminTicketOverviewPage />} />
+        {/* general routes */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
     </Routes>
   )
 }
