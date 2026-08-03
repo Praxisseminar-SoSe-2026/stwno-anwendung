@@ -29,13 +29,13 @@ function App() {
         <Route path="/waschmaschinen" element={<LaundryMachinesPage />} />
         <Route path="/reparaturanfrage" element={<ReparaturanfragePage />} />
         <Route path="/gemeinschaftsraum" element={<RoomBookingPage />} />
+        {/* admin routes */}
+        <Route path="/admin" element={<AdminIndexPage />} />
+        <Route path="/admin/tickets" element={<AdminTicketOverviewPage />} />
+        {/* general routes */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
-      {/* admin routes */}
-      <Route path="/admin" element={<AdminIndexPage />} />
-      <Route path="/admin/tickets" element={<AdminTicketOverviewPage />} />
-      {/* general routes */}
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   )
 }

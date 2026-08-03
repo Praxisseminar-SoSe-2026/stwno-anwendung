@@ -6,7 +6,9 @@ export function Layout() {
   return (
     <Stack>
       <Header />
-      <Outlet />
+      <Stack sx={{ m: 5 }}>
+        <Outlet />
+      </Stack>
     </Stack>
   )
 }
