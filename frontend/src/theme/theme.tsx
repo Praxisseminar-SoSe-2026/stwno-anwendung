@@ -15,7 +15,6 @@ export const theme = createTheme({
     error: colorVariables.error,
     warning: colorVariables.warning,
     success: colorVariables.success,
-    info: colorVariables.info,
   },
   typography: {
     fontFamily: typoVariables.fontFamily,
@@ -28,5 +27,15 @@ export const theme = createTheme({
   spacing: spacingUnit,
   shape: {
     borderRadius: radiusVariables.medium,
+  },
+  components: {
+    // made with docs [https://mui.com/material-ui/api/text-field/#theme-default-props, https://mui.com/material-ui/api/form-helper-text/#classes, https://mui.com/material-ui/customization/theme-components/#theme-style-overrides]
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          fontSize: typoVariables.sizes.body1,
+        },
+      },
+    },
   },
 })

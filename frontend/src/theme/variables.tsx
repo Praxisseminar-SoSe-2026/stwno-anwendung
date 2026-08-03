@@ -1,50 +1,34 @@
 export const colorVariables = {
   primary: {
-    light: '#ef5350',
-    main: '#d32f2f',
-    dark: '#c62828',
+    main: '#031A6F',
   },
   secondary: {
-    light: '#ef5350',
-    main: '#d32f2f',
-    dark: '#c62828',
+    main: '#ACA7CC',
   },
   background: {
-    default: '#ffffff',
+    default: '#E8E8E8',
     paper: '#ffffff',
   },
   error: {
-    light: '#ef5350',
-    main: '#d32f2f',
-    dark: '#c62828',
+    main: '#E30716',
   },
   warning: {
-    light: '#ef5350',
-    main: '#d32f2f',
-    dark: '#c62828',
+    main: '#E5A716',
   },
   success: {
-    light: '#ef5350',
-    main: '#d32f2f',
-    dark: '#c62828',
+    main: '#75B72B',
   },
   text: {
-    primary: '#ef5350',
-    secondary: '#d32f2f',
-  },
-  info: {
-    light: '#ef5350',
-    main: '#d32f2f',
-    dark: '#c62828',
+    primary: '#333333',
   },
 } as const
 
 export const typoVariables = {
   fontFamily: 'Roboto',
   sizes: {
-    h1: 67,
-    h2: 67,
-    body1: 67,
+    h1: 55,
+    h2: 40,
+    body1: 22,
     body2: 67,
     caption: 67,
   },
@@ -53,7 +37,7 @@ export const typoVariables = {
 export const spacingUnit = 8
 
 export const radiusVariables = {
-  small: 67,
-  medium: 67,
+  small: 6,
+  medium: 6,
   large: 67,
 } as const
