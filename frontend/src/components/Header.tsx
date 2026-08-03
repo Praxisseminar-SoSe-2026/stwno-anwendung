@@ -11,18 +11,22 @@ export function Header() {
     { to: '/waschmaschinen', label: t('laundry.title') },
     { to: '/reparaturanfrage', label: t('repairRequest.title') },
     { to: '/gemeinschaftsraum', label: t('roomBooking.title') },
-    { to: '/login', label: t('login.title') },
   ]
 
   return (
     <AppBar position="static" color="default">
-      <Toolbar>
+      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Stack direction="row" spacing={3}>
           {links.map((link) => (
             <Button key={link.to} component={Link} to={link.to}>
               {link.label}
             </Button>
           ))}
+        </Stack>
+        <Stack>
+          <Button key={'/login'} component={Link} to={'/login'}>
+            {t('login.titleShort')}
+          </Button>
         </Stack>
       </Toolbar>
     </AppBar>
