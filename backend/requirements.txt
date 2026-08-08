@@ -16,3 +16,4 @@ bcrypt~=4.2.0
 email-validator~=2.2.0
 pyjwt~=2.13.0
 uliweb-alembic
+aiosmtplib~=3.0.2
