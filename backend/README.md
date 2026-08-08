@@ -161,6 +161,13 @@ ruff check app
 ## Logging
 Logging is configured centrally in `app/core/logging.py`. Every request is logged automatically via a middleware, including method, path, status code, and response time.
 
+## Email Notification
+
+Emails are sent asynchronously via SMTP using a background task, so requests don't block while the email is being delivered.
+
+For local development, emails are caught by Mailhog instead of being delivered.
+View sent emails at http://127.0.0.1:8025 and configer settings in `.env`.
+
 ## Project structure
 ```
 app/
