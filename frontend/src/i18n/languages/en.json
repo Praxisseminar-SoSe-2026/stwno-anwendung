@@ -55,6 +55,7 @@
     "passwordInvalid": "Please enter a valid password.",
     "signingIn": "is signing in...",
     "signIn": "Log in",
+    "signOut": "Log out",
     "error": "Login failed."
   },
   "notFound": {
