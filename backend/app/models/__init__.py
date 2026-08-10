@@ -4,6 +4,7 @@ from app.models.community_room import CommunityRoom
 from app.models.consent import Consent
 from app.models.dormitory import Dormitory
 from app.models.dormitory_facility_manager import DormitoryFacilityManager
+from app.models.faq_categories import (FaqCategory)
 from app.models.faq_entry import FaqEntry
 from app.models.item_reservation import ItemReservation
 from app.models.item_type import ItemType
@@ -41,6 +42,7 @@ __all__ = [
     "WashRoom",
     "WashingMachine",
     "FaqEntry",
+    "FaqCategory",
     "Announcement",
     "Notification",
     "Consent",
