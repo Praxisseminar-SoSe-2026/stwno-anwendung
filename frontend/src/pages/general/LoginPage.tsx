@@ -20,17 +20,16 @@ export function LoginPage() {
   const [passwordError, setPasswordError] = useState(false)
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('')
 
-  const { submitLogin, loading } = useLogin()
+  const { submitLogin, loading, error } = useLogin()
 
-  const handleSubmit: SubmitEventHandler<HTMLFormElement> = (event) => {
+  const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault()
     if (emailError || passwordError) {
-      event.preventDefault()
       return
     }
     const data = new FormData(event.currentTarget)
 
-    const response = submitLogin({
+    const response = await submitLogin({
       email: data.get('email') as string,
       password: data.get('password') as string,
     })
@@ -128,6 +127,7 @@ export function LoginPage() {
         >
           {loading ? t('login.signingIn') : t('login.signIn')}
         </Button>
+        {error && <Typography color="error">{error}</Typography>}
       </Box>
     </Paper>
   )

@@ -54,7 +54,8 @@
     "emailInvalid": "Please enter a valid Email.",
     "passwordInvalid": "Please enter a valid password.",
     "signingIn": "is signing in...",
-    "signIn": "Log in"
+    "signIn": "Log in",
+    "error": "Login failed."
   },
   "notFound": {
     "title": "404 - This page unfortunately doesn't exist :("
