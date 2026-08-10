@@ -13,5 +13,11 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 30
 
-
+    smtp_host: str = "mailhog"
+    smtp_port: int = 1025
+    smtp_username: str | None = None
+    smtp_password: str | None = None
+    smtp_use_tls: bool = False
+    smtp_from_email: str = "stwno.app@gmail.com" # only for testing
+    
 settings = Settings()
