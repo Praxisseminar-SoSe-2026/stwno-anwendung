@@ -8,7 +8,6 @@ existieren in der DB). Ausfuehren mit:
 
 from __future__ import annotations
 
-import hashlib
 from datetime import UTC, date, datetime, timedelta
 
 from app.db.database import SessionLocal
@@ -28,13 +27,8 @@ from app.models import (
     WashRoom,
 )
 
+from app.core.security import hash_password
 
-def fake_password_hash(raw: str) -> str:
-    """Platzhalter-Hash fuer Seed-Zwecke.
-
-    KEIN echter bcrypt-Hash
-    """
-    return "seed$" + hashlib.sha256(raw.encode()).hexdigest()
 
 
 def seed() -> None:
@@ -103,28 +97,28 @@ def seed() -> None:
             first_name="Raffael",
             last_name="Eger",
             email="raffael.eger@web.de",
-            password_hash=fake_password_hash("password"),
+            password_hash=hash_password("password"),
             person_number="A0001",
         )
         admin2 = User(
             first_name="Maximilian",
             last_name="Auberger",
             email="maximilian.auberger@stud.uni-regensburg.de",
-            password_hash=fake_password_hash("password"),
+            password_hash=hash_password("password"),
             person_number="A0002",
         )
         admin3 = User(
             first_name="Jonas",
             last_name="Haller",
             email="jonas.haller@stud.uni-regensburg.de",
-            password_hash=fake_password_hash("password"),
+            password_hash=hash_password("password"),
             person_number="A0003",
         )
         hausmeister = User(
             first_name="Michael",
             last_name="Arnold",
             email="hausmeister@mail.de",
-            password_hash=fake_password_hash("password"),
+            password_hash=hash_password("password"),
             person_number="A0004",
             dormitory_id=dorm.id,
         )
@@ -132,7 +126,7 @@ def seed() -> None:
             first_name="Lena",
             last_name="Beispiel",
             email="lena@mail.com",
-            password_hash=fake_password_hash("password"),
+            password_hash=hash_password("password"),
             person_number="S1001",
             flat_number="12A",
             contract_end=date.today() + timedelta(days=180),
