@@ -73,6 +73,7 @@ def seed() -> None:
         )
         db.flush()
 
+        # TODO: add announcement permissions for other roles
         db.add_all(
             [
                 RolePermission(
