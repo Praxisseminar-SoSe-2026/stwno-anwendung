@@ -54,7 +54,9 @@
     "emailInvalid": "Bitte geben Sie eine gültige E-Mail Adresse an.",
     "passwordInvalid": "Bitte geben Sie ein gültiges Passwort an.",
     "signingIn": "wird angemeldet...",
-    "signIn": "Anmelden"
+    "signIn": "Anmelden",
+    "signOut": "Abmelden",
+    "error": "Login fehlgeschlagen."
   },
   "notFound": {
     "title": "404 - Diese Seite gibts leider nicht :("
