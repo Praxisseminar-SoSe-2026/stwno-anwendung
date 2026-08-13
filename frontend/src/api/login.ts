@@ -12,6 +12,8 @@ export type LoginResponse = {
   last_name: string
   access_token: string
   token_type: string
+  dormitory_id: number | null
+  roles: string[]
 }
 
 // call API Endpoint /login
