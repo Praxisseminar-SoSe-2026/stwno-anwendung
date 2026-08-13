@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.core.dependencies import get_current_user
+from app.core.permission import get_user_role
 from app.core.security import create_access_token
 from app.db.database import get_db
 from app.models import User
@@ -44,14 +45,22 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
         raise HTTPException(status_code=401, detail=str(exc)) from exc
 
     token = create_access_token(user.id)
+    roles = get_user_role(db, user.id)
     return LoginResponse(
         access_token=token,
         id=user.id,
         email=user.email,
         first_name=user.first_name,
         last_name=user.last_name,
+        roles=roles,
     )
 
 @router.get("/me", response_model=UserResponse)
-def get_me(current_user: User = Depends(get_current_user)):
-    return current_user
+def get_me(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    roles = get_user_role(db, current_user.id)
+    response = UserResponse.model_validate(current_user)
+    response.roles = roles
+    return response
