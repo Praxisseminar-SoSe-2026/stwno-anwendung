@@ -76,6 +76,9 @@ def seed() -> None:
                     role_id=role_admin.id, permission_id=perm_post_announcement.id
                 ),
                 RolePermission(
+                    role_id=role_admin.id, permission_id=perm_edit_announcement.id
+                ),
+                RolePermission(
                     role_id=role_admin.id, permission_id=perm_manage_users.id
                 ),
             ]
