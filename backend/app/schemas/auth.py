@@ -18,3 +18,4 @@ class LoginResponse(BaseModel):
     last_name: str
     access_token: str
     token_type: str = "bearer"
+    roles: list[str] = []
