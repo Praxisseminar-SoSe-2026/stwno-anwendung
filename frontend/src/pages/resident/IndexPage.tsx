@@ -32,10 +32,10 @@ export function IndexPage() {
             <CardContent>
               <Stack direction="row" spacing={1} alignItems="center">
                 <Typography variant="h4">{a.title}</Typography>
-              <Typography variant="h6" color="text.secondary">
-                {a.created_at && new Date(a.created_at).toLocaleDateString()}
-              </Typography>
-                  {a.important && (
+                <Typography variant="h6" color="text.secondary">
+                  {a.created_at && new Date(a.created_at).toLocaleDateString()}
+                </Typography>
+                {a.important && (
                   <Chip
                     label={t('bulletinBoard.important')}
                     color="error"
@@ -43,7 +43,7 @@ export function IndexPage() {
                   />
                 )}
               </Stack>
-                <Typography variant="body1" color="text.secondary">
+              <Typography variant="body1" color="text.secondary">
                 {a.text}
               </Typography>
             </CardContent>
