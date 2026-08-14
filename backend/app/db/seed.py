@@ -195,7 +195,12 @@ def seed() -> None:
         faq_category_moving = FaqCategory(name="Moving in and out")
         faq_category_miscellaneous = FaqCategory(name="Miscellaneous")
 
-        db.add_all([faq_category_general, faq_category_washroom, faq_category_recycling, faq_category_community_room, faq_category_moving, faq_category_miscellaneous])
+        db.add_all([faq_category_general,
+                    faq_category_washroom,
+                    faq_category_recycling,
+                    faq_category_community_room,
+                    faq_category_moving,
+                    faq_category_miscellaneous])
         db.flush()
 
         db.add_all(
@@ -203,77 +208,89 @@ def seed() -> None:
                 FaqEntry(
                     question="Wo finde ich die Hausordnung?!",
                     answer="Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-                           "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                           "Sed do eiusmod tempor incididunt ut labore et dolore magna "
+                           "aliqua.",
                     category_id=faq_category_general.id,
                     created_by_id=admin.id,
                 ),
                 FaqEntry(
                     question="An wen wende ich mich bei allgemeinen Fragen?",
                     answer="Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-                           "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                           "Sed do eiusmod tempor incididunt ut labore et dolore magna "
+                           "aliqua.",
                     category_id=faq_category_general.id,
                     created_by_id=admin.id,
                 ),
                 FaqEntry(
                     question="Wie bediene ich eine Waschmaschine?",
                     answer="Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-                           "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                           "Sed do eiusmod tempor incididunt ut labore et dolore magna "
+                           "aliqua.",
                     category_id=faq_category_washroom.id,
                     created_by_id=admin.id,
                 ),
                 FaqEntry(
                     question="Was mache ich, wenn eine Waschmaschine defekt ist?",
                     answer="Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-                           "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                           "Sed do eiusmod tempor incididunt ut labore et dolore magna "
+                           "aliqua.",
                     category_id=faq_category_washroom.id,
                     created_by_id=admin.id,
                 ),
                 FaqEntry(
                     question="Wie trenne ich meinen Müll richtig?",
                     answer="Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-                           "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                           "Sed do eiusmod tempor incididunt ut labore et dolore magna "
+                           "aliqua.",
                     category_id=faq_category_recycling.id,
                     created_by_id=admin.id,
                 ),
                 FaqEntry(
                     question="Was ist Bio Müll?",
                     answer="Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-                           "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                           "Sed do eiusmod tempor incididunt ut labore et dolore magna "
+                           "aliqua.",
                     category_id=faq_category_recycling.id,
                     created_by_id=admin.id,
                 ),
                 FaqEntry(
                     question="Wie buche ich den Gemeinschaftsraum?",
                     answer="Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-                           "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                           "Sed do eiusmod tempor incididunt ut labore et dolore magna "
+                           "aliqua.",
                     category_id=faq_category_community_room.id,
                     created_by_id=admin.id,
                 ),
                 FaqEntry(
-                    question="Wie lange im Voraus kann ich den Gemeinschaftsraum buchen?",
+                    question="Wie lange im Voraus kann ich den Gemeinschaftsraum "
+                             "buchen?",
                     answer="Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-                           "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                           "Sed do eiusmod tempor incididunt ut labore et dolore magna "
+                           "aliqua.",
                     category_id=faq_category_community_room.id,
                     created_by_id=admin.id,
                 ),
                 FaqEntry(
                     question="Was muss ich beim Auszug beachten?",
                     answer="Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-                           "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                           "Sed do eiusmod tempor incididunt ut labore et dolore magna "
+                           "aliqua.",
                     category_id=faq_category_moving.id,
                     created_by_id=admin.id,
                 ),
                 FaqEntry(
                     question="Wann erhalte ich meine Kaution zurück?",
                     answer="Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-                           "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                           "Sed do eiusmod tempor incididunt ut labore et dolore magna "
+                           "aliqua.",
                     category_id=faq_category_moving.id,
                     created_by_id=admin.id,
                 ),
                 FaqEntry(
                     question="Wo finde ich verlorene Gegenstände?",
-                    answer="Lorem ipsum dolor sit amet, test123! consectetur adipiscing elit. "
-                           "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                    answer="Lorem ipsum dolor sit amet, test123! consectetur "
+                           "adipiscing elit. Sed do eiusmod tempor incididunt "
+                           "ut labore et dolore magna aliqua.",
                     category_id=faq_category_miscellaneous.id,
                     created_by_id=admin.id,
                 ),
