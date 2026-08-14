@@ -18,12 +18,16 @@ class FaqEntry(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     question: Mapped[str]
-    category_id: Mapped[int | None] = mapped_column(ForeignKey("faq_categories.id"), default=None)
+    category_id: Mapped[int | None] = mapped_column(
+        ForeignKey("faq_categories.id"), default=None
+    )
     answer: Mapped[str] = mapped_column(Text)
     created_by_id: Mapped[int | None] = mapped_column(
         ForeignKey("users.id"), default=None
     )
     updated_at: Mapped[datetime | None] = mapped_column(default=None)
 
-    category: Mapped[FaqCategory | None] = relationship(back_populates="questions_entries")
+    category: Mapped[FaqCategory | None] = relationship(
+        back_populates="questions_entries"
+    )
     created_by: Mapped[User | None] = relationship(back_populates="created_faq_entries")
