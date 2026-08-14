@@ -15,3 +15,4 @@ class UserResponse(BaseModel):
     contract_end: date | None
     dormitory_id: int | None
     created_at: datetime | None
+    roles: list[str] = []

@@ -76,6 +76,9 @@ def seed() -> None:
                     role_id=role_admin.id, permission_id=perm_post_announcement.id
                 ),
                 RolePermission(
+                    role_id=role_admin.id, permission_id=perm_edit_announcement.id
+                ),
+                RolePermission(
                     role_id=role_admin.id, permission_id=perm_manage_users.id
                 ),
             ]
@@ -137,6 +140,8 @@ def seed() -> None:
         db.add_all(
             [
                 UserRole(user_id=admin.id, role_id=role_admin.id),
+                UserRole(user_id=admin2.id, role_id=role_admin.id),
+                UserRole(user_id=admin3.id, role_id=role_admin.id),
                 UserRole(user_id=hausmeister.id, role_id=role_facility_manager.id),
                 UserRole(user_id=resident.id, role_id=role_resident.id),
                 DormitoryFacilityManager(dormitory_id=dorm.id, user_id=hausmeister.id),

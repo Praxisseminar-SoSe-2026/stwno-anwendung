@@ -8,6 +8,19 @@
     "isNotAvailable": "ist nicht erreichbar.",
     "isLoading": "lädt..."
   },
+  "bulletinBoard": {
+    "title": "Schwarzes Brett",
+    "empty": "Keine Ankündigungen vorhanden.",
+    "important": "Wichtig",
+    "titleLabel": "Titel",
+    "textLabel": "Text"
+  },
+  "common": {
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "edit": "Bearbeiten",
+    "delete": "Löschen"
+  },
   "faq": {
     "title": "Häufig gestellte Fragen",
     "searchPlaceholder": "Suche...",
@@ -56,7 +69,8 @@
     "signingIn": "wird angemeldet...",
     "signIn": "Anmelden",
     "signOut": "Abmelden",
-    "error": "Login fehlgeschlagen."
+    "error": "Login fehlgeschlagen.",
+    "invalid": "Bitte einloggen."
   },
   "notFound": {
     "title": "404 - Diese Seite gibts leider nicht :("
