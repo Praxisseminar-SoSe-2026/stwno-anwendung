@@ -8,7 +8,7 @@ from app.core.config import settings
 from app.core.logging import setup_logging
 from app.core.middleware import RequestLoggingMiddleware
 from app.db.database import get_db
-from app.routers import auth, email, permission, registration
+from app.routers import auth, email, faq, permission, registration
 
 setup_logging(level=settings.log_level, environment=settings.environment)
 
@@ -29,6 +29,7 @@ app.include_router(permission.router)
 app.include_router(registration.router)
 app.include_router(email.router)
 app.include_router(auth.router)
+app.include_router(faq.router)
 
 
 @app.get("/health")
