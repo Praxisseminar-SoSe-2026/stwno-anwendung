@@ -1,8 +1,10 @@
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router'
 import {
   Stack,
   Typography,
   Card,
+  CardActionArea,
   CardContent,
   Chip,
   CircularProgress,
@@ -29,9 +31,12 @@ function ticketTitle(ticket: TicketRequest): string {
   if (ticket.type === 'repair') {
     return `${ticket.location}: ${ticket.description}`
   }
-  return ` ${ticket.start_datetime &&
-                          new Date(ticket.start_datetime).toLocaleDateString()} -> ${ticket.end_datetime &&
-                          new Date(ticket.end_datetime).toLocaleDateString()}`
+  return ` ${
+    ticket.start_datetime &&
+    new Date(ticket.start_datetime).toLocaleDateString()
+  } -> ${
+    ticket.end_datetime && new Date(ticket.end_datetime).toLocaleDateString()
+  }`
 }
 
 export function AdminTicketOverviewPage() {
@@ -50,7 +55,9 @@ export function AdminTicketOverviewPage() {
 
   return (
     <Stack spacing={2}>
-      <Typography variant="h1">{t('adminTicketOverview.titleShort')}</Typography>
+      <Typography variant="h1">
+        {t('adminTicketOverview.titleShort')}
+      </Typography>
 
       <Grid container spacing={2}>
         {STATUS_COLUMNS.map((column) => {
@@ -65,31 +72,34 @@ export function AdminTicketOverviewPage() {
               <Stack spacing={1}>
                 {columnRequests.map((ticket) => (
                   <Card key={ticket.id} variant="outlined">
-                    <CardContent>
-                      <Stack
-                        direction="row"
-                        spacing={1}
-                        alignItems="center"
-                        justifyContent="space-between"
-                      >
-                        <Typography>
-                        {ticket.created_at &&
-                          new Date(ticket.created_at).toLocaleDateString()}
-                      </Typography>
-                        <Chip
-                          label={TYPE_LABELS[ticket.type]}
-                          color={
-                            ticket.type === 'repair' ? 'primary' : 'secondary'
-                          }
-                        />
-                        <Typography>
-                          {`# ${ticket.id}`}
+                    <CardActionArea
+                      component={Link}
+                      to={`/admin/tickets/${ticket.id}`}
+                    >
+                      <CardContent>
+                        <Stack
+                          direction="row"
+                          spacing={1}
+                          alignItems="center"
+                          justifyContent="space-between"
+                        >
+                          <Typography>
+                            {ticket.created_at &&
+                              new Date(ticket.created_at).toLocaleDateString()}
+                          </Typography>
+                          <Chip
+                            label={TYPE_LABELS[ticket.type]}
+                            color={
+                              ticket.type === 'repair' ? 'primary' : 'secondary'
+                            }
+                          />
+                          <Typography>{`# ${ticket.id}`}</Typography>
+                        </Stack>
+                        <Typography variant="h4" color="text.secondary">
+                          {ticketTitle(ticket)}
                         </Typography>
-                      </Stack>
-                      <Typography variant="h4" color="text.secondary">
-                        {ticketTitle(ticket)}
-                      </Typography>
-                    </CardContent>
+                      </CardContent>
+                    </CardActionArea>
                   </Card>
                 ))}
                 {columnRequests.length === 0 && (
