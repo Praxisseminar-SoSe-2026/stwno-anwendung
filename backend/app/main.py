@@ -8,7 +8,6 @@ from app.core.config import settings
 from app.core.logging import setup_logging
 from app.core.middleware import RequestLoggingMiddleware
 from app.db.database import get_db
-
 from app.routers import announcement, auth, email, faq, permission, registration
 
 setup_logging(level=settings.log_level, environment=settings.environment)
