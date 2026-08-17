@@ -8,9 +8,9 @@ existieren in der DB). Ausfuehren mit:
 
 from __future__ import annotations
 
-import hashlib
 from datetime import UTC, date, datetime, timedelta
 
+from app.core.security import hash_password
 from app.db.database import SessionLocal
 from app.models import (
     Announcement,
@@ -28,14 +28,6 @@ from app.models import (
     WashingMachine,
     WashRoom,
 )
-
-
-def fake_password_hash(raw: str) -> str:
-    """Platzhalter-Hash fuer Seed-Zwecke.
-
-    KEIN echter bcrypt-Hash
-    """
-    return "seed$" + hashlib.sha256(raw.encode()).hexdigest()
 
 
 def seed() -> None:
@@ -74,6 +66,7 @@ def seed() -> None:
         )
         db.flush()
 
+        # TODO: add announcement permissions for other roles
         db.add_all(
             [
                 RolePermission(
@@ -82,6 +75,9 @@ def seed() -> None:
                 ),
                 RolePermission(
                     role_id=role_admin.id, permission_id=perm_post_announcement.id
+                ),
+                RolePermission(
+                    role_id=role_admin.id, permission_id=perm_edit_announcement.id
                 ),
                 RolePermission(
                     role_id=role_admin.id, permission_id=perm_manage_users.id
@@ -104,28 +100,28 @@ def seed() -> None:
             first_name="Raffael",
             last_name="Eger",
             email="raffael.eger@web.de",
-            password_hash=fake_password_hash("password"),
+            password_hash=hash_password("password"),
             person_number="A0001",
         )
         admin2 = User(
             first_name="Maximilian",
             last_name="Auberger",
             email="maximilian.auberger@stud.uni-regensburg.de",
-            password_hash=fake_password_hash("password"),
+            password_hash=hash_password("password"),
             person_number="A0002",
         )
         admin3 = User(
             first_name="Jonas",
             last_name="Haller",
             email="jonas.haller@stud.uni-regensburg.de",
-            password_hash=fake_password_hash("password"),
+            password_hash=hash_password("password"),
             person_number="A0003",
         )
         hausmeister = User(
             first_name="Michael",
             last_name="Arnold",
             email="hausmeister@mail.de",
-            password_hash=fake_password_hash("password"),
+            password_hash=hash_password("password"),
             person_number="A0004",
             dormitory_id=dorm.id,
         )
@@ -133,7 +129,7 @@ def seed() -> None:
             first_name="Lena",
             last_name="Beispiel",
             email="lena@mail.com",
-            password_hash=fake_password_hash("password"),
+            password_hash=hash_password("password"),
             person_number="S1001",
             flat_number="12A",
             contract_end=date.today() + timedelta(days=180),
@@ -145,6 +141,8 @@ def seed() -> None:
         db.add_all(
             [
                 UserRole(user_id=admin.id, role_id=role_admin.id),
+                UserRole(user_id=admin2.id, role_id=role_admin.id),
+                UserRole(user_id=admin3.id, role_id=role_admin.id),
                 UserRole(user_id=hausmeister.id, role_id=role_facility_manager.id),
                 UserRole(user_id=resident.id, role_id=role_resident.id),
                 DormitoryFacilityManager(dormitory_id=dorm.id, user_id=hausmeister.id),

@@ -4,6 +4,7 @@ from fastapi import Depends, HTTPException, Request, Response
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 
+from app.core.permission import user_has_permission
 from app.core.security import (
     InvalidTokenError,
     create_access_token,
@@ -55,3 +56,17 @@ def get_current_user(
     response.headers["X-Access-Token"] = new_token
 
     return user
+
+def require_permission(permission_name: str):
+    def checker(
+        current_user: User = Depends(get_current_user),
+        db: Session = Depends(get_db),
+    ) -> User:
+        if not user_has_permission(db, current_user.id, permission_name):
+            logger.warning(
+                "User %s lacks permission '%s'", current_user.id, permission_name
+            )
+            raise HTTPException(status_code=403, detail="Insufficient permissions")
+        return current_user
+
+    return checker

@@ -18,3 +18,5 @@ class LoginResponse(BaseModel):
     last_name: str
     access_token: str
     token_type: str = "bearer"
+    dormitory_id: int | None = None
+    roles: list[str] = []

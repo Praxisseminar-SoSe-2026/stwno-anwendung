@@ -8,6 +8,19 @@
     "isNotAvailable": "is not available.",
     "isLoading": "is loading..."
   },
+  "bulletinBoard": {
+    "title": "Bulletin Board",
+    "empty": "No announcements available.",
+    "important": "Important",
+    "titleLabel": "Title",
+    "textLabel": "Text"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
   "faq": {
     "title": "Frequently Asked Questions",
     "searchPlaceholder": "Search...",
@@ -54,7 +67,10 @@
     "emailInvalid": "Please enter a valid Email.",
     "passwordInvalid": "Please enter a valid password.",
     "signingIn": "is signing in...",
-    "signIn": "Log in"
+    "signIn": "Log in",
+    "signOut": "Log out",
+    "error": "Login failed.",
+    "invalid": "Please login"
   },
   "notFound": {
     "title": "404 - This page unfortunately doesn't exist :("

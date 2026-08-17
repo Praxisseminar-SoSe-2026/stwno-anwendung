@@ -8,6 +8,7 @@ import { FaqPage } from './pages/resident/FaqPage'
 import { LaundryMachinesPage } from './pages/resident/LaundryMachinesPage'
 import { ReparaturanfragePage } from './pages/resident/ReparaturanfragePage'
 import { RoomBookingPage } from './pages/resident/RoomBookingPage'
+import { AnnouncementDetailPage } from './pages/resident/AnnouncementDetailPage'
 
 // admin pages
 import { AdminIndexPage } from './pages/admin/AdminIndexPage'
@@ -29,6 +30,7 @@ function App() {
         <Route path="/waschmaschinen" element={<LaundryMachinesPage />} />
         <Route path="/reparaturanfrage" element={<ReparaturanfragePage />} />
         <Route path="/gemeinschaftsraum" element={<RoomBookingPage />} />
+        <Route path="/aushang/:id" element={<AnnouncementDetailPage />} />
         {/* admin routes */}
         <Route path="/admin" element={<AdminIndexPage />} />
         <Route path="/admin/tickets" element={<AdminTicketOverviewPage />} />
