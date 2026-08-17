@@ -123,7 +123,7 @@ export function AnnouncementDetailPage() {
           </>
         ) : (
           <>
-            <Stack direction="row" spacing={1} alignItems="center">
+            <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
               <Typography variant="h4">{announcement.title}</Typography>
               <Typography variant="h6" color="text.secondary">
                 {announcement.created_at &&

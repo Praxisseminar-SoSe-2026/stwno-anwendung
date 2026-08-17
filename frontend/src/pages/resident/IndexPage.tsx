@@ -30,7 +30,7 @@ export function IndexPage() {
         <Card key={a.id} variant="outlined">
           <CardActionArea component={Link} to={`/aushang/${a.id}`}>
             <CardContent>
-              <Stack direction="row" spacing={1} alignItems="center">
+              <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
                 <Typography variant="h4">{a.title}</Typography>
                 <Typography variant="h6" color="text.secondary">
                   {a.created_at && new Date(a.created_at).toLocaleDateString()}
