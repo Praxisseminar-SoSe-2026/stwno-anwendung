@@ -9,6 +9,7 @@ from app.models.repair_request import RepairRequest
 from app.models.request import Request
 from app.models.room_request import RoomRequest
 from app.models.user import User
+from app.schemas.request import RepairRequestCreate
 
 STAFF_ROLES = {"admin", "mitarbeiter"}
 
@@ -18,6 +19,10 @@ class RequestNotFoundError(Exception):
 
 
 class RequestAccessDeniedError(Exception):
+    pass
+
+
+class ResidentWithoutDormitoryError(Exception):
     pass
 
 
@@ -92,3 +97,22 @@ def get_request(db: Session, request_id: int, current_user: User) -> Request:
         return request
 
     raise RequestAccessDeniedError("Not authorized to view this request")
+
+
+def create_repair_request(
+    db: Session, current_user: User, payload: RepairRequestCreate
+) -> RepairRequest:
+    if current_user.dormitory_id is None:
+        raise ResidentWithoutDormitoryError(
+            "User has no dormitory assigned; cannot create a repair request"
+        )
+
+    repair_request = RepairRequest(
+        resident_id=current_user.id,
+        assigned_dormitory_id=current_user.dormitory_id,
+        **payload.model_dump(),
+    )
+    db.add(repair_request)
+    db.commit()
+    db.refresh(repair_request)
+    return repair_request
