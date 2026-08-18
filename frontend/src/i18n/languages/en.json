@@ -57,7 +57,13 @@
   },
   "adminTicketOverview": {
     "title": "Ticket Overview (Repair and Room Booking Requests)",
-    "titleShort": "Ticket Overview"
+    "titleShort": "Ticket Overview",
+    "notAuthorized": "You are not authorized to use this page."
+  },
+  "request": {
+    "start": "Begin",
+    "end": "End",
+    "location": "Location"
   },
   "login": {
     "title": "Log into STWNO-Anwendung",

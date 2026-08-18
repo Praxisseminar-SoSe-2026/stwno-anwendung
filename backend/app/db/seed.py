@@ -21,8 +21,10 @@ from app.models import (
     FaqEntry,
     ItemType,
     Permission,
+    RepairRequest,
     Role,
     RolePermission,
+    RoomRequest,
     User,
     UserRole,
     WashingMachine,
@@ -306,6 +308,49 @@ def seed() -> None:
                 dormitory_id=dorm.id,
             )
         )
+
+        # Tickets
+        repair_open = RepairRequest(
+            resident_id=resident.id,
+            status="Offen",
+            description="Die Heizung geht nicht",
+            location=resident.flat_number,
+            assigned_dormitory_id=dorm.id,
+        )
+        repair_confirmed = RepairRequest(
+            resident_id=resident.id,
+            status="Bestätigt",
+            description="Es kommt kein warmes Wasser",
+            location=resident.flat_number,
+            assigned_dormitory_id=dorm.id,
+        )
+        repair_closed = RepairRequest(
+            resident_id=resident.id,
+            status="Geschlossen",
+            description="Lampe im Flur defekt",
+            location="Flur, 2. OG",
+            assigned_dormitory_id=dorm.id,
+        )
+        db.add_all([repair_open, repair_confirmed, repair_closed])
+
+        room_open = RoomRequest(
+            resident_id=resident.id,
+            status="Offen",
+            community_room_id=community_room.id,
+            start_datetime=datetime.now(UTC),
+            end_datetime=datetime.now(UTC) + timedelta(days=1),
+        )
+        room_confirmed = RoomRequest(
+            resident_id=resident.id,
+            status="Bestätigt",
+            community_room_id=community_room.id,
+            start_datetime=datetime.now(UTC) + timedelta(days=5),
+            end_datetime=datetime.now(UTC) + timedelta(days=6),
+            decided_by_id=admin.id,
+            decided_at=datetime.now(UTC),
+        )
+        db.add_all([room_open, room_confirmed])
+        db.flush()
 
         db.commit()
         print("Seed-Daten erfolgreich eingefuegt.")

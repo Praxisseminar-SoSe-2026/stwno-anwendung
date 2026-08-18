@@ -9,6 +9,7 @@ import { LaundryMachinesPage } from './pages/resident/LaundryMachinesPage'
 import { ReparaturanfragePage } from './pages/resident/ReparaturanfragePage'
 import { RoomBookingPage } from './pages/resident/RoomBookingPage'
 import { AnnouncementDetailPage } from './pages/resident/AnnouncementDetailPage'
+import { AdminTicketDetailPage } from './pages/admin/AdminTicketDetailPage.tsx'
 
 // admin pages
 import { AdminIndexPage } from './pages/admin/AdminIndexPage'
@@ -34,6 +35,7 @@ function App() {
         {/* admin routes */}
         <Route path="/admin" element={<AdminIndexPage />} />
         <Route path="/admin/tickets" element={<AdminTicketOverviewPage />} />
+        <Route path="/admin/tickets/:id" element={<AdminTicketDetailPage />} />
         {/* general routes */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="*" element={<NotFoundPage />} />
