@@ -6,15 +6,30 @@ from sqlalchemy.orm import Session
 from app.core.dependencies import get_current_user
 from app.db.database import get_db
 from app.models.user import User
-from app.schemas.request import RequestResponse
+from app.schemas.request import RequestResponse, RepairRequestCreate
 from app.services.request_service import (
     RequestAccessDeniedError,
     RequestNotFoundError,
+    ResidentWithoutDormitoryError,
+    create_repair_request,
     get_request,
     list_requests,
 )
 
 router = APIRouter(prefix="/requests", tags=["requests"])
+
+@router.post("/repair", response_model=RequestResponse, status_code=201)
+def create_repair(
+    payload: RepairRequestCreate,
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_user)],
+):
+    try:
+        repair_request = create_repair_request(db, current_user, payload)
+    except ResidentWithoutDormitoryError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    return RequestResponse.from_request(repair_request)
 
 
 @router.get("", response_model=list[RequestResponse])
