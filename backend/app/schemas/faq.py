@@ -1,6 +1,7 @@
 from pydantic import BaseModel, ConfigDict
 
 
+# Todo: discuss and if necessary add created_by and updated_at
 class FaqCategoryResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 

@@ -16,6 +16,7 @@ from app.services.faq_service import (
     FaqEntryNotFoundError,
     create_faq_entry,
     delete_faq_entry,
+    get_faq_entry,
     list_categories,
     list_faq_entries,
     update_faq_entry,
@@ -31,6 +32,17 @@ def list_faq_categories(
     db: Annotated[Session, Depends(get_db)],
 ):
     return list_categories(db)
+
+
+@router.get("/{faq_id}", response_model=FaqEntryResponse)
+def get_one(
+        faq_id: int,
+        db: Annotated[Session, Depends(get_db)],
+):
+    try:
+        return get_faq_entry(db, faq_id)
+    except FaqEntryNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
 @router.get("", response_model=list[FaqEntryResponse])
