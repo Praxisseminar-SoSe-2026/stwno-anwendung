@@ -19,7 +19,8 @@
     "save": "Save",
     "cancel": "Cancel",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "create": "Create"
   },
   "faq": {
     "title": "Frequently Asked Questions",

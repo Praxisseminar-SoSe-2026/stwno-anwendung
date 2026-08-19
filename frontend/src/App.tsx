@@ -20,6 +20,7 @@ import { NotFoundPage } from './pages/general/NotFoundPage'
 
 import './App.css'
 import { FaqDetailPage } from './pages/resident/FaqDetailPage.tsx'
+import { FaqCreatePage } from './pages/resident/FaqCreatePage.tsx'
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/" element={<IndexPage />} />
         <Route path="/faq" element={<FaqPage />} />
         <Route path="/faq/:id" element={<FaqDetailPage />}></Route>
+        <Route path="/faq/neu" element={<FaqCreatePage />}></Route>
         <Route path="/waschmaschinen" element={<LaundryMachinesPage />} />
         <Route path="/reparaturanfrage" element={<ReparaturanfragePage />} />
         <Route path="/gemeinschaftsraum" element={<RoomBookingPage />} />

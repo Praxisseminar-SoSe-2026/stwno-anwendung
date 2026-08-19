@@ -45,25 +45,30 @@ export function FaqPage() {
   return (
     <Stack spacing={10}>
       <Typography variant="h1">{t('faq.title')}</Typography>
-      <TextField
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        placeholder={t('faq.searchPlaceholder')}
-        slotProps={{
-          input: {
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          },
-        }}
-        sx={{
-          backgroundColor: 'background.paper',
-          maxWidth: '30%',
-          borderRadius: 1,
-        }}
-      />
+      <Stack direction="row" spacing={2}>
+        <TextField
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder={t('faq.searchPlaceholder')}
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            },
+          }}
+          sx={{
+            backgroundColor: 'background.paper',
+            maxWidth: '30%',
+            borderRadius: 1,
+          }}
+        />
+        <Button component={Link} variant="contained" to="/faq/neu">
+          +
+        </Button>
+      </Stack>
 
       {/* creates element for every category and their associated questions */}
       {Object.entries(groupedFaqs).map(([category, categoryFaqs]) => (

@@ -39,6 +39,7 @@ def get_faq_entry(db: Session, faq_id: int) -> FaqEntry:
 
 
 # Todo: make current user logging not optional
+# Todo: discuss if only creating a new entry when question, answer and category are given
 def create_faq_entry(
     db: Session, payload: FaqEntryCreateRequest, created_by_id: int | None = None
 ) -> FaqEntry:

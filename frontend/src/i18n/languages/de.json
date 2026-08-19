@@ -19,7 +19,8 @@
     "save": "Speichern",
     "cancel": "Abbrechen",
     "edit": "Bearbeiten",
-    "delete": "Löschen"
+    "delete": "Löschen",
+    "create": "Erstellen"
   },
   "faq": {
     "title": "Häufig gestellte Fragen",
