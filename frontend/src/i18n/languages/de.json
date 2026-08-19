@@ -63,7 +63,8 @@
   "request": {
     "start": "Beginn",
     "end": "Ende",
-    "location": "Ort"
+    "location": "Ort",
+    "exportPdf": "PDF erstellen"
   },
   "login": {
     "title": "Bei STWNO-Anwendung anmelden",
