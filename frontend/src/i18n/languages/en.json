@@ -27,12 +27,15 @@
     "noSearchResults": "No results for this search.",
     "category": {
       "general": "General",
-      "laundry": "Washroom",
+      "washroom": "Washroom",
       "recycling": "Recycling",
-      "roomBooking": "Community Room",
-      "moving": "Moving in and out",
+      "community room": "Community Room",
+      "moving in and out": "Moving In and Out",
       "miscellaneous": "Miscellaneous"
-    }
+    },
+    "questionLabel": "Question",
+    "answerLabel": "Answer",
+    "categoryLabel": "Category"
   },
   "laundry": {
     "title": "Washroom",

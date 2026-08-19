@@ -27,12 +27,15 @@
     "noSearchResults": "Keine Ergebnisse zu dieser Suche.",
     "category": {
       "general": "Allgemein",
-      "laundry": "Waschküche",
+      "washroom": "Waschküche",
       "recycling": "Müll & Recycling",
-      "roomBooking": "Gemeinschaftsraum",
-      "moving": "Ein- und Auszug",
+      "community room": "Gemeinschaftsraum",
+      "moving in and out": "Ein- und Auszug",
       "miscellaneous": "Sonstiges"
-    }
+    },
+    "questionLabel": "Frage",
+    "answerLabel": "Antwort",
+    "categoryLabel": "Kategorie"
   },
   "laundry": {
     "title": "Waschküche",
