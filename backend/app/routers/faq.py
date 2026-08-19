@@ -16,10 +16,10 @@ from app.services.faq_service import (
     FaqEntryNotFoundError,
     create_faq_entry,
     delete_faq_entry,
+    get_faq_entry,
     list_categories,
     list_faq_entries,
     update_faq_entry,
-    get_faq_entry
 )
 
 logger = logging.getLogger(__name__)
