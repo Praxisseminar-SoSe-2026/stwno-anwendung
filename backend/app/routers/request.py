@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app.core.dependencies import get_current_user
 from app.db.database import get_db
 from app.models.user import User
-from app.schemas.request import RequestResponse, RoomRequestCreate, RoomRequestStatusUpdate
+from app.schemas.request import RequestResponse, RoomRequestCreate, RoomRequestStatusUpdate, RoomBookings
 from app.services.request_service import (
     RequestAccessDeniedError,
     RequestNotFoundError,
@@ -16,7 +16,8 @@ from app.services.request_service import (
     get_request,
     list_requests,
     create_room_request,
-    edit_room_request
+    edit_room_request,
+    list_room_bookings
 )
 
 router = APIRouter(prefix="/requests", tags=["requests"])
@@ -47,6 +48,17 @@ def list_all(
 ):
     requests = list_requests(db, current_user)
     return [RequestResponse.from_request(r) for r in requests]
+
+
+@router.get("/room_booking", response_model=list[RoomBookings])
+def list_all_room_booking_requests(
+        db: Annotated[Session, Depends(get_db)],
+        current_user: Annotated[User, Depends(get_current_user)]
+):
+    try:
+        return list_room_bookings(db, current_user)
+    except ResidentDormitoryError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
 @router.get("/{request_id}", response_model=RequestResponse)
