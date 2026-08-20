@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, date
 from typing import TYPE_CHECKING
 
 from pydantic import BaseModel
@@ -57,5 +57,5 @@ class RequestResponse(BaseModel):
 
 class RoomRequestCreate(BaseModel):
     community_room_id: int
-    start_datetime: datetime
-    end_datetime: datetime
+    start_date: date
+    end_date: date

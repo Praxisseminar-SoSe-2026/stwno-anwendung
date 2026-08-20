@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from sqlalchemy.orm import Session
 
@@ -125,17 +125,34 @@ def create_room_request(db: Session, current_user: User, payload: RoomRequestCre
             "User has different dormitory assigned, than community room"
         )
 
-    if payload.start_datetime >= payload.end_datetime:
+    first_booked_day = payload.start_date
+    last_booked_day = payload.end_date
+
+    if first_booked_day > last_booked_day:
         raise RoomBookingTimeConflictError(
-            "Start datetime must be smaller than end datetime"
+            "Start date must be before end date"
         )
+
+    # check if booking is on weekend to book whole weekend, made with tutorial [https://www.geeksforgeeks.org/python/weekday-function-of-datetime-date-class-in-python/]
+    if first_booked_day.weekday() >= 4:
+        friday = first_booked_day - timedelta(days=first_booked_day.weekday() - 4)
+        first_booked_day = friday
+        last_booked_day = friday + timedelta(days=2)
+    # check if maximal 2 days are booked in a row (except for weekends)
+    elif (last_booked_day - first_booked_day).days >= 2:
+        raise RoomBookingTimeConflictError(
+            "Bookings outside the weekend cant be longer than 2 days"
+        )
+
+    first_booked_day_datetime = datetime.combine(first_booked_day, datetime.min.time())
+    last_booked_day_datetime = datetime.combine(last_booked_day, datetime.max.time())
 
     time_conflict = (
         db.query(RoomRequest)
         .filter(
             RoomRequest.community_room_id == payload.community_room_id,
-            RoomRequest.start_datetime <= payload.end_datetime,
-            RoomRequest.end_datetime >= payload.start_datetime,
+            RoomRequest.start_datetime <= last_booked_day_datetime,
+            RoomRequest.end_datetime >= first_booked_day_datetime,
         )
         .first()
     )
@@ -147,7 +164,9 @@ def create_room_request(db: Session, current_user: User, payload: RoomRequestCre
 
     room_request = RoomRequest(
         resident_id=current_user.id,
-        **payload.model_dump()
+        community_room_id=payload.community_room_id,
+        start_datetime=first_booked_day_datetime,
+        end_datetime=last_booked_day_datetime,
     )
 
     db.add(room_request)
