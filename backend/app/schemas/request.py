@@ -65,3 +65,12 @@ class RoomRequestCreate(BaseModel):
 class RoomRequestStatusUpdate(BaseModel):
     # Todo: discuss concept of global standard for status
     status: Literal["Bestätigt", "Abgelehnt"]
+
+
+class RoomBookings(BaseModel):
+    id: int
+    community_room_id: int
+    dormitory_id: int
+    start_datetime: datetime
+    end_datetime: datetime
+    status: str

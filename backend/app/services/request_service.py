@@ -10,8 +10,7 @@ from app.models.request import Request
 from app.models.room_request import RoomRequest
 from app.models.user import User
 
-from app.schemas.request import RoomRequestCreate, RoomRequestStatusUpdate
-
+from app.schemas.request import RoomRequestCreate, RoomRequestStatusUpdate, RoomBookings
 
 STAFF_ROLES = {"admin", "mitarbeiter"}
 
@@ -93,8 +92,8 @@ def get_request(db: Session, request_id: int, current_user: User) -> Request:
     if "hausmeister" in roles:
         dormitory_ids = managed_dormitory_ids(db, current_user.id)
         if (
-            isinstance(request, RepairRequest)
-            and request.assigned_dormitory_id in dormitory_ids
+                isinstance(request, RepairRequest)
+                and request.assigned_dormitory_id in dormitory_ids
         ):
             return request
         if isinstance(request, RoomRequest):
@@ -176,7 +175,8 @@ def create_room_request(db: Session, current_user: User, payload: RoomRequestCre
     return room_request
 
 
-def edit_room_request(db: Session, request_id: int, current_user: User, payload: RoomRequestStatusUpdate) -> RoomRequest:
+def edit_room_request(db: Session, request_id: int, current_user: User,
+                      payload: RoomRequestStatusUpdate) -> RoomRequest:
     roles = set(get_user_role(db, current_user.id))
 
     if not (roles & STAFF_ROLES):
@@ -193,3 +193,29 @@ def edit_room_request(db: Session, request_id: int, current_user: User, payload:
     db.commit()
     db.refresh(room_request)
     return room_request
+
+
+# Todo: staff should be able to look at these kind of information (independent of having a dormitory assigned)
+def list_room_bookings(db: Session, current_user: User) -> list[RoomBookings]:
+    if current_user.dormitory_id is None:
+        raise ResidentDormitoryError(
+            "User has no dormitory assigned; cannot list room availability"
+        )
+
+    room_requests = (db.query(RoomRequest)
+                     .join(CommunityRoom, RoomRequest.community_room_id == CommunityRoom.id)
+                     .filter(CommunityRoom.dormitory_id == current_user.dormitory_id)
+                     .all()
+                     )
+
+    return [
+        RoomBookings(
+            id=room_request.id,
+            community_room_id=room_request.community_room_id,
+            dormitory_id=current_user.dormitory_id,
+            start_datetime=room_request.start_datetime,
+            end_datetime=room_request.end_datetime,
+            status=room_request.status,
+        )
+        for room_request in room_requests
+    ]
