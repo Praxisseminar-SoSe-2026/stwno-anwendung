@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Literal
 
 from datetime import datetime, date
 from typing import TYPE_CHECKING
@@ -59,3 +60,8 @@ class RoomRequestCreate(BaseModel):
     community_room_id: int
     start_date: date
     end_date: date
+
+
+class RoomRequestStatusUpdate(BaseModel):
+    # Todo: discuss concept of global standard for status
+    status: Literal["Bestätigt", "Abgelehnt"]

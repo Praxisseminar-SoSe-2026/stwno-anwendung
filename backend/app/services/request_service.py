@@ -10,7 +10,8 @@ from app.models.request import Request
 from app.models.room_request import RoomRequest
 from app.models.user import User
 
-from app.schemas.request import RoomRequestCreate
+from app.schemas.request import RoomRequestCreate, RoomRequestStatusUpdate
+
 
 STAFF_ROLES = {"admin", "mitarbeiter"}
 
@@ -170,6 +171,25 @@ def create_room_request(db: Session, current_user: User, payload: RoomRequestCre
     )
 
     db.add(room_request)
+    db.commit()
+    db.refresh(room_request)
+    return room_request
+
+
+def edit_room_request(db: Session, request_id: int, current_user: User, payload: RoomRequestStatusUpdate) -> RoomRequest:
+    roles = set(get_user_role(db, current_user.id))
+
+    if not (roles & STAFF_ROLES):
+        raise RequestAccessDeniedError("Not authorized to edit this request")
+
+    room_request = db.get(RoomRequest, request_id)
+    if room_request is None:
+        raise RequestNotFoundError(f"Request {request_id} not found")
+
+    room_request.status = payload.status
+    room_request.decided_by_id = current_user.id
+    room_request.decided_at = datetime.now()
+
     db.commit()
     db.refresh(room_request)
     return room_request
