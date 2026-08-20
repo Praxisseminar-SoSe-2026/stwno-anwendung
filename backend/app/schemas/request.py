@@ -53,3 +53,9 @@ class RequestResponse(BaseModel):
             )
 
         return cls(**data)
+
+
+class RoomRequestCreate(BaseModel):
+    community_room_id: int
+    start_datetime: datetime
+    end_datetime: datetime

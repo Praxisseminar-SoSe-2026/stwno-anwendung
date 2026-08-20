@@ -10,6 +10,8 @@ from app.models.request import Request
 from app.models.room_request import RoomRequest
 from app.models.user import User
 
+from app.schemas.request import RoomRequestCreate
+
 STAFF_ROLES = {"admin", "mitarbeiter"}
 
 
@@ -18,6 +20,18 @@ class RequestNotFoundError(Exception):
 
 
 class RequestAccessDeniedError(Exception):
+    pass
+
+
+class ResidentDormitoryError(Exception):
+    pass
+
+
+class RoomBookingTimeConflictError(Exception):
+    pass
+
+
+class RoomNotFoundError(Exception):
     pass
 
 
@@ -92,3 +106,51 @@ def get_request(db: Session, request_id: int, current_user: User) -> Request:
         return request
 
     raise RequestAccessDeniedError("Not authorized to view this request")
+
+
+def create_room_request(db: Session, current_user: User, payload: RoomRequestCreate) -> RoomRequest:
+    if current_user.dormitory_id is None:
+        raise ResidentDormitoryError(
+            "User has no dormitory assigned; cannot create a room request"
+        )
+
+    community_room = db.get(CommunityRoom, payload.community_room_id)
+    if community_room is None:
+        raise RoomNotFoundError(
+            f"Community room with id {payload.community_room_id} not found"
+        )
+
+    if current_user.dormitory_id != community_room.dormitory_id:
+        raise ResidentDormitoryError(
+            "User has different dormitory assigned, than community room"
+        )
+
+    if payload.start_datetime >= payload.end_datetime:
+        raise RoomBookingTimeConflictError(
+            "Start datetime must be smaller than end datetime"
+        )
+
+    time_conflict = (
+        db.query(RoomRequest)
+        .filter(
+            RoomRequest.community_room_id == payload.community_room_id,
+            RoomRequest.start_datetime <= payload.end_datetime,
+            RoomRequest.end_datetime >= payload.start_datetime,
+        )
+        .first()
+    )
+
+    if time_conflict is not None:
+        raise RoomBookingTimeConflictError(
+            "Community room is already booked for this timeslot"
+        )
+
+    room_request = RoomRequest(
+        resident_id=current_user.id,
+        **payload.model_dump()
+    )
+
+    db.add(room_request)
+    db.commit()
+    db.refresh(room_request)
+    return room_request
