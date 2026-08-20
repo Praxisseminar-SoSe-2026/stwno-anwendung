@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app.core.dependencies import get_current_user
 from app.db.database import get_db
 from app.models.user import User
-from app.schemas.request import RequestResponse, RoomRequestCreate
+from app.schemas.request import RequestResponse, RoomRequestCreate, RoomRequestStatusUpdate
 from app.services.request_service import (
     RequestAccessDeniedError,
     RequestNotFoundError,
@@ -15,7 +15,8 @@ from app.services.request_service import (
     RoomBookingTimeConflictError,
     get_request,
     list_requests,
-    create_room_request
+    create_room_request,
+    edit_room_request
 )
 
 router = APIRouter(prefix="/requests", tags=["requests"])
@@ -62,3 +63,20 @@ def get_one(
         raise HTTPException(status_code=403, detail=str(exc)) from exc
 
     return RequestResponse.from_request(request)
+
+
+@router.patch("/room_booking/{request_id}", response_model=RequestResponse)
+def edit_room_booking_request(
+        request_id: int,
+        payload: RoomRequestStatusUpdate,
+        db: Annotated[Session, Depends(get_db)],
+        current_user: Annotated[User, Depends(get_current_user)],
+):
+    try:
+        room_request = edit_room_request(db, request_id, current_user, payload)
+    except RequestAccessDeniedError as exc:
+        raise HTTPException(status_code=403, detail=str(exc)) from exc
+    except RequestNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+    return RequestResponse.from_request(room_request)
