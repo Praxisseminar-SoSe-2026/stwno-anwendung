@@ -6,15 +6,37 @@ from sqlalchemy.orm import Session
 from app.core.dependencies import get_current_user
 from app.db.database import get_db
 from app.models.user import User
-from app.schemas.request import RequestResponse
+from app.schemas.request import RequestResponse, RoomRequestCreate
 from app.services.request_service import (
     RequestAccessDeniedError,
     RequestNotFoundError,
+    ResidentDormitoryError,
+    RoomNotFoundError,
+    RoomBookingTimeConflictError,
     get_request,
     list_requests,
+    create_room_request
 )
 
 router = APIRouter(prefix="/requests", tags=["requests"])
+
+
+@router.post("/room_booking", response_model=RequestResponse)
+def create_room_booking_request(
+        payload: RoomRequestCreate,
+        db: Annotated[Session, Depends(get_db)],
+        current_user: Annotated[User, Depends(get_current_user)],
+):
+    try:
+        room_request = create_room_request(db, current_user, payload)
+    except ResidentDormitoryError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except RoomNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except RoomBookingTimeConflictError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    return RequestResponse.from_request(room_request)
 
 
 @router.get("", response_model=list[RequestResponse])
