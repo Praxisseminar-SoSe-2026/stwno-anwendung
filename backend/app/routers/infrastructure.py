@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/infrastructure", tags=["infrastructure"])
 
 
-@router.get("", response_model=list[CommunityRoomResponse])
+@router.get("/community_rooms", response_model=list[CommunityRoomResponse])
 def list_all(
     db: Annotated[Session, Depends(get_db)],
     current_user: Annotated[User, Depends(get_current_user)],
