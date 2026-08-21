@@ -54,7 +54,8 @@
     "title": "Reparaturanfrage"
   },
   "roomBooking": {
-    "title": "Gemeinschaftsraumbuchung"
+    "title": "Gemeinschaftsraumbuchung",
+    "selectCommunityRoom": "Gemeinschaftsraum auswählen"
   },
   "adminIndex": {
     "title": "Hallo Chef!"

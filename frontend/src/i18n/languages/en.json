@@ -54,7 +54,8 @@
     "title": "Repair Request"
   },
   "roomBooking": {
-    "title": "Community Room Booking"
+    "title": "Community Room Booking",
+    "selectCommunityRoom": "Select Community Room"
   },
   "adminIndex": {
     "title": "Hello Boss!"
