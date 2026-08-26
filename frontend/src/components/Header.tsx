@@ -1,13 +1,15 @@
-import { AppBar, Toolbar, Button, Stack } from '@mui/material'
+import {AppBar, Toolbar, Button, Stack, Typography} from '@mui/material'
 import { Link } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../contexts/AuthContext'
+import { useLogout } from "../hooks/useLogout.ts"
 
 const STAFF_ROLES = ['admin', 'mitarbeiter', 'hausmeister']
 
 export function Header() {
   const { t } = useTranslation()
-  const { hasRole, loading } = useAuth()
+  const { user, hasRole, loading } = useAuth()
+  const { logout } = useLogout()
 
   const links = [
     { to: '/', label: 'Start' },
@@ -35,9 +37,17 @@ export function Header() {
           )}
         </Stack>
         <Stack>
-          <Button key={'/login'} component={Link} to={'/login'}>
+          {user ? (
+              <>
+                <Typography>{user.first_name} {user.last_name}</Typography>
+                <Button onClick={logout}>Logout</Button>
+              </>
+          ) : (
+             <Button key={'/login'} component={Link} to={'/login'}>
             {t('login.titleShort')}
           </Button>
+          )
+          }
         </Stack>
       </Toolbar>
     </AppBar>
