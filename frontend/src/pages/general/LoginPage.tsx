@@ -2,6 +2,7 @@
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import type { SubmitEventHandler } from 'react'
+import { useNavigate } from 'react-router'
 import { useLogin } from '../../hooks/useLogin.ts'
 import { useLogout } from '../../hooks/useLogout.ts'
 import {
@@ -15,6 +16,7 @@ import {
 
 export function LoginPage() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const [emailError, setEmailError] = useState(false)
   const [emailErrorMessage, setEmailErrorMessage] = useState('')
 
@@ -38,6 +40,7 @@ export function LoginPage() {
 
     if (response) {
       console.log(response)
+      navigate('/')
     }
   }
 
