@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router'
 
-import { ProtectedRoute } from "./components/ProtectedRoute.tsx"
+import { ProtectedRoute } from './components/ProtectedRoute.tsx'
 //layout
 import { Layout } from './components/Layout.tsx'
 // resident pages
@@ -42,7 +42,10 @@ function App() {
           {/* admin routes */}
           <Route path="/admin" element={<AdminIndexPage />} />
           <Route path="/admin/tickets" element={<AdminTicketOverviewPage />} />
-          <Route path="/admin/tickets/:id" element={<AdminTicketDetailPage />} />
+          <Route
+            path="/admin/tickets/:id"
+            element={<AdminTicketDetailPage />}
+          />
           {/* general routes */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="*" element={<NotFoundPage />} />
