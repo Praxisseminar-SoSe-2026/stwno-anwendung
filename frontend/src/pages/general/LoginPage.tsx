@@ -4,7 +4,6 @@ import { useState } from 'react'
 import type { SubmitEventHandler } from 'react'
 import { useNavigate } from 'react-router'
 import { useLogin } from '../../hooks/useLogin.ts'
-import { useLogout } from '../../hooks/useLogout.ts'
 import {
   Typography,
   Paper,
@@ -24,7 +23,6 @@ export function LoginPage() {
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('')
 
   const { submitLogin, loading, error } = useLogin()
-  const { logout } = useLogout()
 
   const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault()
@@ -134,10 +132,6 @@ export function LoginPage() {
           {loading ? t('login.signingIn') : t('login.signIn')}
         </Button>
 
-        {/*logout Button*/}
-        <Button variant="contained" onClick={logout} color="error">
-          {t('login.signOut')}
-        </Button>
         {error && <Typography color="error">{error}</Typography>}
       </Box>
     </Paper>
