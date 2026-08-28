@@ -55,7 +55,8 @@
   },
   "roomBooking": {
     "title": "Community Room Booking",
-    "selectCommunityRoom": "Select Community Room"
+    "selectCommunityRoom": "Select Community Room",
+    "occupied": "occupied"
   },
   "adminIndex": {
     "title": "Hello Boss!"

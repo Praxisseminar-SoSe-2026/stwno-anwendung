@@ -55,7 +55,8 @@
   },
   "roomBooking": {
     "title": "Gemeinschaftsraumbuchung",
-    "selectCommunityRoom": "Gemeinschaftsraum auswählen"
+    "selectCommunityRoom": "Gemeinschaftsraum auswählen",
+    "occupied": "Belegt"
   },
   "adminIndex": {
     "title": "Hallo Chef!"
