@@ -56,7 +56,10 @@
   "roomBooking": {
     "title": "Gemeinschaftsraumbuchung",
     "selectCommunityRoom": "Gemeinschaftsraum auswählen",
-    "occupied": "Belegt"
+    "occupied": "Belegt",
+    "bookCommunityRoom": "{{communityRoomName}} buchen",
+    "startDate": "von",
+    "endDate": "bis"
   },
   "adminIndex": {
     "title": "Hallo Chef!"
