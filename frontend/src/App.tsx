@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router'
 
+import { ProtectedRoute } from './components/ProtectedRoute.tsx'
 //layout
 import { Layout } from './components/Layout.tsx'
 // resident pages
@@ -10,7 +11,6 @@ import { ReparaturanfragePage } from './pages/resident/ReparaturanfragePage'
 import { RoomBookingPage } from './pages/resident/RoomBookingPage'
 import { AnnouncementDetailPage } from './pages/resident/AnnouncementDetailPage'
 import { AdminTicketDetailPage } from './pages/admin/AdminTicketDetailPage.tsx'
-import { RoomBookingCreatePage } from './pages/resident/RoomBookingCreatePage'
 
 // admin pages
 import { AdminIndexPage } from './pages/admin/AdminIndexPage'
@@ -27,27 +27,29 @@ import { FaqCreatePage } from './pages/resident/FaqCreatePage.tsx'
 function App() {
   return (
     <Routes>
-      {/* resident routes */}
-      <Route element={<Layout />}>
-        <Route path="/" element={<IndexPage />} />
-        <Route path="/faq" element={<FaqPage />} />
-        <Route path="/faq/:id" element={<FaqDetailPage />}></Route>
-        <Route path="/faq/neu" element={<FaqCreatePage />}></Route>
-        <Route path="/waschmaschinen" element={<LaundryMachinesPage />} />
-        <Route path="/reparaturanfrage" element={<ReparaturanfragePage />} />
-        <Route path="/gemeinschaftsraum" element={<RoomBookingPage />} />
-        <Route
-          path="/gemeinschaftsraum/anfrage/:id"
-          element={<RoomBookingCreatePage />}
-        />
-        <Route path="/aushang/:id" element={<AnnouncementDetailPage />} />
-        {/* admin routes */}
-        <Route path="/admin" element={<AdminIndexPage />} />
-        <Route path="/admin/tickets" element={<AdminTicketOverviewPage />} />
-        <Route path="/admin/tickets/:id" element={<AdminTicketDetailPage />} />
-        {/* general routes */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="*" element={<NotFoundPage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route element={<ProtectedRoute />}>
+        <Route element={<Layout />}>
+          {/* resident routes */}
+          <Route path="/" element={<IndexPage />} />
+          <Route path="/faq" element={<FaqPage />} />
+          <Route path="/faq/:id" element={<FaqDetailPage />}></Route>
+          <Route path="/faq/neu" element={<FaqCreatePage />}></Route>
+          <Route path="/waschmaschinen" element={<LaundryMachinesPage />} />
+          <Route path="/reparaturanfrage" element={<ReparaturanfragePage />} />
+          <Route path="/gemeinschaftsraum" element={<RoomBookingPage />} />
+          <Route path="/aushang/:id" element={<AnnouncementDetailPage />} />
+          {/* admin routes */}
+          <Route path="/admin" element={<AdminIndexPage />} />
+          <Route path="/admin/tickets" element={<AdminTicketOverviewPage />} />
+          <Route
+            path="/admin/tickets/:id"
+            element={<AdminTicketDetailPage />}
+          />
+          {/* general routes */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
       </Route>
     </Routes>
   )
