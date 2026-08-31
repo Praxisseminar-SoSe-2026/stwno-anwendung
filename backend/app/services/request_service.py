@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 from sqlalchemy.orm import Session
 
@@ -32,6 +32,14 @@ class RoomBookingTimeConflictError(Exception):
 
 
 class KeyExchangeDateMissingError(Exception):
+    pass
+
+
+class KeyExchangeDateAfterBookingError(Exception):
+    pass
+
+
+class DateInPastError(Exception):
     pass
 
 
@@ -123,6 +131,11 @@ def create_room_request(db: Session, current_user: User, payload: RoomRequestCre
             "Alternative key exchange date is missing"
         )
 
+    if not payload.regular_key_exchange_possible and payload.alternative_key_exchange_date < date.today():
+        raise DateInPastError(
+            "Date can not be in the past"
+        )
+
     community_room = db.get(CommunityRoom, payload.community_room_id)
     if community_room is None:
         raise RoomNotFoundError(
@@ -142,6 +155,11 @@ def create_room_request(db: Session, current_user: User, payload: RoomRequestCre
             "Start date must be before end date"
         )
 
+    if first_booked_day < date.today():
+        raise DateInPastError(
+            "Date can not be in the past"
+        )
+
     # check if booking is on weekend to book whole weekend, made with tutorial [https://www.geeksforgeeks.org/python/weekday-function-of-datetime-date-class-in-python/]
     if first_booked_day.weekday() >= 4:
         friday = first_booked_day - timedelta(days=first_booked_day.weekday() - 4)
@@ -153,6 +171,11 @@ def create_room_request(db: Session, current_user: User, payload: RoomRequestCre
             "Bookings outside the weekend cant be longer than 2 days"
         )
 
+    if not payload.regular_key_exchange_possible and payload.alternative_key_exchange_date > first_booked_day:
+        raise KeyExchangeDateAfterBookingError(
+            "Key exchange can not happen after first day of booking"
+        )
+
     first_booked_day_datetime = datetime.combine(first_booked_day, datetime.min.time())
     last_booked_day_datetime = datetime.combine(last_booked_day, datetime.max.time())
 
@@ -162,6 +185,7 @@ def create_room_request(db: Session, current_user: User, payload: RoomRequestCre
         else None
     )
 
+    # Todo: time conflict should only affect accepted booking requests
     time_conflict = (
         db.query(RoomRequest)
         .filter(
