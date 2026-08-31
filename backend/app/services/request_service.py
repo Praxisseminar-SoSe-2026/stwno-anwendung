@@ -31,6 +31,10 @@ class RoomBookingTimeConflictError(Exception):
     pass
 
 
+class KeyExchangeDateMissingError(Exception):
+    pass
+
+
 class RoomNotFoundError(Exception):
     pass
 
@@ -114,6 +118,11 @@ def create_room_request(db: Session, current_user: User, payload: RoomRequestCre
             "User has no dormitory assigned; cannot create a room request"
         )
 
+    if not payload.regular_key_exchange_possible and not payload.alternative_key_exchange_date:
+        raise KeyExchangeDateMissingError(
+            "Alternative key exchange date is missing"
+        )
+
     community_room = db.get(CommunityRoom, payload.community_room_id)
     if community_room is None:
         raise RoomNotFoundError(
@@ -147,6 +156,12 @@ def create_room_request(db: Session, current_user: User, payload: RoomRequestCre
     first_booked_day_datetime = datetime.combine(first_booked_day, datetime.min.time())
     last_booked_day_datetime = datetime.combine(last_booked_day, datetime.max.time())
 
+    alternative_key_exchange_datetime = (
+        datetime.combine(payload.alternative_key_exchange_date, datetime.min.time())
+        if payload.alternative_key_exchange_date is not None
+        else None
+    )
+
     time_conflict = (
         db.query(RoomRequest)
         .filter(
@@ -167,6 +182,8 @@ def create_room_request(db: Session, current_user: User, payload: RoomRequestCre
         community_room_id=payload.community_room_id,
         start_datetime=first_booked_day_datetime,
         end_datetime=last_booked_day_datetime,
+        regular_key_exchange_possible=payload.regular_key_exchange_possible,
+        alternative_key_exchange_date=alternative_key_exchange_datetime,
     )
 
     db.add(room_request)

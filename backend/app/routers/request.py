@@ -13,6 +13,7 @@ from app.services.request_service import (
     ResidentDormitoryError,
     RoomNotFoundError,
     RoomBookingTimeConflictError,
+    KeyExchangeDateMissingError,
     get_request,
     list_requests,
     create_room_request,
@@ -58,6 +59,8 @@ def list_all_room_booking_requests(
     try:
         return list_room_bookings(db, current_user)
     except ResidentDormitoryError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except KeyExchangeDateMissingError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
