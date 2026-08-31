@@ -59,7 +59,9 @@
     "occupied": "Belegt",
     "bookCommunityRoom": "{{communityRoomName}} buchen",
     "startDate": "von",
-    "endDate": "bis"
+    "endDate": "bis",
+    "regularKeyExchangePossibleQuestion": "Können Sie den Schlüssel am Vorbuchungstag zwischen 9 und 11 Uhr im Büro der Hausmeister:in abholen?",
+    "alternativeKeyExchangeDate": "alternativer Tag zum Schlüsselaustausch"
   },
   "adminIndex": {
     "title": "Hallo Chef!"

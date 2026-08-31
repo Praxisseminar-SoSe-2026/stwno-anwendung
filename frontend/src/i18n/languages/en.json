@@ -59,7 +59,9 @@
     "occupied": "occupied",
     "bookCommunityRoom": "Book {{communityRoomName}}",
     "startDate": "from",
-    "endDate": "till"
+    "endDate": "till",
+    "regularKeyExchangePossibleQuestion": "Can you pick up the key at the facility management office between 9 a.m. and 11 a.m. on the day before the booking?",
+    "alternativeKeyExchangeDate": "Alternative day for key exchange"
   },
   "adminIndex": {
     "title": "Hello Boss!"

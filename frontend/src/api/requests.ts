@@ -29,6 +29,8 @@ export type RoomRequestCreate = {
   community_room_id: number
   start_date: string
   end_date: string
+  regular_key_exchange_possible: boolean
+  alternative_key_exchange_date: string | null
 }
 
 export type RoomRequestStatusUpdate = {
