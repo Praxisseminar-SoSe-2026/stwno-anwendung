@@ -6,21 +6,26 @@ from sqlalchemy.orm import Session
 from app.core.dependencies import get_current_user
 from app.db.database import get_db
 from app.models.user import User
-from app.schemas.request import RequestResponse, RoomRequestCreate, RoomRequestStatusUpdate, RoomBookings
+from app.schemas.request import (
+    RequestResponse,
+    RoomBookings,
+    RoomRequestCreate,
+    RoomRequestStatusUpdate,
+)
 from app.services.request_service import (
+    DateInPastError,
+    KeyExchangeDateAfterBookingError,
+    KeyExchangeDateMissingError,
     RequestAccessDeniedError,
     RequestNotFoundError,
     ResidentDormitoryError,
-    RoomNotFoundError,
     RoomBookingTimeConflictError,
-    KeyExchangeDateMissingError,
-    KeyExchangeDateAfterBookingError,
-    DateInPastError,
-    get_request,
-    list_requests,
+    RoomNotFoundError,
     create_room_request,
     edit_room_request,
-    list_room_bookings
+    get_request,
+    list_requests,
+    list_room_bookings,
 )
 
 router = APIRouter(prefix="/requests", tags=["requests"])
@@ -28,9 +33,9 @@ router = APIRouter(prefix="/requests", tags=["requests"])
 
 @router.post("/room_booking", response_model=RequestResponse)
 def create_room_booking_request(
-        payload: RoomRequestCreate,
-        db: Annotated[Session, Depends(get_db)],
-        current_user: Annotated[User, Depends(get_current_user)],
+    payload: RoomRequestCreate,
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_user)],
 ):
     try:
         room_request = create_room_request(db, current_user, payload)
@@ -61,8 +66,8 @@ def list_all(
 
 @router.get("/room_booking", response_model=list[RoomBookings])
 def list_all_room_booking_requests(
-        db: Annotated[Session, Depends(get_db)],
-        current_user: Annotated[User, Depends(get_current_user)]
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_user)],
 ):
     try:
         return list_room_bookings(db, current_user)
@@ -88,10 +93,10 @@ def get_one(
 
 @router.patch("/room_booking/{request_id}", response_model=RequestResponse)
 def edit_room_booking_request(
-        request_id: int,
-        payload: RoomRequestStatusUpdate,
-        db: Annotated[Session, Depends(get_db)],
-        current_user: Annotated[User, Depends(get_current_user)],
+    request_id: int,
+    payload: RoomRequestStatusUpdate,
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_user)],
 ):
     try:
         room_request = edit_room_request(db, request_id, current_user, payload)

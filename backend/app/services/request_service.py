@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, date
+from datetime import date, datetime, timedelta
 
 from sqlalchemy.orm import Session
 
@@ -9,8 +9,7 @@ from app.models.repair_request import RepairRequest
 from app.models.request import Request
 from app.models.room_request import RoomRequest
 from app.models.user import User
-
-from app.schemas.request import RoomRequestCreate, RoomRequestStatusUpdate, RoomBookings
+from app.schemas.request import RoomBookings, RoomRequestCreate, RoomRequestStatusUpdate
 
 STAFF_ROLES = {"admin", "mitarbeiter"}
 
@@ -104,8 +103,8 @@ def get_request(db: Session, request_id: int, current_user: User) -> Request:
     if "hausmeister" in roles:
         dormitory_ids = managed_dormitory_ids(db, current_user.id)
         if (
-                isinstance(request, RepairRequest)
-                and request.assigned_dormitory_id in dormitory_ids
+            isinstance(request, RepairRequest)
+            and request.assigned_dormitory_id in dormitory_ids
         ):
             return request
         if isinstance(request, RoomRequest):
@@ -120,21 +119,25 @@ def get_request(db: Session, request_id: int, current_user: User) -> Request:
     raise RequestAccessDeniedError("Not authorized to view this request")
 
 
-def create_room_request(db: Session, current_user: User, payload: RoomRequestCreate) -> RoomRequest:
+def create_room_request(
+    db: Session, current_user: User, payload: RoomRequestCreate
+) -> RoomRequest:
     if current_user.dormitory_id is None:
         raise ResidentDormitoryError(
             "User has no dormitory assigned; cannot create a room request"
         )
 
-    if not payload.regular_key_exchange_possible and not payload.alternative_key_exchange_date:
-        raise KeyExchangeDateMissingError(
-            "Alternative key exchange date is missing"
-        )
+    if (
+        not payload.regular_key_exchange_possible
+        and not payload.alternative_key_exchange_date
+    ):
+        raise KeyExchangeDateMissingError("Alternative key exchange date is missing")
 
-    if not payload.regular_key_exchange_possible and payload.alternative_key_exchange_date < date.today():
-        raise DateInPastError(
-            "Date can not be in the past"
-        )
+    if (
+        not payload.regular_key_exchange_possible
+        and payload.alternative_key_exchange_date < date.today()
+    ):
+        raise DateInPastError("Date can not be in the past")
 
     community_room = db.get(CommunityRoom, payload.community_room_id)
     if community_room is None:
@@ -151,14 +154,10 @@ def create_room_request(db: Session, current_user: User, payload: RoomRequestCre
     last_booked_day = payload.end_date
 
     if first_booked_day > last_booked_day:
-        raise RoomBookingTimeConflictError(
-            "Start date must be before end date"
-        )
+        raise RoomBookingTimeConflictError("Start date must be before end date")
 
     if first_booked_day < date.today():
-        raise DateInPastError(
-            "Date can not be in the past"
-        )
+        raise DateInPastError("Date can not be in the past")
 
     # check if booking is on weekend to book whole weekend, made with tutorial [https://www.geeksforgeeks.org/python/weekday-function-of-datetime-date-class-in-python/]
     if first_booked_day.weekday() >= 4:
@@ -171,7 +170,10 @@ def create_room_request(db: Session, current_user: User, payload: RoomRequestCre
             "Bookings outside the weekend cant be longer than 2 days"
         )
 
-    if not payload.regular_key_exchange_possible and payload.alternative_key_exchange_date > first_booked_day:
+    if (
+        not payload.regular_key_exchange_possible
+        and payload.alternative_key_exchange_date > first_booked_day
+    ):
         raise KeyExchangeDateAfterBookingError(
             "Key exchange can not happen after first day of booking"
         )
@@ -216,8 +218,9 @@ def create_room_request(db: Session, current_user: User, payload: RoomRequestCre
     return room_request
 
 
-def edit_room_request(db: Session, request_id: int, current_user: User,
-                      payload: RoomRequestStatusUpdate) -> RoomRequest:
+def edit_room_request(
+    db: Session, request_id: int, current_user: User, payload: RoomRequestStatusUpdate
+) -> RoomRequest:
     roles = set(get_user_role(db, current_user.id))
 
     if not (roles & STAFF_ROLES):
@@ -236,18 +239,20 @@ def edit_room_request(db: Session, request_id: int, current_user: User,
     return room_request
 
 
-# Todo: staff should be able to look at these kind of information (independent of having a dormitory assigned)
+# Todo: staff should be able to look at these kind of information
+#  (independent of having a dormitory assigned)
 def list_room_bookings(db: Session, current_user: User) -> list[RoomBookings]:
     if current_user.dormitory_id is None:
         raise ResidentDormitoryError(
             "User has no dormitory assigned; cannot list room availability"
         )
 
-    room_requests = (db.query(RoomRequest)
-                     .join(CommunityRoom, RoomRequest.community_room_id == CommunityRoom.id)
-                     .filter(CommunityRoom.dormitory_id == current_user.dormitory_id)
-                     .all()
-                     )
+    room_requests = (
+        db.query(RoomRequest)
+        .join(CommunityRoom, RoomRequest.community_room_id == CommunityRoom.id)
+        .filter(CommunityRoom.dormitory_id == current_user.dormitory_id)
+        .all()
+    )
 
     return [
         RoomBookings(

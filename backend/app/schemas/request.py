@@ -1,8 +1,7 @@
 from __future__ import annotations
-from typing import Literal
 
-from datetime import datetime, date
-from typing import TYPE_CHECKING
+from datetime import date, datetime
+from typing import TYPE_CHECKING, Literal
 
 from pydantic import BaseModel
 

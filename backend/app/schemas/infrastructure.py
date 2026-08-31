@@ -1,7 +1,8 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel
 
 
-# Todo: this could be the file for more infrastructure related schemas, e.g. rentable cleaning gadgets
+# Todo: this could be the file for more infrastructure related schemas,
+#  e.g. rentable cleaning gadgets
 class CommunityRoomResponse(BaseModel):
     id: int
     name: str

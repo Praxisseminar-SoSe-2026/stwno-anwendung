@@ -13,10 +13,10 @@ from app.routers import (
     auth,
     email,
     faq,
+    infrastructure,
     permission,
     registration,
     request,
-    infrastructure
 )
 
 setup_logging(level=settings.log_level, environment=settings.environment)
