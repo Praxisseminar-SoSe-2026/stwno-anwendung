@@ -54,7 +54,14 @@
     "title": "Repair Request"
   },
   "roomBooking": {
-    "title": "Community Room Booking"
+    "title": "Community Room Booking",
+    "selectCommunityRoom": "Select Community Room",
+    "occupied": "occupied",
+    "bookCommunityRoom": "Book {{communityRoomName}}",
+    "startDate": "from",
+    "endDate": "till",
+    "regularKeyExchangePossibleQuestion": "Can you pick up the key at the facility management office between 9 a.m. and 11 a.m. on the day before the booking?",
+    "alternativeKeyExchangeDate": "Alternative day for key exchange"
   },
   "adminIndex": {
     "title": "Hello Boss!"
