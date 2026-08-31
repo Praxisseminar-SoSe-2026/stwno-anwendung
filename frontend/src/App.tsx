@@ -10,6 +10,7 @@ import { ReparaturanfragePage } from './pages/resident/ReparaturanfragePage'
 import { RoomBookingPage } from './pages/resident/RoomBookingPage'
 import { AnnouncementDetailPage } from './pages/resident/AnnouncementDetailPage'
 import { AdminTicketDetailPage } from './pages/admin/AdminTicketDetailPage.tsx'
+import { RoomBookingCreatePage } from './pages/resident/RoomBookingCreatePage'
 
 // admin pages
 import { AdminIndexPage } from './pages/admin/AdminIndexPage'
@@ -35,6 +36,10 @@ function App() {
         <Route path="/waschmaschinen" element={<LaundryMachinesPage />} />
         <Route path="/reparaturanfrage" element={<ReparaturanfragePage />} />
         <Route path="/gemeinschaftsraum" element={<RoomBookingPage />} />
+        <Route
+          path="/gemeinschaftsraum/anfrage/:id"
+          element={<RoomBookingCreatePage />}
+        />
         <Route path="/aushang/:id" element={<AnnouncementDetailPage />} />
         {/* admin routes */}
         <Route path="/admin" element={<AdminIndexPage />} />

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime, timedelta
 
 from sqlalchemy.orm import Session
 
@@ -9,6 +9,7 @@ from app.models.repair_request import RepairRequest
 from app.models.request import Request
 from app.models.room_request import RoomRequest
 from app.models.user import User
+from app.schemas.request import RoomBookings, RoomRequestCreate, RoomRequestStatusUpdate
 
 STAFF_ROLES = {"admin", "mitarbeiter"}
 
@@ -18,6 +19,30 @@ class RequestNotFoundError(Exception):
 
 
 class RequestAccessDeniedError(Exception):
+    pass
+
+
+class ResidentDormitoryError(Exception):
+    pass
+
+
+class RoomBookingTimeConflictError(Exception):
+    pass
+
+
+class KeyExchangeDateMissingError(Exception):
+    pass
+
+
+class KeyExchangeDateAfterBookingError(Exception):
+    pass
+
+
+class DateInPastError(Exception):
+    pass
+
+
+class RoomNotFoundError(Exception):
     pass
 
 
@@ -92,3 +117,151 @@ def get_request(db: Session, request_id: int, current_user: User) -> Request:
         return request
 
     raise RequestAccessDeniedError("Not authorized to view this request")
+
+
+def create_room_request(
+    db: Session, current_user: User, payload: RoomRequestCreate
+) -> RoomRequest:
+    if current_user.dormitory_id is None:
+        raise ResidentDormitoryError(
+            "User has no dormitory assigned; cannot create a room request"
+        )
+
+    if (
+        not payload.regular_key_exchange_possible
+        and not payload.alternative_key_exchange_date
+    ):
+        raise KeyExchangeDateMissingError("Alternative key exchange date is missing")
+
+    if (
+        not payload.regular_key_exchange_possible
+        and payload.alternative_key_exchange_date < date.today()
+    ):
+        raise DateInPastError("Date can not be in the past")
+
+    community_room = db.get(CommunityRoom, payload.community_room_id)
+    if community_room is None:
+        raise RoomNotFoundError(
+            f"Community room with id {payload.community_room_id} not found"
+        )
+
+    if current_user.dormitory_id != community_room.dormitory_id:
+        raise ResidentDormitoryError(
+            "User has different dormitory assigned, than community room"
+        )
+
+    first_booked_day = payload.start_date
+    last_booked_day = payload.end_date
+
+    if first_booked_day > last_booked_day:
+        raise RoomBookingTimeConflictError("Start date must be before end date")
+
+    if first_booked_day < date.today():
+        raise DateInPastError("Date can not be in the past")
+
+    # check if booking is on weekend to book whole weekend, made with tutorial [https://www.geeksforgeeks.org/python/weekday-function-of-datetime-date-class-in-python/]
+    if first_booked_day.weekday() >= 4:
+        friday = first_booked_day - timedelta(days=first_booked_day.weekday() - 4)
+        first_booked_day = friday
+        last_booked_day = friday + timedelta(days=2)
+    # check if maximal 2 days are booked in a row (except for weekends)
+    elif (last_booked_day - first_booked_day).days >= 2:
+        raise RoomBookingTimeConflictError(
+            "Bookings outside the weekend cant be longer than 2 days"
+        )
+
+    if (
+        not payload.regular_key_exchange_possible
+        and payload.alternative_key_exchange_date > first_booked_day
+    ):
+        raise KeyExchangeDateAfterBookingError(
+            "Key exchange can not happen after first day of booking"
+        )
+
+    first_booked_day_datetime = datetime.combine(first_booked_day, datetime.min.time())
+    last_booked_day_datetime = datetime.combine(last_booked_day, datetime.max.time())
+
+    alternative_key_exchange_datetime = (
+        datetime.combine(payload.alternative_key_exchange_date, datetime.min.time())
+        if payload.alternative_key_exchange_date is not None
+        else None
+    )
+
+    # Todo: time conflict should only affect accepted booking requests
+    time_conflict = (
+        db.query(RoomRequest)
+        .filter(
+            RoomRequest.community_room_id == payload.community_room_id,
+            RoomRequest.start_datetime <= last_booked_day_datetime,
+            RoomRequest.end_datetime >= first_booked_day_datetime,
+        )
+        .first()
+    )
+
+    if time_conflict is not None:
+        raise RoomBookingTimeConflictError(
+            "Community room is already booked for this timeslot"
+        )
+
+    room_request = RoomRequest(
+        resident_id=current_user.id,
+        community_room_id=payload.community_room_id,
+        start_datetime=first_booked_day_datetime,
+        end_datetime=last_booked_day_datetime,
+        regular_key_exchange_possible=payload.regular_key_exchange_possible,
+        alternative_key_exchange_date=alternative_key_exchange_datetime,
+    )
+
+    db.add(room_request)
+    db.commit()
+    db.refresh(room_request)
+    return room_request
+
+
+def edit_room_request(
+    db: Session, request_id: int, current_user: User, payload: RoomRequestStatusUpdate
+) -> RoomRequest:
+    roles = set(get_user_role(db, current_user.id))
+
+    if not (roles & STAFF_ROLES):
+        raise RequestAccessDeniedError("Not authorized to edit this request")
+
+    room_request = db.get(RoomRequest, request_id)
+    if room_request is None:
+        raise RequestNotFoundError(f"Request {request_id} not found")
+
+    room_request.status = payload.status
+    room_request.decided_by_id = current_user.id
+    room_request.decided_at = datetime.now()
+
+    db.commit()
+    db.refresh(room_request)
+    return room_request
+
+
+# Todo: staff should be able to look at these kind of information
+#  (independent of having a dormitory assigned)
+def list_room_bookings(db: Session, current_user: User) -> list[RoomBookings]:
+    if current_user.dormitory_id is None:
+        raise ResidentDormitoryError(
+            "User has no dormitory assigned; cannot list room availability"
+        )
+
+    room_requests = (
+        db.query(RoomRequest)
+        .join(CommunityRoom, RoomRequest.community_room_id == CommunityRoom.id)
+        .filter(CommunityRoom.dormitory_id == current_user.dormitory_id)
+        .all()
+    )
+
+    return [
+        RoomBookings(
+            id=room_request.id,
+            community_room_id=room_request.community_room_id,
+            dormitory_id=current_user.dormitory_id,
+            start_datetime=room_request.start_datetime,
+            end_datetime=room_request.end_datetime,
+            status=room_request.status,
+        )
+        for room_request in room_requests
+    ]

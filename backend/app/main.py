@@ -13,6 +13,7 @@ from app.routers import (
     auth,
     email,
     faq,
+    infrastructure,
     permission,
     registration,
     request,
@@ -40,6 +41,7 @@ app.include_router(announcement.router)
 app.include_router(email.router)
 app.include_router(auth.router)
 app.include_router(faq.router)
+app.include_router(infrastructure.router)
 
 
 @app.get("/health")
