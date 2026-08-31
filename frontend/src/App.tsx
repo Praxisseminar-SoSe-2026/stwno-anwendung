@@ -11,7 +11,6 @@ import { ReparaturanfragePage } from './pages/resident/ReparaturanfragePage'
 import { RoomBookingPage } from './pages/resident/RoomBookingPage'
 import { AnnouncementDetailPage } from './pages/resident/AnnouncementDetailPage'
 import { AdminTicketDetailPage } from './pages/admin/AdminTicketDetailPage.tsx'
-import { RoomBookingCreatePage } from './pages/resident/RoomBookingCreatePage'
 
 // admin pages
 import { AdminIndexPage } from './pages/admin/AdminIndexPage'
