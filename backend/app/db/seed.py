@@ -20,6 +20,9 @@ from app.models import (
     FaqCategory,
     FaqEntry,
     ItemType,
+    LaundryBooking,
+    LaundryMachine,
+    LaundryRoom,
     Permission,
     RepairRequest,
     Role,
@@ -27,8 +30,6 @@ from app.models import (
     RoomRequest,
     User,
     UserRole,
-    WashingMachine,
-    WashRoom,
 )
 
 
@@ -151,7 +152,7 @@ def seed() -> None:
             ]
         )
 
-        # Community Rooms, Items, Washing Room
+        # Community Rooms, Items, Laundry Room
         community_room = CommunityRoom(
             dormitory_id=dorm.id,
             name="Gemeinschaftsraum EG",
@@ -163,29 +164,42 @@ def seed() -> None:
         db.add(item_type)
         db.flush()
 
-        wash_room = WashRoom(dormitory_id=dorm.id, name="Waschraum Erdgeschoss")
-        db.add(wash_room)
+        laundry_room = LaundryRoom(dormitory_id=dorm.id, name="Waschraum Erdgeschoss")
+        db.add(laundry_room)
         db.flush()
 
-        db.add_all(
-            [
-                WashingMachine(
-                    wash_room_id=wash_room.id, label="Maschine 1", status="Frei"
-                ),
-                WashingMachine(
-                    wash_room_id=wash_room.id,
-                    label="Maschine 2",
-                    status="Belegt",
-                    last_signal_at=datetime.now(UTC),
-                ),
-                WashingMachine(
-                    wash_room_id=wash_room.id,
-                    label="Maschine 3",
-                    status="Belegt",
-                    last_signal_at=datetime.now(UTC),
-                ),
-            ]
+        laundry_machine1 = LaundryMachine(
+            laundry_room_id=laundry_room.id,
+            label="Maschine 1",
+            type="Dryer",
+            status="Frei"
         )
+        laundry_machine2 = LaundryMachine(
+            laundry_room_id=laundry_room.id,
+            label="Maschine 2",
+            status="Belegt",
+        )
+        laundry_machine3 = LaundryMachine(
+            laundry_room_id=laundry_room.id,
+            label="Maschine 3",
+            status="Belegt",
+        )
+
+        db.add_all([laundry_machine1, laundry_machine2, laundry_machine3])
+        db.flush()
+
+        db.add_all([
+            LaundryBooking(
+                laundry_machine_id=laundry_machine2.id,
+                resident_id=resident.id,
+                ends_at=datetime.now() + timedelta(minutes=90),
+            ),
+            LaundryBooking(
+                laundry_machine_id=laundry_machine3.id,
+                resident_id=resident.id,
+                ends_at=datetime.now() + timedelta(minutes=2),
+            )
+        ])
 
         # FAQs
         faq_category_general = FaqCategory(name="General")

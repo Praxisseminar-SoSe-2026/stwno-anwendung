@@ -9,17 +9,17 @@ from app.db.database import Base
 
 if TYPE_CHECKING:
     from app.models.dormitory import Dormitory
-    from app.models.washing_machine import WashingMachine
+    from app.models.laundry_machine import LaundryMachine
 
 
-class WashRoom(Base):
-    __tablename__ = "wash_rooms"
+class LaundryRoom(Base):
+    __tablename__ = "laundry_rooms"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     dormitory_id: Mapped[int] = mapped_column(ForeignKey("dormitories.id"))
     name: Mapped[str]
 
-    dormitory: Mapped[Dormitory] = relationship(back_populates="wash_rooms")
-    washing_machines: Mapped[list[WashingMachine]] = relationship(
-        back_populates="wash_room"
+    dormitory: Mapped[Dormitory] = relationship(back_populates="laundry_rooms")
+    laundry_machines: Mapped[list[LaundryMachine]] = relationship(
+        back_populates="laundry_room"
     )

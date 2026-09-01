@@ -19,8 +19,9 @@ from app.models.role_permission import RolePermission
 from app.models.room_request import RoomRequest
 from app.models.user import User
 from app.models.user_role import UserRole
-from app.models.wash_room import WashRoom
-from app.models.washing_machine import WashingMachine
+from app.models.laundry_room import LaundryRoom
+from app.models.laundry_machine import LaundryMachine
+from app.models.laundry_booking import LaundryBooking
 
 __all__ = [
     "Role",

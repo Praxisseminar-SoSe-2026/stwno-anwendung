@@ -11,9 +11,9 @@ if TYPE_CHECKING:
     from app.models.community_room import CommunityRoom
     from app.models.dormitory_facility_manager import DormitoryFacilityManager
     from app.models.item_type import ItemType
+    from app.models.laundry_room import LaundryRoom
     from app.models.repair_request import RepairRequest
     from app.models.user import User
-    from app.models.wash_room import WashRoom
 
 
 class Dormitory(Base):
@@ -36,5 +36,5 @@ class Dormitory(Base):
         back_populates="assigned_dormitory"
     )
     item_types: Mapped[list[ItemType]] = relationship(back_populates="dormitory")
-    wash_rooms: Mapped[list[WashRoom]] = relationship(back_populates="dormitory")
+    laundry_rooms: Mapped[list[LaundryRoom]] = relationship(back_populates="dormitory")
     announcements: Mapped[list[Announcement]] = relationship(back_populates="dormitory")
