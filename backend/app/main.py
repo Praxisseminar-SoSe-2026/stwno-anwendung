@@ -11,6 +11,7 @@ from app.db.database import get_db
 from app.routers import (
     announcement,
     auth,
+    dormitory,
     email,
     faq,
     infrastructure,
@@ -39,6 +40,7 @@ app.include_router(request.router)
 app.include_router(registration.router)
 app.include_router(announcement.router)
 app.include_router(email.router)
+app.include_router(dormitory.router)
 app.include_router(auth.router)
 app.include_router(faq.router)
 app.include_router(infrastructure.router)
