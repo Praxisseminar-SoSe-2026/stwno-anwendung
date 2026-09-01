@@ -94,7 +94,13 @@ def seed() -> None:
             city="Regensburg",
             zip_code="93053",
         )
-        db.add_all([dorm])
+        dorm2 = Dormitory(
+            name="Fort-Skelly-Straße",
+            address="Fort-Skelly-Straße 19",
+            city="Regensburg",
+            zip_code="93053",
+        )
+        db.add_all([dorm, dorm2])
         db.flush()
 
         # User
@@ -137,7 +143,17 @@ def seed() -> None:
             contract_end=date.today() + timedelta(days=180),
             dormitory_id=dorm.id,
         )
-        db.add_all([admin, admin2, admin3, hausmeister, resident])
+        resident2 = User(
+            first_name="Lukas",
+            last_name="Beispiel",
+            email="lukas@mail.com",
+            password_hash=hash_password("password"),
+            person_number="S1002",
+            flat_number="12B",
+            contract_end=date.today() + timedelta(days=180),
+            dormitory_id=dorm2.id,
+        )
+        db.add_all([admin, admin2, admin3, hausmeister, resident, resident2])
         db.flush()
 
         db.add_all(
@@ -147,6 +163,7 @@ def seed() -> None:
                 UserRole(user_id=admin3.id, role_id=role_admin.id),
                 UserRole(user_id=hausmeister.id, role_id=role_facility_manager.id),
                 UserRole(user_id=resident.id, role_id=role_resident.id),
+                UserRole(user_id=resident2.id, role_id=role_resident.id),
                 DormitoryFacilityManager(dormitory_id=dorm.id, user_id=hausmeister.id),
             ]
         )
