@@ -9,24 +9,38 @@ import {
   TextField,
   FormControlLabel,
   Checkbox,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
 } from '@mui/material'
 import { createAnnouncement } from '../../api/announcements'
+import { useDormitories } from '../../hooks/useDormitories'
+
+const GLOBAL_VALUE = 'global'
 
 export function AdminCreateAnnouncementPage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const { dormitories } = useDormitories()
 
   const [title, setTitle] = useState('')
   const [text, setText] = useState('')
   const [important, setImportant] = useState(false)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [scope, setScope] = useState<string>(GLOBAL_VALUE)
 
   const handleSubmit = async () => {
     setSaving(true)
     setError(null)
     try {
-      const created = await createAnnouncement({ title, text, important })
+      const created = await createAnnouncement({
+        title,
+        text,
+        important,
+        dormitory_id: scope === GLOBAL_VALUE ? null : Number(scope),
+      })
       navigate(`/aushang/${created.id}`)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create')
@@ -34,11 +48,13 @@ export function AdminCreateAnnouncementPage() {
     }
   }
 
-  /* TODO: Add the possibility to create the announcement for a specific dormitory */
+  /* TODO: Add optional image upload */
   return (
     <Paper variant="outlined" sx={{ p: 4 }}>
       <Stack spacing={2}>
-        <Typography variant="h4">{t('bulletinBoard.createAnnouncement')}</Typography>
+        <Typography variant="h4">
+          {t('bulletinBoard.createAnnouncement')}
+        </Typography>
 
         <TextField
           label={t('bulletinBoard.titleLabel')}
@@ -63,6 +79,25 @@ export function AdminCreateAnnouncementPage() {
           minRows={4}
           fullWidth
         />
+
+        <FormControl fullWidth>
+          <InputLabel id="scope-label">{t('bulletinBoard.scope')}</InputLabel>
+          <Select
+            labelId="scope-label"
+            value={scope}
+            label={t('bulletinBoard.scope')}
+            onChange={(e) => setScope(e.target.value)}
+          >
+            <MenuItem value={GLOBAL_VALUE}>
+              {t('bulletinBoard.scopeGlobal')}
+            </MenuItem>
+            {dormitories.map((d) => (
+              <MenuItem key={d.id} value={String(d.id)}>
+                {d.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
         <Button
           variant="contained"

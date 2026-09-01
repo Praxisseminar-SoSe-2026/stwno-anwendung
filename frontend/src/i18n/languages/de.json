@@ -15,7 +15,9 @@
     "titleLabel": "Titel",
     "textLabel": "Text",
     "newAnnouncement": "+",
-    "createAnnouncement": "Neue Ankündigung"
+    "createAnnouncement": "Neue Ankündigung",
+    "scope": "Sichtbarkeit der Ankündigung",
+    "scopeGlobal": "Für alle Wohnheime"
   },
   "common": {
     "save": "Speichern",

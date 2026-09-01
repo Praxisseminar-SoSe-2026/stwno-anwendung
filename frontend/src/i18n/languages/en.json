@@ -15,7 +15,9 @@
     "titleLabel": "Title",
     "textLabel": "Text",
     "newAnnouncement": "+",
-    "createAnnouncement": "New Announcement"
+    "createAnnouncement": "New announcement",
+    "scope": "Visibility of the announcement",
+    "scopeGlobal": "All dormitories"
   },
   "common": {
     "save": "Save",
