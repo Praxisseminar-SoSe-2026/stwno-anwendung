@@ -13,7 +13,9 @@
     "empty": "Keine Ankündigungen vorhanden.",
     "important": "Wichtig",
     "titleLabel": "Titel",
-    "textLabel": "Text"
+    "textLabel": "Text",
+    "newAnnouncement": "+",
+    "createAnnouncement": "Neue Ankündigung"
   },
   "common": {
     "save": "Speichern",

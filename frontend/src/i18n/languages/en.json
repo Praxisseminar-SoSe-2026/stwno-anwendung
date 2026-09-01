@@ -13,7 +13,9 @@
     "empty": "No announcements available.",
     "important": "Important",
     "titleLabel": "Title",
-    "textLabel": "Text"
+    "textLabel": "Text",
+    "newAnnouncement": "+",
+    "createAnnouncement": "New Announcement"
   },
   "common": {
     "save": "Save",

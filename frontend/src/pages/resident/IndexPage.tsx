@@ -8,19 +8,32 @@ import {
   CardContent,
   Chip,
   CircularProgress,
+  Button,
 } from '@mui/material'
 import { useAnnouncements } from '../../hooks/useAnnouncements'
+import { useAuth } from '../../contexts/AuthContext'
+
+const EDITOR_ROLES = ['admin', 'hausmeister']
 
 export function IndexPage() {
   const { t } = useTranslation()
   const { announcements, loading, error } = useAnnouncements()
+  const { hasRole, loading: authLoading } = useAuth()
+  const canCreate = !authLoading && EDITOR_ROLES.some((role) => hasRole(role))
 
   if (loading) return <CircularProgress />
   if (error) return <Typography color="error">{t('login.invalid')}</Typography>
 
   return (
     <Stack spacing={2}>
-      <Typography variant="h1">{t('bulletinBoard.title')}</Typography>
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <Typography variant="h1">{t('bulletinBoard.title')}</Typography>
+        {canCreate && (
+          <Button variant="contained" component={Link} to="/aushang/neu">
+            {t('bulletinBoard.newAnnouncement')}
+          </Button>
+        )}
+      </Stack>
 
       {announcements.length === 0 && (
         <Typography>{t('bulletinBoard.empty')}</Typography>
