@@ -9,24 +9,25 @@ from app.models.user import User
 from app.schemas.request import (
     RepairRequestCreate,
     RequestResponse,
-    RoomBookings,
     RoomRequestCreate,
     RoomRequestStatusUpdate,
 )
 from app.services.request_service import (
     DateInPastError,
+    InvalidTimeSlotProposalError,
     KeyExchangeDateAfterBookingError,
     KeyExchangeDateMissingError,
     RequestAccessDeniedError,
     RequestNotFoundError,
     ResidentDormitoryError,
+    ResidentWithoutDormitoryError,
     RoomBookingTimeConflictError,
     RoomNotFoundError,
+    create_repair_request,
     create_room_request,
     edit_room_request,
     get_request,
     list_requests,
-    list_room_bookings,
 )
 
 router = APIRouter(prefix="/requests", tags=["requests"])
@@ -47,6 +48,7 @@ def create_repair(
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
     return RequestResponse.from_request(repair_request)
+
 
 @router.get("", response_model=list[RequestResponse])
 def list_all(
@@ -95,8 +97,8 @@ def get_one(
         raise HTTPException(status_code=403, detail=str(exc)) from exc
 
     return RequestResponse.from_request(request)
-  
-  
+
+
 @router.patch("/room_booking/{request_id}", response_model=RequestResponse)
 def edit_room_booking_request(
     request_id: int,
@@ -105,9 +107,7 @@ def edit_room_booking_request(
     current_user: Annotated[User, Depends(get_current_user)],
 ):
     try:
-        room_request = edit_room_request(
-            db, request_id, current_user, payload
-        )
+        room_request = edit_room_request(db, request_id, current_user, payload)
     except RequestAccessDeniedError as exc:
         raise HTTPException(status_code=403, detail=str(exc)) from exc
     except RequestNotFoundError as exc:

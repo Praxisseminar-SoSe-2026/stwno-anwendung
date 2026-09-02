@@ -10,7 +10,12 @@ from app.models.repair_request import RepairRequest
 from app.models.request import Request
 from app.models.room_request import RoomRequest
 from app.models.user import User
-from app.schemas.request import RoomBookings, RepairRequestCreate, RoomRequestCreate, RoomRequestStatusUpdate
+from app.schemas.request import (
+    RepairRequestCreate,
+    RoomBookings,
+    RoomRequestCreate,
+    RoomRequestStatusUpdate,
+)
 
 STAFF_ROLES = {"admin", "mitarbeiter"}
 
@@ -27,13 +32,15 @@ class RequestNotFoundError(Exception):
 class RequestAccessDeniedError(Exception):
     pass
 
+
 class ResidentWithoutDormitoryError(Exception):
     pass
 
 
 class InvalidTimeSlotProposalError(Exception):
     pass
-  
+
+
 class ResidentDormitoryError(Exception):
     pass
 
@@ -189,8 +196,8 @@ def create_repair_request(
     db.commit()
     db.refresh(repair_request)
     return repair_request
-  
-  
+
+
 def create_room_request(
     db: Session, current_user: User, payload: RoomRequestCreate
 ) -> RoomRequest:

@@ -90,6 +90,8 @@ class RepairRequestCreate(BaseModel):
     entry_permission: bool = False
     proposed_time_slots: list[AccessTimeSlotProposalCreate] = []
     proposed_date_note: str | None = None
+
+
 class RoomRequestCreate(BaseModel):
     community_room_id: int
     start_date: date
