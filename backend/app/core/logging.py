@@ -10,6 +10,7 @@ LOG_DIR.mkdir(exist_ok=True)
 
 HUMAN_FORMAT = "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
 
+
 # Build with https://runebook.dev/en/docs/python/library/logging/formatter-objects
 class JsonFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord) -> str:

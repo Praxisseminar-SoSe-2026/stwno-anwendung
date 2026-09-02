@@ -78,6 +78,7 @@ class RequestResponse(BaseModel):
 
         return cls(**data)
 
+
 class RepairRequestCreate(BaseModel):
     description: str
     location: str

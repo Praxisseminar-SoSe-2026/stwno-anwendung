@@ -8,8 +8,9 @@ class AnnouncementNotFoundError(Exception):
     pass
 
 
-def create_announcement(db: Session, author_id: int, payload: AnnouncementCreate) \
-        -> Announcement:
+def create_announcement(
+    db: Session, author_id: int, payload: AnnouncementCreate
+) -> Announcement:
     announcement = Announcement(author_id=author_id, **payload.model_dump())
     db.add(announcement)
     db.commit()

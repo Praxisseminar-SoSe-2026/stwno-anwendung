@@ -111,9 +111,7 @@ def get_request(db: Session, request_id: int, current_user: User) -> Request:
 
 def _validate_time_slot_proposal(start_time: datetime) -> None:
     if start_time <= datetime.now(UTC):
-        raise InvalidTimeSlotProposalError(
-            "Proposed time slots must be in the future"
-        )
+        raise InvalidTimeSlotProposalError("Proposed time slots must be in the future")
     if start_time.weekday() > 4:
         raise InvalidTimeSlotProposalError(
             "Proposed time slots must be on a weekday (Monday-Friday)"
@@ -136,9 +134,7 @@ def create_repair_request(
             "User has no dormitory assigned; cannot create a repair request"
         )
 
-    has_note = bool(
-        payload.proposed_date_note and payload.proposed_date_note.strip()
-    )
+    has_note = bool(payload.proposed_date_note and payload.proposed_date_note.strip())
     needs_time_slots = not payload.entry_permission and not has_note
 
     if needs_time_slots:

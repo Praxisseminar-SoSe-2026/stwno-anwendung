@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app.core.dependencies import get_current_user
 from app.db.database import get_db
 from app.models.user import User
-from app.schemas.request import RequestResponse, RepairRequestCreate
+from app.schemas.request import RepairRequestCreate, RequestResponse
 from app.services.request_service import (
     InvalidTimeSlotProposalError,
     RequestAccessDeniedError,
@@ -18,6 +18,7 @@ from app.services.request_service import (
 )
 
 router = APIRouter(prefix="/requests", tags=["requests"])
+
 
 @router.post("/repair", response_model=RequestResponse, status_code=201)
 def create_repair(
