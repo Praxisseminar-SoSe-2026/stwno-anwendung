@@ -9,6 +9,17 @@ if TYPE_CHECKING:
     from app.models.request import Request
 
 
+# only start time because end time is auto generated
+class AccessTimeSlotProposalCreate(BaseModel):
+    start_time: datetime
+
+
+class AccessTimeSlotProposalResponse(BaseModel):
+    id: int
+    start_time: datetime
+    end_time: datetime
+
+
 class RequestResponse(BaseModel):
     id: int
     type: str
@@ -20,6 +31,9 @@ class RequestResponse(BaseModel):
     location: str | None = None
     description: str | None = None
     image_url: str | None = None
+    entry_permission: bool | None = None
+    proposed_date_note: str | None = None
+    proposed_time_slots: list[AccessTimeSlotProposalResponse] = []
 
     # room-specific
     community_room_id: int | None = None
@@ -46,6 +60,16 @@ class RequestResponse(BaseModel):
                 location=request.location,
                 description=request.description,
                 image_url=request.image_url,
+                entry_permission=request.entry_permission,
+                proposed_date_note=request.proposed_date_note,
+                proposed_time_slots=[
+                    AccessTimeSlotProposalResponse(
+                        id=slot.id,
+                        start_time=slot.start_time,
+                        end_time=slot.end_time,
+                    )
+                    for slot in request.time_slot_proposals
+                ],
             )
         elif isinstance(request, RoomRequest):
             data.update(
@@ -57,6 +81,15 @@ class RequestResponse(BaseModel):
             )
 
         return cls(**data)
+
+
+class RepairRequestCreate(BaseModel):
+    description: str
+    location: str
+    image_url: str | None = None
+    entry_permission: bool = False
+    proposed_time_slots: list[AccessTimeSlotProposalCreate] = []
+    proposed_date_note: str | None = None
 
 
 class RoomRequestCreate(BaseModel):

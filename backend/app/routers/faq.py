@@ -36,8 +36,8 @@ def list_faq_categories(
 
 @router.get("/{faq_id}", response_model=FaqEntryResponse)
 def get_one(
-        faq_id: int,
-        db: Annotated[Session, Depends(get_db)],
+    faq_id: int,
+    db: Annotated[Session, Depends(get_db)],
 ):
     try:
         return get_faq_entry(db, faq_id)

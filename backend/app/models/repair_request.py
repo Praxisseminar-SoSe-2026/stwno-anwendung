@@ -10,6 +10,7 @@ from app.models.request import Request
 
 if TYPE_CHECKING:
     from app.models.access_time_slot import AccessTimeSlot
+    from app.models.access_time_slot_proposal import AccessTimeSlotProposal
     from app.models.consent import Consent
     from app.models.dormitory import Dormitory
     from app.models.repair_request_status_history import RepairRequestStatusHistory
@@ -26,6 +27,7 @@ class RepairRequest(Request):
     entry_permission: Mapped[bool | None] = mapped_column(
         default=False, server_default=sql_false()
     )
+    proposed_date_note: Mapped[str | None] = mapped_column(Text, default=None)
     assigned_dormitory_id: Mapped[int | None] = mapped_column(
         ForeignKey("dormitories.id"), default=None
     )
@@ -35,6 +37,9 @@ class RepairRequest(Request):
     )
     access_time_slot: Mapped[AccessTimeSlot | None] = relationship(
         back_populates="repair_request", uselist=False
+    )
+    time_slot_proposals: Mapped[list[AccessTimeSlotProposal]] = relationship(
+        back_populates="repair_request"
     )
     status_history: Mapped[list[RepairRequestStatusHistory]] = relationship(
         back_populates="repair_request"

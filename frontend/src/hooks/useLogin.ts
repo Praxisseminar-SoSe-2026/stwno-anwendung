@@ -25,6 +25,7 @@ export function useLogin() {
         last_name: result.last_name,
         roles: result.roles,
         dormitory_id: result.dormitory_id,
+        flat_number: result.flat_number,
       })
       return result
     } catch (err) {

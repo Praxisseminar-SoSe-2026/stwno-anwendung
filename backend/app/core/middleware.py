@@ -13,7 +13,7 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         start_time = time.perf_counter()
         response = await call_next(request)
-        response_time = (time.perf_counter() - start_time) * 1000 # ms
+        response_time = (time.perf_counter() - start_time) * 1000  # ms
 
         logger.info(
             "%s %s -> %s (%.1fms)",

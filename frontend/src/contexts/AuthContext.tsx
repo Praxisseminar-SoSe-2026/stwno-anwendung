@@ -9,6 +9,7 @@ export type AuthUser = {
   last_name: string
   roles: string[]
   dormitory_id: number | null
+  flat_number: string | null
 }
 
 type AuthContextValue = {

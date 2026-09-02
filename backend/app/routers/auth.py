@@ -28,8 +28,9 @@ def set_password_endpoint(payload: SetPasswordRequest, db: Session = Depends(get
     try:
         user = set_password(db, payload.email, payload.password)
     except UserNotFoundError as exc:
-        raise HTTPException(status_code=404, detail="No account found "
-                                                    "for this email") from exc
+        raise HTTPException(
+            status_code=404, detail="No account found " "for this email"
+        ) from exc
     except CredentialsAlreadySetError as exc:
         raise HTTPException(status_code=409, detail=str(exc)) from exc
 
@@ -53,8 +54,10 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
         first_name=user.first_name,
         last_name=user.last_name,
         dormitory_id=user.dormitory_id,
+        flat_number=user.flat_number,
         roles=roles,
     )
+
 
 @router.get("/me", response_model=UserResponse)
 def get_me(

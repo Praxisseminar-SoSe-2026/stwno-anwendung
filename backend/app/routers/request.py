@@ -7,28 +7,56 @@ from app.core.dependencies import get_current_user
 from app.db.database import get_db
 from app.models.user import User
 from app.schemas.request import (
+    RepairRequestCreate,
     RequestResponse,
-    RoomBookings,
     RoomRequestCreate,
     RoomRequestStatusUpdate,
 )
 from app.services.request_service import (
     DateInPastError,
+    InvalidTimeSlotProposalError,
     KeyExchangeDateAfterBookingError,
     KeyExchangeDateMissingError,
     RequestAccessDeniedError,
     RequestNotFoundError,
     ResidentDormitoryError,
+    ResidentWithoutDormitoryError,
     RoomBookingTimeConflictError,
     RoomNotFoundError,
+    create_repair_request,
     create_room_request,
     edit_room_request,
     get_request,
     list_requests,
-    list_room_bookings,
 )
 
 router = APIRouter(prefix="/requests", tags=["requests"])
+
+
+@router.post("/repair", response_model=RequestResponse, status_code=201)
+def create_repair(
+    payload: RepairRequestCreate,
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_user)],
+):
+    try:
+        repair_request = create_repair_request(db, current_user, payload)
+    except (
+        ResidentWithoutDormitoryError,
+        InvalidTimeSlotProposalError,
+    ) as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    return RequestResponse.from_request(repair_request)
+
+
+@router.get("", response_model=list[RequestResponse])
+def list_all(
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_user)],
+):
+    requests = list_requests(db, current_user)
+    return [RequestResponse.from_request(r) for r in requests]
 
 
 @router.post("/room_booking", response_model=RequestResponse)
@@ -53,26 +81,6 @@ def create_room_booking_request(
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
     return RequestResponse.from_request(room_request)
-
-
-@router.get("", response_model=list[RequestResponse])
-def list_all(
-    db: Annotated[Session, Depends(get_db)],
-    current_user: Annotated[User, Depends(get_current_user)],
-):
-    requests = list_requests(db, current_user)
-    return [RequestResponse.from_request(r) for r in requests]
-
-
-@router.get("/room_booking", response_model=list[RoomBookings])
-def list_all_room_booking_requests(
-    db: Annotated[Session, Depends(get_db)],
-    current_user: Annotated[User, Depends(get_current_user)],
-):
-    try:
-        return list_room_bookings(db, current_user)
-    except ResidentDormitoryError as exc:
-        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
 @router.get("/{request_id}", response_model=RequestResponse)

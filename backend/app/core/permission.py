@@ -16,6 +16,7 @@ def user_has_permission(db: Session, user_id: int, permission_name: str) -> bool
     )
     return exists is not None
 
+
 def get_user_role(db: Session, user_id: int) -> list[str]:
     roles = (
         db.query(Role.name)

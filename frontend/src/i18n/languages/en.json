@@ -55,7 +55,21 @@
     }
   },
   "repairRequest": {
-    "title": "Repair Request"
+    "title": "Repair Request",
+    "description": "Problem Description",
+    "image": "Image (optional)",
+    "ownFlat": "In your own apartment?",
+    "yes": "yes", "no": "no", "location": "Location",
+    "entryPermission": "Permission to Enter",
+    "chooseSlots": "Please select at least 3 appointments",
+    "slot": "Appointment {{number}}",
+    "noSlotWorks": "None of the appointments work",
+    "proposedDate": "Proposed Appointment",
+    "submit": "Submit Repair Request",
+    "submitting": "Sending...",
+    "success": "Repair request submitted successfully.",
+    "error": "Repair request could not be submitted.",
+    "slotInvalid": "The appointment must be in the future and begin on a weekday (Mon–Fri) between 8:00 a.m. and 3:00 p.m."
   },
   "roomBooking": {
     "title": "Community Room Booking",

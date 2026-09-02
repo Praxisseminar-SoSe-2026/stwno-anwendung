@@ -6,6 +6,7 @@ export type CurrentUser = {
   first_name: string
   last_name: string
   dormitory_id: number | null
+  flat_number: string | null
   roles: string[]
 }
 

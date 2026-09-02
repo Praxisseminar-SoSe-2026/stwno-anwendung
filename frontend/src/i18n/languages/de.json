@@ -55,7 +55,23 @@
     }
   },
   "repairRequest": {
-    "title": "Reparaturanfrage"
+    "title": "Reparaturanfrage",
+    "description": "Problembeschreibung",
+    "image": "Bild (optional)",
+    "ownFlat": "In der eigenen Wohnung?",
+    "yes": "ja",
+    "no": "nein",
+    "location": "Ort",
+    "entryPermission": "Betreterlaubnis",
+    "chooseSlots": "Bitte mindestens 3 Termine wählen",
+    "slot": "Termin {{number}}",
+    "noSlotWorks": "Keiner der Termine passt",
+    "proposedDate": "Terminvorschlag",
+    "submit": "Reparaturanfrage abschicken",
+    "submitting": "wird gesendet...",
+    "success": "Reparaturanfrage erfolgreich abgeschickt.",
+    "error": "Reparaturanfrage konnte nicht gesendet werden.",
+    "slotInvalid": "Termin muss in der Zukunft liegen, an einem Werktag (Mo–Fr) zwischen 08:00 und 15:00 Uhr beginnen."
   },
   "roomBooking": {
     "title": "Gemeinschaftsraumbuchung",
