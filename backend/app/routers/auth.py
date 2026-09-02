@@ -53,6 +53,7 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
         first_name=user.first_name,
         last_name=user.last_name,
         dormitory_id=user.dormitory_id,
+        flat_number=user.flat_number,
         roles=roles,
     )
 

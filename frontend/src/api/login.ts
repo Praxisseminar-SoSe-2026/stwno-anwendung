@@ -13,6 +13,7 @@ export type LoginResponse = {
   access_token: string
   token_type: string
   dormitory_id: number | null
+  flat_number: string | null
   roles: string[]
 }
 
