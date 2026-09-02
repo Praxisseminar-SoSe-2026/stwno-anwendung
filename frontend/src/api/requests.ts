@@ -32,6 +32,8 @@ export type CreateRepairRequestPayload = {
   entry_permission: boolean
   proposed_time_slots?: { start_time: string }[]
   proposed_date_note?: string | null
+}
+
 export type RoomBooking = {
   id: number
   community_room_id: number
@@ -102,7 +104,7 @@ export async function createRepairRequest(
     body: JSON.stringify(payload),
   })
   return handleResponse(res)
-
+}
   
 export async function createRoomBooking(
   data: RoomRequestCreate
