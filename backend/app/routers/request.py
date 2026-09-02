@@ -8,6 +8,7 @@ from app.db.database import get_db
 from app.models.user import User
 from app.schemas.request import RequestResponse, RepairRequestCreate
 from app.services.request_service import (
+    InvalidTimeSlotProposalError,
     RequestAccessDeniedError,
     RequestNotFoundError,
     ResidentWithoutDormitoryError,
@@ -26,7 +27,7 @@ def create_repair(
 ):
     try:
         repair_request = create_repair_request(db, current_user, payload)
-    except ResidentWithoutDormitoryError as exc:
+    except (ResidentWithoutDormitoryError, InvalidTimeSlotProposalError) as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
     return RequestResponse.from_request(repair_request)
