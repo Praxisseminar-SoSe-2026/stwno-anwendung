@@ -1,4 +1,5 @@
 from app.models.access_time_slot import AccessTimeSlot
+from app.models.access_time_slot_proposal import AccessTimeSlotProposal
 from app.models.announcement import Announcement
 from app.models.community_room import CommunityRoom
 from app.models.consent import Consent
@@ -34,6 +35,7 @@ __all__ = [
     "RepairRequest",
     "RoomRequest",
     "AccessTimeSlot",
+    "AccessTimeSlotProposal",
     "RepairRequestStatusHistory",
     "RequestComment",
     "CommunityRoom",
