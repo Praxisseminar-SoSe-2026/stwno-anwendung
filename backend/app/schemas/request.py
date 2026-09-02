@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from datetime import datetime
-from typing import TYPE_CHECKING
+from datetime import date, datetime
+from typing import TYPE_CHECKING, Literal
 
 from pydantic import BaseModel
 
@@ -39,6 +39,8 @@ class RequestResponse(BaseModel):
     community_room_id: int | None = None
     start_datetime: datetime | None = None
     end_datetime: datetime | None = None
+    regular_key_exchange_possible: bool | None = None
+    alternative_key_exchange_date: date | None = None
 
     @classmethod
     def from_request(cls, request: Request) -> RequestResponse:
@@ -74,6 +76,8 @@ class RequestResponse(BaseModel):
                 community_room_id=request.community_room_id,
                 start_datetime=request.start_datetime,
                 end_datetime=request.end_datetime,
+                regular_key_exchange_possible=request.regular_key_exchange_possible,
+                alternative_key_exchange_date=request.alternative_key_exchange_date,
             )
 
         return cls(**data)
@@ -86,3 +90,23 @@ class RepairRequestCreate(BaseModel):
     entry_permission: bool = False
     proposed_time_slots: list[AccessTimeSlotProposalCreate] = []
     proposed_date_note: str | None = None
+class RoomRequestCreate(BaseModel):
+    community_room_id: int
+    start_date: date
+    end_date: date
+    regular_key_exchange_possible: bool | None
+    alternative_key_exchange_date: date | None
+
+
+class RoomRequestStatusUpdate(BaseModel):
+    # Todo: discuss concept of global standard for status
+    status: Literal["Bestätigt", "Abgelehnt"]
+
+
+class RoomBookings(BaseModel):
+    id: int
+    community_room_id: int
+    dormitory_id: int
+    start_datetime: datetime
+    end_datetime: datetime
+    status: str

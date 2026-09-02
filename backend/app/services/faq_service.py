@@ -31,7 +31,16 @@ def list_faq_entries(db: Session) -> list[FaqEntry]:
     return db.query(FaqEntry).all()
 
 
+def get_faq_entry(db: Session, faq_id: int) -> FaqEntry:
+    entry = db.query(FaqEntry).filter(FaqEntry.id == faq_id).first()
+    if entry is None:
+        raise FaqEntryNotFoundError(f"No FAQ entry found with id {faq_id}")
+    return entry
+
+
 # Todo: make current user logging not optional
+# Todo: discuss if only creating a new entry when question, answer
+#  and category are given
 def create_faq_entry(
     db: Session, payload: FaqEntryCreateRequest, created_by_id: int | None = None
 ) -> FaqEntry:

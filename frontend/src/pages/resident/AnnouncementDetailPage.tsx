@@ -11,12 +11,18 @@ import {
   Chip,
   Checkbox,
   FormControlLabel,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Select,
 } from '@mui/material'
 import { useAnnouncement } from '../../hooks/useAnnouncement'
 import { updateAnnouncement, deleteAnnouncement } from '../../api/announcements'
+import { useDormitories } from '../../hooks/useDormitories'
 import { useAuth } from '../../contexts/AuthContext'
 
-const EDITOR_ROLES = ['admin']
+const EDITOR_ROLES = ['admin', 'hausmeister']
+const GLOBAL_VALUE = 'global'
 
 export function AnnouncementDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -27,12 +33,15 @@ export function AnnouncementDetailPage() {
     Number(id)
   )
 
+  const { dormitories } = useDormitories()
+
   const [editing, setEditing] = useState(false)
   const [title, setTitle] = useState('')
   const [important, setImportant] = useState(false)
   const [text, setText] = useState('')
   const [saving, setSaving] = useState(false)
   const [actionError, setActionError] = useState<string | null>(null)
+  const [scope, setScope] = useState<string>(GLOBAL_VALUE)
 
   const canEdit = EDITOR_ROLES.some((role) => hasRole(role))
 
@@ -41,6 +50,11 @@ export function AnnouncementDetailPage() {
     setTitle(announcement.title)
     setImportant(announcement.important ?? false)
     setText(announcement.text)
+    setScope(
+      announcement.dormitory_id === null
+        ? GLOBAL_VALUE
+        : String(announcement.dormitory_id)
+    )
     setEditing(true)
   }
 
@@ -53,6 +67,7 @@ export function AnnouncementDetailPage() {
         title,
         important,
         text,
+        dormitory_id: scope === GLOBAL_VALUE ? null : Number(scope),
       })
       setAnnouncement(updated)
       setEditing(false)
@@ -108,6 +123,28 @@ export function AnnouncementDetailPage() {
               minRows={4}
               fullWidth
             />
+
+            <FormControl fullWidth>
+              <InputLabel id="scope-label">
+                {t('bulletinBoard.scope')}
+              </InputLabel>
+              <Select
+                labelId="scope-label"
+                value={scope}
+                label={t('bulletinBoard.scope')}
+                onChange={(e) => setScope(e.target.value)}
+              >
+                <MenuItem value={GLOBAL_VALUE}>
+                  {t('bulletinBoard.scopeGlobal')}
+                </MenuItem>
+                {dormitories.map((d) => (
+                  <MenuItem key={d.id} value={String(d.id)}>
+                    {d.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
             <Stack direction="row" spacing={2}>
               <Button
                 variant="contained"
@@ -123,7 +160,7 @@ export function AnnouncementDetailPage() {
           </>
         ) : (
           <>
-            <Stack direction="row" spacing={1} alignItems="center">
+            <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
               <Typography variant="h4">{announcement.title}</Typography>
               <Typography variant="h6" color="text.secondary">
                 {announcement.created_at &&

@@ -13,13 +13,18 @@
     "empty": "Keine Ankündigungen vorhanden.",
     "important": "Wichtig",
     "titleLabel": "Titel",
-    "textLabel": "Text"
+    "textLabel": "Text",
+    "newAnnouncement": "+",
+    "createAnnouncement": "Neue Ankündigung",
+    "scope": "Sichtbarkeit der Ankündigung",
+    "scopeGlobal": "Für alle Wohnheime"
   },
   "common": {
     "save": "Speichern",
     "cancel": "Abbrechen",
     "edit": "Bearbeiten",
-    "delete": "Löschen"
+    "delete": "Löschen",
+    "create": "Erstellen"
   },
   "faq": {
     "title": "Häufig gestellte Fragen",
@@ -27,12 +32,15 @@
     "noSearchResults": "Keine Ergebnisse zu dieser Suche.",
     "category": {
       "general": "Allgemein",
-      "laundry": "Waschküche",
+      "washroom": "Waschküche",
       "recycling": "Müll & Recycling",
-      "roomBooking": "Gemeinschaftsraum",
-      "moving": "Ein- und Auszug",
+      "community room": "Gemeinschaftsraum",
+      "moving in and out": "Ein- und Auszug",
       "miscellaneous": "Sonstiges"
-    }
+    },
+    "questionLabel": "Frage",
+    "answerLabel": "Antwort",
+    "categoryLabel": "Kategorie"
   },
   "laundry": {
     "title": "Waschküche",
@@ -66,7 +74,14 @@
     "slotInvalid": "Termin muss in der Zukunft liegen, an einem Werktag (Mo–Fr) zwischen 08:00 und 15:00 Uhr beginnen."
   },
   "roomBooking": {
-    "title": "Gemeinschaftsraumbuchung"
+    "title": "Gemeinschaftsraumbuchung",
+    "selectCommunityRoom": "Gemeinschaftsraum auswählen",
+    "occupied": "Belegt",
+    "bookCommunityRoom": "{{communityRoomName}} buchen",
+    "startDate": "von",
+    "endDate": "bis",
+    "regularKeyExchangePossibleQuestion": "Können Sie den Schlüssel am Vorbuchungstag zwischen 9 und 11 Uhr im Büro der Hausmeister:in abholen?",
+    "alternativeKeyExchangeDate": "alternativer Tag zum Schlüsselaustausch"
   },
   "adminIndex": {
     "title": "Hallo Chef!"
@@ -79,7 +94,8 @@
   "request": {
     "start": "Beginn",
     "end": "Ende",
-    "location": "Ort"
+    "location": "Ort",
+    "exportPdf": "PDF erstellen"
   },
   "login": {
     "title": "Bei STWNO-Anwendung anmelden",

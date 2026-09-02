@@ -1,6 +1,14 @@
 import { useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
-import { Stack, Typography, Paper, Chip, CircularProgress } from '@mui/material'
+import {
+  Stack,
+  Typography,
+  Paper,
+  Chip,
+  CircularProgress,
+  Button,
+} from '@mui/material'
+import PrintIcon from '@mui/icons-material/Print'
 import { useRequest } from '../../hooks/useRequest'
 import { useAuth } from '../../contexts/AuthContext'
 import type { RequestType } from '../../api/requests'
@@ -42,6 +50,14 @@ export function AdminTicketDetailPage() {
           />
           <Typography>{`# ${request.id}`}</Typography>
           <Chip label={request.status} />
+          <Button
+            variant="outlined"
+            startIcon={<PrintIcon />}
+            onClick={() => window.print()}
+            className="print-button"
+          >
+            {t('request.exportPdf')}
+          </Button>
         </Stack>
 
         {request.type === 'repair' && (
