@@ -4,8 +4,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
+from app.core.security import hash_password
 from app.db.database import Base, get_db
 from app.main import app
+from app.models import User
 
 
 # Based on: https://sqlmodel.tiangolo.com/tutorial/fastapi/tests/#pytest-fixtures
@@ -29,3 +31,18 @@ def client_fixture(session):
     client = TestClient(app)
     yield client
     app.dependency_overrides.clear()
+
+
+@pytest.fixture(name="test_user")
+def test_user_fixture(session):
+    user = User(
+        first_name="John",
+        last_name="Doe",
+        email="john@doe.com",
+        password_hash=hash_password("password"),
+        person_number="S1234",
+    )
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+    return user
