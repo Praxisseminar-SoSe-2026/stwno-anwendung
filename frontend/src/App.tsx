@@ -16,6 +16,7 @@ import { RoomBookingCreatePage } from './pages/resident/RoomBookingCreatePage'
 // admin pages
 import { AdminIndexPage } from './pages/admin/AdminIndexPage'
 import { AdminTicketOverviewPage } from './pages/admin/AdminTicketOverviewPage'
+import { AdminCreateAnnouncementPage } from './pages/admin/AdminCreateAnnouncementPage.tsx'
 
 //general pages
 import { LoginPage } from './pages/general/LoginPage'
@@ -40,13 +41,20 @@ function App() {
           <Route path="/reparaturanfrage" element={<ReparaturanfragePage />} />
           <Route path="/gemeinschaftsraum" element={<RoomBookingPage />} />
           <Route path="/aushang/:id" element={<AnnouncementDetailPage />} />
-          <Route path="/gemeinschaftsraum/anfrage/:id" element={<RoomBookingCreatePage />} />
+          <Route
+            path="/gemeinschaftsraum/anfrage/:id"
+            element={<RoomBookingCreatePage />}
+          />
           {/* admin routes */}
           <Route path="/admin" element={<AdminIndexPage />} />
           <Route path="/admin/tickets" element={<AdminTicketOverviewPage />} />
           <Route
             path="/admin/tickets/:id"
             element={<AdminTicketDetailPage />}
+          />
+          <Route
+            path="/aushang/neu"
+            element={<AdminCreateAnnouncementPage />}
           />
           {/* general routes */}
           <Route path="/login" element={<LoginPage />} />

@@ -13,7 +13,11 @@
     "empty": "No announcements available.",
     "important": "Important",
     "titleLabel": "Title",
-    "textLabel": "Text"
+    "textLabel": "Text",
+    "newAnnouncement": "+",
+    "createAnnouncement": "New announcement",
+    "scope": "Visibility of the announcement",
+    "scopeGlobal": "All dormitories"
   },
   "common": {
     "save": "Save",

@@ -71,3 +71,14 @@ export async function deleteAnnouncement(id: number): Promise<void> {
     throw new Error(errorBody?.detail ?? 'Request failed')
   }
 }
+
+export async function createAnnouncement(
+  data: AnnouncementInput
+): Promise<Announcement> {
+  const res = await fetch(`${BASE_URL}/announcements`, {
+    method: 'POST',
+    headers: authHeaders(),
+    body: JSON.stringify(data),
+  })
+  return handleResponse(res)
+}

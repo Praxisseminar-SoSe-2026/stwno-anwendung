@@ -13,7 +13,11 @@
     "empty": "Keine Ankündigungen vorhanden.",
     "important": "Wichtig",
     "titleLabel": "Titel",
-    "textLabel": "Text"
+    "textLabel": "Text",
+    "newAnnouncement": "+",
+    "createAnnouncement": "Neue Ankündigung",
+    "scope": "Sichtbarkeit der Ankündigung",
+    "scopeGlobal": "Für alle Wohnheime"
   },
   "common": {
     "save": "Speichern",
