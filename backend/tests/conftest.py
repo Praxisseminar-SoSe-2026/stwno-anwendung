@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from app.core.security import hash_password
+from app.core.security import hash_password, create_access_token
 from app.db.database import Base, get_db
 from app.main import app
 from app.models import User
@@ -46,3 +46,9 @@ def test_user_fixture(session):
     session.commit()
     session.refresh(user)
     return user
+
+
+@pytest.fixture(name="auth_token")
+def auth_token_fixture(test_user):
+    token = create_access_token(test_user.id)
+    return {"Authorization": f"Bearer {token}"} # token only is not equal to the response of the endpoint
