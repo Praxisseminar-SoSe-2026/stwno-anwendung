@@ -12,21 +12,21 @@ _MOCK_DATABASE = {
         "last_name": "Torvald",
         "email": "linus.torvald@stud.uni-regensburg.de",
         "flat_number": "07B",
-        "dormitory_id": None,
+        "dormitory_id": 1,
     },
     "S2002": {
         "first_name": "Grace",
         "last_name": "Hopper",
         "email": "grace.hopper@stud.uni-regensburg.de",
-        "flat_number": None,
-        "dormitory_id": None,
+        "flat_number": "123",
+        "dormitory_id": 2,
     },
     "B1001": {
         "first_name": "Alan",
         "last_name": "Turing",
         "email": "alan.turing@stud.uni-regensburg.de",
-        "flat_number": None,
-        "dormitory_id": None,
+        "flat_number": "987",
+        "dormitory_id": 1,
     },
 }
 
