@@ -17,6 +17,7 @@ from app.routers import (
     permission,
     registration,
     request,
+    laundry_booking,
 )
 
 setup_logging(level=settings.log_level, environment=settings.environment)
@@ -42,6 +43,7 @@ app.include_router(email.router)
 app.include_router(auth.router)
 app.include_router(faq.router)
 app.include_router(infrastructure.router)
+app.include_router(laundry_booking.router)
 
 
 @app.get("/health")
