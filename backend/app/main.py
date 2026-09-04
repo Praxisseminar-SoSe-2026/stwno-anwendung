@@ -15,6 +15,7 @@ from app.routers import (
     email,
     faq,
     infrastructure,
+    laundry_booking,
     permission,
     registration,
     request,
@@ -44,6 +45,7 @@ app.include_router(dormitory.router)
 app.include_router(auth.router)
 app.include_router(faq.router)
 app.include_router(infrastructure.router)
+app.include_router(laundry_booking.router)
 
 
 @app.get("/health")
