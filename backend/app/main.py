@@ -14,10 +14,10 @@ from app.routers import (
     email,
     faq,
     infrastructure,
+    laundry_booking,
     permission,
     registration,
     request,
-    laundry_booking,
 )
 
 setup_logging(level=settings.log_level, environment=settings.environment)

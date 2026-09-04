@@ -1,15 +1,15 @@
+
 from sqlalchemy.orm import Session
-from datetime import datetime
 
 from app.models.community_room import CommunityRoom
-from app.models.user import User
 from app.models.laundry_machine import LaundryMachine
-
-from app.services.laundry_booking_service import reset_machine_status_if_expired_or_return_endtime
-from app.services.request_service import ResidentDormitoryError
-from app.services.laundry_booking_service import ResidentLaundryRoomError
-
 from app.models.laundry_room import LaundryRoom
+from app.models.user import User
+from app.services.laundry_booking_service import (
+    ResidentLaundryRoomError,
+    reset_machine_status_if_expired_or_return_endtime,
+)
+from app.services.request_service import ResidentDormitoryError
 
 
 class LaundryRoomNotFoundError(Exception):
@@ -32,7 +32,9 @@ def list_community_rooms(db: Session, current_user: User) -> list[CommunityRoom]
     return community_rooms
 
 
-def list_laundry_machines(db: Session, current_user: User, laundry_room_id: int) -> list[LaundryMachine]:
+def list_laundry_machines(db: Session,
+                          current_user: User,
+                          laundry_room_id: int) -> list[LaundryMachine]:
 
     laundry_room = db.get(LaundryRoom, laundry_room_id)
     if laundry_room is None:
@@ -46,11 +48,14 @@ def list_laundry_machines(db: Session, current_user: User, laundry_room_id: int)
         )
 
     machines = (
-        db.query(LaundryMachine).filter(LaundryMachine.laundry_room_id == laundry_room_id).all()
+        db.query(LaundryMachine)
+        .filter(LaundryMachine.laundry_room_id == laundry_room_id)
+        .all()
     )
 
     for machine in machines:
         if machine.status == "Belegt":
-            machine.occupied_until = reset_machine_status_if_expired_or_return_endtime(db, machine.id)
+            machine.occupied_until = (
+                reset_machine_status_if_expired_or_return_endtime(db, machine.id))
 
     return machines

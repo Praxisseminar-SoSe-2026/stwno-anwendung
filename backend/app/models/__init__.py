@@ -8,6 +8,9 @@ from app.models.faq_category import FaqCategory
 from app.models.faq_entry import FaqEntry
 from app.models.item_reservation import ItemReservation
 from app.models.item_type import ItemType
+from app.models.laundry_booking import LaundryBooking
+from app.models.laundry_machine import LaundryMachine
+from app.models.laundry_room import LaundryRoom
 from app.models.notification import Notification
 from app.models.permission import Permission
 from app.models.repair_request import RepairRequest
@@ -19,9 +22,6 @@ from app.models.role_permission import RolePermission
 from app.models.room_request import RoomRequest
 from app.models.user import User
 from app.models.user_role import UserRole
-from app.models.laundry_room import LaundryRoom
-from app.models.laundry_machine import LaundryMachine
-from app.models.laundry_booking import LaundryBooking
 
 __all__ = [
     "Role",
@@ -47,4 +47,7 @@ __all__ = [
     "Announcement",
     "Notification",
     "Consent",
+    "LaundryBooking",
+    "LaundryMachine",
+    "LaundryRoom",
 ]

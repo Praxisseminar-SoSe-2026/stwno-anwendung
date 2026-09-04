@@ -34,7 +34,9 @@ class BookingAlreadyEndedError(Exception):
 
 
 # Todo: check for false durations (negative numbers, etc.)
-def create_laundry_booking(db: Session, current_user: User, payload: LaundryBookingCreate) -> LaundryBooking:
+def create_laundry_booking(db: Session,
+                           current_user: User,
+                           payload: LaundryBookingCreate) -> LaundryBooking:
     now = datetime.now()
     if current_user.dormitory_id is None:
         raise ResidentDormitoryError(
@@ -49,7 +51,8 @@ def create_laundry_booking(db: Session, current_user: User, payload: LaundryBook
 
     if machine.laundry_room.dormitory_id != current_user.dormitory_id:
         raise ResidentLaundryRoomError(
-            "Machine is in a laundry room, that does not belong to the resident dormitory"
+            "Machine is in a laundry room, "
+            "that does not belong to the resident dormitory"
         )
 
     time_conflict = (
@@ -81,7 +84,9 @@ def create_laundry_booking(db: Session, current_user: User, payload: LaundryBook
     return laundry_booking
 
 
-def end_laundry_booking(db: Session, current_user: User, laundry_booking_id: int) -> LaundryBooking:
+def end_laundry_booking(db: Session,
+                        current_user: User,
+                        laundry_booking_id: int) -> LaundryBooking:
     booking = db.get(LaundryBooking, laundry_booking_id)
 
     now = datetime.now()
@@ -114,7 +119,8 @@ def end_laundry_booking(db: Session, current_user: User, laundry_booking_id: int
     return booking
 
 
-def reset_machine_status_if_expired_or_return_endtime(db: Session, laundry_machine_id: int) -> None:
+def reset_machine_status_if_expired_or_return_endtime(db: Session,
+                                                      laundry_machine_id: int) -> None:
 
     active_booking = (
         db.query(LaundryBooking)
