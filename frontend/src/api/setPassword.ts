@@ -11,4 +11,8 @@ export async function setPassword(data: SetPasswordData): Promise<void> {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
     })
+    if (!res.ok) {
+        const errorBody = await res.json().catch(() => null)
+        throw new Error(errorBody?.detail ?? 'Setting password failed')
+  }
 }

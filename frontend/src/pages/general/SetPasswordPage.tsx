@@ -1,4 +1,4 @@
-import {Box, Button, FormControl, Paper, TextField} from "@mui/material";
+import {Box, Button, FormControl, Paper, TextField, Typography} from "@mui/material";
 import {useLocation, useNavigate} from "react-router";
 import {type SubmitEventHandler, useState} from "react";
 import {useSetPassword} from "../../hooks/useSetPassword.ts";
@@ -6,7 +6,7 @@ import {useSetPassword} from "../../hooks/useSetPassword.ts";
 export function SetPasswordPage() {
     const location = useLocation()
     const navigate = useNavigate()
-    const submitSetPassword = useSetPassword()
+    const {submitSetPassword, error} = useSetPassword()
 
     const emailFromRegistrationPage = (location.state as { email?: string })?.email ?? ''
     const [email] = useState(emailFromRegistrationPage)
@@ -21,7 +21,15 @@ export function SetPasswordPage() {
         }
     }
     return (
-        <Paper>
+        <Paper
+        variant="outlined"
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: '30%',
+        p: 4,
+        gap: 2,
+      }}>
             <Box
                 component="form"
                 onSubmit={handleSubmit}>
@@ -46,6 +54,7 @@ export function SetPasswordPage() {
                         />
                 </FormControl>
                 <Button type="submit">Create Account</Button>
+                {error && <Typography color="error">{error}</Typography>}
             </Box>
         </Paper>
     )

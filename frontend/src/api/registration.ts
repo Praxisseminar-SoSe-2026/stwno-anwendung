@@ -22,6 +22,10 @@ export async function register(data: RegistrationData): Promise<RegistrationResp
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
     })
+    if (!res.ok){
+        const errorBody = await res.json().catch(() => null)
+        throw new Error(errorBody?.detail ?? 'Registration failed')
+    }
 
     return res.json()
 }

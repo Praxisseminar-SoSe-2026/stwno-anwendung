@@ -1,10 +1,10 @@
 import {type SubmitEventHandler, useState} from "react";
-import {Box, Button, FormControl, Paper, TextField} from "@mui/material";
+import {Box, Button, FormControl, Paper, TextField, Typography} from "@mui/material";
 import {useRegistration} from "../../hooks/useRegistration.ts";
 import {useNavigate} from "react-router";
 
 export function RegistrationPage() {
-    const submitRegistration = useRegistration()
+    const {submitRegistration, error} = useRegistration()
     const navigate = useNavigate()
     const [personNumber, setPersonNumber] = useState('')
 
@@ -17,7 +17,15 @@ export function RegistrationPage() {
         }
     }
     return(
-        <Paper>
+        <Paper
+        variant="outlined"
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: '30%',
+        p: 4,
+        gap: 2,
+      }}>
             <Box
                 component="form"
                 onSubmit={handleSubmit}
@@ -33,6 +41,7 @@ export function RegistrationPage() {
                     />
                 </FormControl>
                 <Button type="submit">Test</Button>
+                {error && <Typography color="error">{error}</Typography>}
             </Box>
         </Paper>
     )
