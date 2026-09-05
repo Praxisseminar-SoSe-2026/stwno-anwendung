@@ -108,6 +108,13 @@
     "error": "Login failed.",
     "invalid": "Please login"
   },
+  "registration": {
+    "register": "Register new account?",
+    "person_number": "Please enter person number",
+    "next_button": "Next",
+    "password": "Password",
+    "create_account": "Create Account"
+  },
   "notFound": {
     "title": "404 - This page unfortunately doesn't exist :("
   }

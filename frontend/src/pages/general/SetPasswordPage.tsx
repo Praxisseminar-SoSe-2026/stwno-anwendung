@@ -2,11 +2,13 @@ import {Box, Button, FormControl, Paper, TextField, Typography} from "@mui/mater
 import {useLocation, useNavigate} from "react-router";
 import {type SubmitEventHandler, useState} from "react";
 import {useSetPassword} from "../../hooks/useSetPassword.ts";
+import {useTranslation} from "react-i18next";
 
 export function SetPasswordPage() {
     const location = useLocation()
     const navigate = useNavigate()
     const {submitSetPassword, error} = useSetPassword()
+    const { t } = useTranslation()
 
     const emailFromRegistrationPage = (location.state as { email?: string })?.email ?? ''
     const [email] = useState(emailFromRegistrationPage)
@@ -47,13 +49,13 @@ export function SetPasswordPage() {
                         id="password"
                         name="password"
                         type="password"
-                        placeholder="Password"
+                        placeholder={t('registration.password')}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
                         />
                 </FormControl>
-                <Button type="submit">Create Account</Button>
+                <Button type="submit">{t('registration.create_account')}</Button>
                 {error && <Typography color="error">{error}</Typography>}
             </Box>
         </Paper>

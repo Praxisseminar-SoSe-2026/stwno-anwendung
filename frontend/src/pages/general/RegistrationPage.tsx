@@ -2,11 +2,13 @@ import {type SubmitEventHandler, useState} from "react";
 import {Box, Button, FormControl, Paper, TextField, Typography} from "@mui/material";
 import {useRegistration} from "../../hooks/useRegistration.ts";
 import {useNavigate} from "react-router";
+import {useTranslation} from "react-i18next";
 
 export function RegistrationPage() {
     const {submitRegistration, error} = useRegistration()
     const navigate = useNavigate()
     const [personNumber, setPersonNumber] = useState('')
+    const { t } = useTranslation()
 
     const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (event) => {
         event.preventDefault()
@@ -34,13 +36,13 @@ export function RegistrationPage() {
                     <TextField
                         id="personNumber"
                         name="personNumber"
-                        placeholder={"Personen-Nummer"}
+                        placeholder={t('registration.person_number')}
                         value={personNumber}
                         onChange={(e) => setPersonNumber(e.target.value)}
                         required
                     />
                 </FormControl>
-                <Button type="submit">Test</Button>
+                <Button type="submit">{t('registration.next_button')}</Button>
                 {error && <Typography color="error">{error}</Typography>}
             </Box>
         </Paper>

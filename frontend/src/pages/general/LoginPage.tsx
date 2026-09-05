@@ -122,7 +122,8 @@ export function LoginPage() {
           />
         </FormControl>
 
-        <Typography><Link to="/registration">Test</Link></Typography>
+        {/*new Account Registar Link*/}
+        <Typography><Link to="/registration">{t('registration.register')}</Link></Typography>
 
         {/*login Button*/}
         <Button

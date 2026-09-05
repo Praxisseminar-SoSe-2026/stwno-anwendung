@@ -110,6 +110,13 @@
     "error": "Login fehlgeschlagen.",
     "invalid": "Bitte einloggen."
   },
+  "registration": {
+    "register": "Neuen Account registrieren?",
+    "person_number": "Bitte Personen-Nummer eingeben",
+    "next_button": "Weiter",
+    "password": "Passwort",
+    "create_account": "Account erstellen"
+  },
   "notFound": {
     "title": "404 - Diese Seite gibts leider nicht :("
   }
