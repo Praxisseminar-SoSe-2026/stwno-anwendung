@@ -99,10 +99,10 @@ export function RepairRequest() {
       entry_permission: entryPermission === 'yes',
       ...(entryPermission === 'no' && !noSlotWorks
         ? {
-          proposed_time_slots: slots.map((slot) => ({
-            start_time: new Date(slot).toISOString(),
-          })),
-        }
+            proposed_time_slots: slots.map((slot) => ({
+              start_time: new Date(slot).toISOString(),
+            })),
+          }
         : {}),
       ...(entryPermission === 'no' && noSlotWorks
         ? { proposed_date_note: proposedDateNote }
@@ -121,7 +121,13 @@ export function RepairRequest() {
   return (
     <Paper
       variant="outlined"
-      sx={{ display: 'flex', flexDirection: 'column', width: '50%', p: 4, gap: 2 }}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: '50%',
+        p: 4,
+        gap: 2,
+      }}
     >
       <Typography variant="h2">{t('repairRequest.title')}</Typography>
 
@@ -261,11 +267,17 @@ export function RepairRequest() {
           </Paper>
         )}
         {/* --- Submit --- */}
-        <Button type="submit" variant="contained" disabled={!canSubmit || loading}>
+        <Button
+          type="submit"
+          variant="contained"
+          disabled={!canSubmit || loading}
+        >
           {loading ? t('repairRequest.submitting') : t('repairRequest.submit')}
         </Button>
         {/* --- Submit Messages --- */}
-        {success && <Alert severity="success">{t('repairRequest.success')}</Alert>}
+        {success && (
+          <Alert severity="success">{t('repairRequest.success')}</Alert>
+        )}
         {error && <Alert severity="error">{error}</Alert>}
       </Box>
     </Paper>

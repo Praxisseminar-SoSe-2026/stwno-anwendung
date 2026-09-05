@@ -1,5 +1,5 @@
-import {setPassword, type SetPasswordData} from "../api/setPassword.ts";
-import {useState} from "react";
+import { setPassword, type SetPasswordData } from '../api/setPassword.ts'
+import { useState } from 'react'
 
 export function useSetPassword() {
   const [error, setError] = useState<string | null>(null)
@@ -8,10 +8,10 @@ export function useSetPassword() {
     try {
       await setPassword(data)
       return true
-    } catch (err){
+    } catch (err) {
       setError(err instanceof Error ? err.message : 'Setting password failed')
       return false
     }
   }
-  return {submitSetPassword, error}
+  return { submitSetPassword, error }
 }
