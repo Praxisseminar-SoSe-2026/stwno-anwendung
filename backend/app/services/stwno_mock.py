@@ -1,3 +1,9 @@
+import json
+from pathlib import Path
+
+MOCK_DATA_PATH = Path(__file__).resolve().parent.parent / "data" / "stwno_mock_data.json"
+
+
 class STWNONotFoundError(Exception):
     """Raised when the person number is unknown to the STWNO."""
 
@@ -6,29 +12,9 @@ class STWNOUnavailableError(Exception):
     """Raised when the mock interface is unreachable/down."""
 
 
-_MOCK_DATABASE = {
-    "S2001": {
-        "first_name": "Linus",
-        "last_name": "Torvald",
-        "email": "linus.torvald@stud.uni-regensburg.de",
-        "flat_number": "07B",
-        "dormitory_id": 1,
-    },
-    "S2002": {
-        "first_name": "Grace",
-        "last_name": "Hopper",
-        "email": "grace.hopper@stud.uni-regensburg.de",
-        "flat_number": "123",
-        "dormitory_id": 2,
-    },
-    "B1001": {
-        "first_name": "Alan",
-        "last_name": "Turing",
-        "email": "alan.turing@stud.uni-regensburg.de",
-        "flat_number": "987",
-        "dormitory_id": 1,
-    },
-}
+def _load_mock_database() -> dict:
+    with MOCK_DATA_PATH.open(encoding="utf-8") as f:
+        return json.load(f)
 
 # Toggle to simulate an outage in tests/manual testing.
 SIMULATE_OUTAGE = False
@@ -38,7 +24,8 @@ def verify_person_number(person_number: str) -> dict:
     if SIMULATE_OUTAGE:
         raise STWNOUnavailableError("STWNO interface is unreachable")
 
-    master_data = _MOCK_DATABASE.get(person_number)
+    mock_database = _load_mock_database()
+    master_data = mock_database.get(person_number)
     if master_data is None:
         raise STWNONotFoundError(f"No record found for person number {person_number}")
 
