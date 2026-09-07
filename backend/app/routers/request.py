@@ -7,7 +7,10 @@ from app.core.dependencies import get_current_user
 from app.db.database import get_db
 from app.models.user import User
 from app.schemas.request import (
+    AccessTimeSlotSelect,
+    CommentCreate,
     RepairRequestCreate,
+    RepairRequestStatusUpdate,
     RequestResponse,
     RoomRequestCreate,
     RoomRequestStatusUpdate,
@@ -23,11 +26,16 @@ from app.services.request_service import (
     ResidentWithoutDormitoryError,
     RoomBookingTimeConflictError,
     RoomNotFoundError,
+    TimeSlotProposalNotFoundError,
+    add_repair_comment,
+    can_edit_request,
     create_repair_request,
     create_room_request,
     edit_room_request,
     get_request,
     list_requests,
+    set_access_time_slot,
+    update_repair_status,
 )
 
 router = APIRouter(prefix="/requests", tags=["requests"])
@@ -50,13 +58,77 @@ def create_repair(
     return RequestResponse.from_request(repair_request)
 
 
+@router.patch("/repair/{request_id}/status", response_model=RequestResponse)
+def update_repair_request_status(
+    request_id: int,
+    payload: RepairRequestStatusUpdate,
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_user)],
+):
+    try:
+        repair_request = update_repair_status(db, request_id, current_user, payload)
+    except RequestNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except RequestAccessDeniedError as exc:
+        raise HTTPException(status_code=403, detail=str(exc)) from exc
+
+    return RequestResponse.from_request(
+        repair_request, can_edit=can_edit_request(db, current_user, repair_request)
+    )
+
+
+@router.post("/repair/{request_id}/entry-time", response_model=RequestResponse)
+def select_repair_entry_time(
+    request_id: int,
+    payload: AccessTimeSlotSelect,
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_user)],
+):
+    try:
+        repair_request = set_access_time_slot(db, request_id, current_user, payload)
+    except RequestNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except RequestAccessDeniedError as exc:
+        raise HTTPException(status_code=403, detail=str(exc)) from exc
+    except TimeSlotProposalNotFoundError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    return RequestResponse.from_request(
+        repair_request, can_edit=can_edit_request(db, current_user, repair_request)
+    )
+
+
+@router.post("/repair/{request_id}/comments", response_model=RequestResponse)
+def add_repair_request_comment(
+    request_id: int,
+    payload: CommentCreate,
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_user)],
+):
+    try:
+        repair_request = add_repair_comment(db, request_id, current_user, payload)
+    except RequestNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except RequestAccessDeniedError as exc:
+        raise HTTPException(status_code=403, detail=str(exc)) from exc
+
+    return RequestResponse.from_request(
+        repair_request, can_edit=can_edit_request(db, current_user, repair_request)
+    )
+
+
 @router.get("", response_model=list[RequestResponse])
 def list_all(
     db: Annotated[Session, Depends(get_db)],
     current_user: Annotated[User, Depends(get_current_user)],
 ):
     requests = list_requests(db, current_user)
-    return [RequestResponse.from_request(r) for r in requests]
+    return [
+        RequestResponse.from_request(
+            r, can_edit=can_edit_request(db, current_user, r)
+        )
+        for r in requests
+    ]
 
 
 @router.post("/room_booking", response_model=RequestResponse)
@@ -96,7 +168,9 @@ def get_one(
     except RequestAccessDeniedError as exc:
         raise HTTPException(status_code=403, detail=str(exc)) from exc
 
-    return RequestResponse.from_request(request)
+    return RequestResponse.from_request(
+        request, can_edit=can_edit_request(db, current_user, request)
+    )
 
 
 @router.patch("/room_booking/{request_id}", response_model=RequestResponse)
