@@ -44,14 +44,14 @@
   },
   "laundry": {
     "title": "Washroom",
-    "washingmaschines": "washingmaschines",
-    "washingmaschine": "washingmaschine",
+    "washingmachines": "washingmaschines",
+    "washingmachine": "washingmaschine",
     "dryers": "dryers",
     "dryer": "dryer",
     "status": {
-      "running": "running",
-      "idle": "idle",
-      "defect": "defect"
+      "occupied": "occupied",
+      "free": "free",
+      "unknown": "defect"
     }
   },
   "repairRequest": {

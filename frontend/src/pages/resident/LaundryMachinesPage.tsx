@@ -1,25 +1,22 @@
 import { useTranslation } from 'react-i18next'
 import { Stack, Typography, Paper } from '@mui/material'
 import { useLaundryMachines } from '../../hooks/useLaundryMachines'
-import type { LaundryMachineStatus } from '../../api/getLaundryMachines'
+import type { LaundryStatus } from '../../api/infrastructure'
 
-const statusColor: Record<
-  LaundryMachineStatus,
-  'success' | 'warning' | 'error'
-> = {
-  running: 'warning',
-  idle: 'success',
-  defect: 'error',
+const statusColor: Record<LaundryStatus, 'success' | 'warning' | 'error'> = {
+  occupied: 'warning',
+  free: 'success',
+  unknown: 'error',
 }
 
 export function LaundryMachinesPage() {
   const { t } = useTranslation()
-  const machinesData = useLaundryMachines()
+  const machinesData = useLaundryMachines(1).machines
 
   const washingmaschines = machinesData.filter(
-    (m) => m.type === 'washingmachine'
+    (m) => m.type === 'Washingmachine'
   )
-  const dryers = machinesData.filter((m) => m.type === 'dryer')
+  const dryers = machinesData.filter((m) => m.type === 'Dryer')
 
   return (
     <Stack spacing={10}>
@@ -27,13 +24,13 @@ export function LaundryMachinesPage() {
 
       {/* waschingmachines */}
       <Stack spacing={3}>
-        <Typography variant="h2">{t('laundry.washingmaschines')}</Typography>
+        <Typography variant="h2">{t('laundry.washingmachines')}</Typography>
         <Stack direction="row" spacing={3}>
           {washingmaschines.map((machine, index) => (
             <Paper key={machine.id} sx={{ p: 3, alignItems: 'center' }}>
               <Stack sx={{ alignItems: 'center' }}>
                 <Typography color="primary">
-                  {t('laundry.washingmaschine')} {index + 1}
+                  {t('laundry.washingmachine')} {index + 1}
                 </Typography>
                 <Typography color={statusColor[machine.status]}>
                   {t(`laundry.status.${machine.status}`)}
