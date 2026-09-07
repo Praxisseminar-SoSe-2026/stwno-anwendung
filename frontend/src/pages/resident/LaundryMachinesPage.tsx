@@ -1,7 +1,16 @@
 import { useTranslation } from 'react-i18next'
-import { Stack, Typography, Paper } from '@mui/material'
+import {
+  Stack,
+  Typography,
+  Paper,
+  TextField,
+  MenuItem,
+  CircularProgress,
+} from '@mui/material'
 import { useLaundryMachines } from '../../hooks/useLaundryMachines'
 import type { LaundryStatus } from '../../api/infrastructure'
+import { useLaundryRooms } from '../../hooks/useLaundryRooms'
+import { useState } from 'react'
 
 const statusColor: Record<LaundryStatus, 'success' | 'warning' | 'error'> = {
   occupied: 'warning',
@@ -11,7 +20,9 @@ const statusColor: Record<LaundryStatus, 'success' | 'warning' | 'error'> = {
 
 export function LaundryMachinesPage() {
   const { t } = useTranslation()
-  const machinesData = useLaundryMachines(1).machines
+  const { laundryRooms, loading, error } = useLaundryRooms()
+  const [roomId, setRoomId] = useState<number | null>(null)
+  const machinesData = useLaundryMachines(roomId).machines
 
   const washingmaschines = machinesData.filter(
     (m) => m.type === 'Washingmachine'
@@ -21,7 +32,26 @@ export function LaundryMachinesPage() {
   return (
     <Stack spacing={10}>
       <Typography variant="h1">{t('laundry.title')}</Typography>
+      {error && <Typography color="error">{error}</Typography>}
 
+      {/* select laundry room */}
+      <TextField
+        select
+        label={t('laundry.selectLaundryRoom')}
+        value={roomId ?? ''}
+        onChange={(e) => setRoomId(Number(e.target.value))}
+        disabled={laundryRooms.length === 0}
+        fullWidth
+      >
+        {laundryRooms.map((room) => (
+          <MenuItem key={room.id} value={room.id}>
+            {room.name}
+          </MenuItem>
+        ))}
+      </TextField>
+      {loading && <CircularProgress />}
+
+      {/* Todo: only display, when laundryroom is selected*/}
       {/* waschingmachines */}
       <Stack spacing={3}>
         <Typography variant="h2">{t('laundry.washingmachines')}</Typography>

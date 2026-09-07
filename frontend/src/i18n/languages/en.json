@@ -46,6 +46,7 @@
     "title": "Washroom",
     "washingmachines": "washingmaschines",
     "washingmachine": "washingmaschine",
+    "selectLaundryRoom": "Select washroom",
     "dryers": "dryers",
     "dryer": "dryer",
     "status": {
