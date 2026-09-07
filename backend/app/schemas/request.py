@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from datetime import date, datetime
 from typing import TYPE_CHECKING, Literal
+from app.core.status import RequestStatus, LaundryStatus
 
 from pydantic import BaseModel
 
@@ -23,7 +24,7 @@ class AccessTimeSlotProposalResponse(BaseModel):
 class RequestResponse(BaseModel):
     id: int
     type: str
-    status: str
+    status: RequestStatus
     created_at: datetime | None
     resident_id: int
 
@@ -101,8 +102,7 @@ class RoomRequestCreate(BaseModel):
 
 
 class RoomRequestStatusUpdate(BaseModel):
-    # Todo: discuss concept of global standard for status
-    status: Literal["Bestätigt", "Abgelehnt"]
+    status: RequestStatus
 
 
 class RoomBookings(BaseModel):
@@ -111,4 +111,4 @@ class RoomBookings(BaseModel):
     dormitory_id: int
     start_datetime: datetime
     end_datetime: datetime
-    status: str
+    status: RequestStatus

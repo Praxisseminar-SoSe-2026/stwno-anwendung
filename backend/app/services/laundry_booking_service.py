@@ -7,6 +7,7 @@ from app.models.laundry_machine import LaundryMachine
 from app.models.user import User
 from app.schemas.laundry import LaundryBookingCreate
 from app.services.request_service import ResidentDormitoryError
+from app.core.status import LaundryStatus
 
 
 class MachineNotFoundError(Exception):
@@ -76,7 +77,7 @@ def create_laundry_booking(db: Session,
         ends_at=now + timedelta(minutes=payload.duration),
     )
 
-    machine.status = "Belegt"
+    machine.status = LaundryStatus.OCCUPIED
 
     db.add(laundry_booking)
     db.commit()
@@ -112,7 +113,7 @@ def end_laundry_booking(db: Session,
         )
 
     booking.cancelled_at = now
-    booking.laundry_machine.status = "Frei"
+    booking.laundry_machine.status = LaundryStatus.FREE
 
     db.commit()
     db.refresh(booking)
@@ -136,8 +137,8 @@ def reset_machine_status_if_expired_or_return_endtime(db: Session,
         return active_booking.ends_at
 
     machine = db.get(LaundryMachine, laundry_machine_id)
-    if machine is not None and machine.status == "Belegt":
-        machine.status = "Frei"
+    if machine is not None and machine.status == LaundryStatus.OCCUPIED:
+        machine.status = LaundryStatus.FREE
         db.commit()
 
     return None
