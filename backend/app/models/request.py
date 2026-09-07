@@ -1,4 +1,5 @@
 from __future__ import annotations
+from sqlalchemy import Enum
 
 from datetime import datetime
 from typing import TYPE_CHECKING
@@ -7,6 +8,7 @@ from sqlalchemy import ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.database import Base
+from app.core.status import RequestStatus
 
 if TYPE_CHECKING:
     from app.models.request_comment import RequestComment
@@ -20,7 +22,9 @@ class Request(Base):
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     type: Mapped[str]
     resident_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    status: Mapped[str] = mapped_column(default="Offen", server_default="Offen")
+    status: Mapped[RequestStatus] = mapped_column(Enum(RequestStatus),
+                                                  default=RequestStatus.OPEN,
+                                                  server_default="OPEN")
     created_at: Mapped[datetime | None] = mapped_column(server_default=func.now())
 
     resident: Mapped[User] = relationship(back_populates="requests")

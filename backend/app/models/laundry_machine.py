@@ -2,10 +2,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Literal
 
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey,Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.database import Base
+from app.core.status import LaundryStatus
 
 if TYPE_CHECKING:
     from app.models.laundry_booking import LaundryBooking
@@ -22,8 +23,9 @@ class LaundryMachine(Base):
         default="Washingmachine",
         server_default="Washingmachine"
     )
-    # Todo: discuss language and naming conventions
-    status: Mapped[str] = mapped_column(default="Unbekannt", server_default="Unbekannt")
+    status: Mapped[LaundryStatus] = mapped_column(Enum(LaundryStatus),
+                                                  default=LaundryStatus.UNKNOWN,
+                                                  server_default="UNKNOWN")
 
     laundry_room: Mapped[LaundryRoom] = relationship(back_populates="laundry_machines")
     bookings: Mapped[list[LaundryBooking]] = relationship(
