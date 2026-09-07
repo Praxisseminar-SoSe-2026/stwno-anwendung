@@ -26,10 +26,6 @@ class NotOriginalBookerError(Exception):
     pass
 
 
-class ResidentLaundryRoomError(Exception):
-    pass
-
-
 class BookingAlreadyEndedError(Exception):
     pass
 
@@ -51,7 +47,7 @@ def create_laundry_booking(db: Session,
         )
 
     if machine.laundry_room.dormitory_id != current_user.dormitory_id:
-        raise ResidentLaundryRoomError(
+        raise ResidentDormitoryError(
             "Machine is in a laundry room, "
             "that does not belong to the resident dormitory"
         )

@@ -17,7 +17,6 @@ from app.services.laundry_booking_service import (
     LaundryBookingTimeConflictError,
     MachineNotFoundError,
     NotOriginalBookerError,
-    ResidentLaundryRoomError,
     create_laundry_booking,
     end_laundry_booking,
 )
@@ -40,8 +39,6 @@ def create_booking(
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     except MachineNotFoundError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
-    except ResidentLaundryRoomError as exc:
-        raise HTTPException(status_code=400, detail=str(exc)) from exc
     except LaundryBookingTimeConflictError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 

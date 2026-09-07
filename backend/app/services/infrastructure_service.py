@@ -5,8 +5,8 @@ from app.models.community_room import CommunityRoom
 from app.models.laundry_machine import LaundryMachine
 from app.models.laundry_room import LaundryRoom
 from app.models.user import User
+from app.core.status import LaundryStatus
 from app.services.laundry_booking_service import (
-    ResidentLaundryRoomError,
     reset_machine_status_if_expired_or_return_endtime,
 )
 from app.services.request_service import ResidentDormitoryError
@@ -32,9 +32,23 @@ def list_community_rooms(db: Session, current_user: User) -> list[CommunityRoom]
     return community_rooms
 
 
-def list_laundry_machines(db: Session,
-                          current_user: User,
-                          laundry_room_id: int) -> list[LaundryMachine]:
+def list_laundry_rooms(db: Session, current_user: User) -> list[LaundryRoom]:
+    if current_user.dormitory_id is None:
+        raise ResidentDormitoryError(
+            "User has no dormitory assigned; cannot list laundry rooms"
+        )
+    laundry_rooms = (
+        db.query(LaundryRoom)
+        .filter(LaundryRoom.dormitory_id == current_user.dormitory_id)
+        .all()
+    )
+
+    return laundry_rooms
+
+
+def list_laundry_machines_in_laundry_room(db: Session,
+                                          current_user: User,
+                                          laundry_room_id: int) -> list[LaundryMachine]:
 
     laundry_room = db.get(LaundryRoom, laundry_room_id)
     if laundry_room is None:
@@ -43,7 +57,7 @@ def list_laundry_machines(db: Session,
         )
 
     if laundry_room.dormitory_id != current_user.dormitory_id:
-        raise ResidentLaundryRoomError(
+        raise ResidentDormitoryError(
             "Laundry room does not belong to the resident dormitory"
         )
 
@@ -54,7 +68,7 @@ def list_laundry_machines(db: Session,
     )
 
     for machine in machines:
-        if machine.status == "Belegt":
+        if machine.status == LaundryStatus.OCCUPIED:
             machine.occupied_until = (
                 reset_machine_status_if_expired_or_return_endtime(db, machine.id))
 
