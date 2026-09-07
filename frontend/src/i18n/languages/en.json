@@ -59,7 +59,9 @@
     "description": "Problem Description",
     "image": "Image (optional)",
     "ownFlat": "In your own apartment?",
-    "yes": "yes", "no": "no", "location": "Location",
+    "yes": "yes",
+    "no": "no",
+    "location": "Location",
     "entryPermission": "Permission to Enter",
     "chooseSlots": "Please select at least 3 appointments",
     "slot": "Appointment {{number}}",
@@ -93,7 +95,18 @@
     "start": "Begin",
     "end": "End",
     "location": "Location",
-    "exportPdf": "Create PDF"
+    "type": {
+      "repair": "repair request",
+      "room": "community room booking request"
+    },
+    "exportPdf": "Create PDF",
+    "status": {
+      "open": "Open",
+      "in_progress": "In progress",
+      "closed": "Closed",
+      "denied": "Denied",
+      "closed/denied": "Closed/Denied"
+    }
   },
   "login": {
     "title": "Log into STWNO-Anwendung",

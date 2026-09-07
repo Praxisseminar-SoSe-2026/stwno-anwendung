@@ -95,7 +95,18 @@
     "start": "Beginn",
     "end": "Ende",
     "location": "Ort",
-    "exportPdf": "PDF erstellen"
+    "type": {
+      "repair": "Reperaturanfrage",
+      "room": "Gemeinschaftsraum"
+    },
+    "exportPdf": "PDF erstellen",
+    "status": {
+      "open": "Offen",
+      "in_progress": "In Bearbeitung",
+      "closed": "Geschlossen",
+      "denied": "Abgelehnt",
+      "closed/denied": "Abgelehnt/Geschlossen"
+    }
   },
   "login": {
     "title": "Bei STWNO-Anwendung anmelden",

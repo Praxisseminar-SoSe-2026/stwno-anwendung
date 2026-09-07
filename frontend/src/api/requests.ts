@@ -2,6 +2,8 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 export type RequestType = 'repair' | 'room'
 
+export type RequestStatus = 'open' | 'in_progress' | 'closed' | 'denied'
+
 export type AccessTimeSlotProposal = {
   id: number
   start_time: string
@@ -11,7 +13,7 @@ export type AccessTimeSlotProposal = {
 export type TicketRequest = {
   id: number
   type: RequestType
-  status: string
+  status: RequestStatus
   created_at: string | null
   resident_id: number
   location: string | null
@@ -40,7 +42,7 @@ export type RoomBooking = {
   dormitory_id: number
   start_datetime: string
   end_datetime: string
-  status: string
+  status: RequestStatus
 }
 
 export type RoomRequestCreate = {
@@ -94,7 +96,6 @@ export async function getRequestById(id: number): Promise<TicketRequest> {
   return handleResponse(res)
 }
 
-
 export async function createRepairRequest(
   payload: CreateRepairRequestPayload
 ): Promise<TicketRequest> {
@@ -105,7 +106,7 @@ export async function createRepairRequest(
   })
   return handleResponse(res)
 }
-  
+
 export async function createRoomBooking(
   data: RoomRequestCreate
 ): Promise<TicketRequest> {
