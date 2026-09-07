@@ -87,7 +87,9 @@ class RequestResponse(BaseModel):
     alternative_key_exchange_date: date | None = None
 
     @classmethod
-    def from_request(cls, request: Request, *, can_edit: bool = False) -> RequestResponse:
+    def from_request(
+        cls, request: Request, *, can_edit: bool = False
+    ) -> RequestResponse:
         from app.models.repair_request import RepairRequest
         from app.models.room_request import RoomRequest
 

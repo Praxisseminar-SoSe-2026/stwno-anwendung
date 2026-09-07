@@ -124,9 +124,7 @@ def list_all(
 ):
     requests = list_requests(db, current_user)
     return [
-        RequestResponse.from_request(
-            r, can_edit=can_edit_request(db, current_user, r)
-        )
+        RequestResponse.from_request(r, can_edit=can_edit_request(db, current_user, r))
         for r in requests
     ]
 
