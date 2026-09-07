@@ -2,12 +2,12 @@ from datetime import datetime, timedelta
 
 from sqlalchemy.orm import Session
 
+from app.core.status import LaundryStatus
 from app.models.laundry_booking import LaundryBooking
 from app.models.laundry_machine import LaundryMachine
 from app.models.user import User
 from app.schemas.laundry import LaundryBookingCreate
 from app.services.request_service import ResidentDormitoryError
-from app.core.status import LaundryStatus
 
 
 class MachineNotFoundError(Exception):

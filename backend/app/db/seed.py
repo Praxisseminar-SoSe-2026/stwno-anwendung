@@ -11,7 +11,7 @@ from __future__ import annotations
 from datetime import UTC, date, datetime, timedelta
 
 from app.core.security import hash_password
-from app.core.status import RequestStatus, LaundryStatus
+from app.core.status import LaundryStatus, RequestStatus
 from app.db.database import SessionLocal
 from app.models import (
     Announcement,

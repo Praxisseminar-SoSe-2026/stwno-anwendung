@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 from datetime import date, datetime
-from typing import TYPE_CHECKING, Literal
-from app.core.status import RequestStatus, LaundryStatus
+from typing import TYPE_CHECKING
 
 from pydantic import BaseModel
+
+from app.core.status import RequestStatus
 
 if TYPE_CHECKING:
     from app.models.request import Request

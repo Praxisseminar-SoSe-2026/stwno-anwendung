@@ -1,14 +1,13 @@
 from __future__ import annotations
-from sqlalchemy import Enum
 
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import ForeignKey, func
+from sqlalchemy import Enum, ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.db.database import Base
 from app.core.status import RequestStatus
+from app.db.database import Base
 
 if TYPE_CHECKING:
     from app.models.request_comment import RequestComment
