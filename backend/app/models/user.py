@@ -16,6 +16,7 @@ if TYPE_CHECKING:
     from app.models.dormitory_facility_manager import DormitoryFacilityManager
     from app.models.faq_entry import FaqEntry
     from app.models.item_reservation import ItemReservation
+    from app.models.laundry_booking import LaundryBooking
     from app.models.notification import Notification
     from app.models.repair_request_status_history import RepairRequestStatusHistory
     from app.models.request import Request
@@ -68,6 +69,10 @@ class User(Base):
     )
     authored_announcements: Mapped[list[Announcement]] = relationship(
         back_populates="author"
+    )
+    # Todo: discuss if this information should be safed and later be accessible
+    laundry_bookings: Mapped[list[LaundryBooking]] = relationship(
+        back_populates="resident"
     )
     notifications: Mapped[list[Notification]] = relationship(back_populates="user")
     consents: Mapped[list[Consent]] = relationship(back_populates="resident")
