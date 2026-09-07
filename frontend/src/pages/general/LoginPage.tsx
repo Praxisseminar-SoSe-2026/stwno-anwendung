@@ -2,7 +2,7 @@
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import type { SubmitEventHandler } from 'react'
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { useLogin } from '../../hooks/useLogin.ts'
 import {
   Typography,
@@ -121,6 +121,11 @@ export function LoginPage() {
             color={passwordError ? 'error' : 'primary'}
           />
         </FormControl>
+
+        {/*new Account Registar Link*/}
+        <Typography>
+          <Link to="/registration">{t('registration.register')}</Link>
+        </Typography>
 
         {/*login Button*/}
         <Button

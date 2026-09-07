@@ -94,7 +94,6 @@ export async function getRequestById(id: number): Promise<TicketRequest> {
   return handleResponse(res)
 }
 
-
 export async function createRepairRequest(
   payload: CreateRepairRequestPayload
 ): Promise<TicketRequest> {
@@ -105,7 +104,7 @@ export async function createRepairRequest(
   })
   return handleResponse(res)
 }
-  
+
 export async function createRoomBooking(
   data: RoomRequestCreate
 ): Promise<TicketRequest> {
