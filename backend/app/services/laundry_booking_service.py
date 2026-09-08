@@ -35,9 +35,9 @@ class BookingAlreadyEndedError(Exception):
 
 
 # Todo: check for false durations (negative numbers, etc.)
-def create_laundry_booking(db: Session,
-                           current_user: User,
-                           payload: LaundryBookingCreate) -> LaundryBooking:
+def create_laundry_booking(
+    db: Session, current_user: User, payload: LaundryBookingCreate
+) -> LaundryBooking:
     now = datetime.now()
     if current_user.dormitory_id is None:
         raise ResidentDormitoryError(
@@ -67,9 +67,7 @@ def create_laundry_booking(db: Session,
     )
 
     if time_conflict is not None:
-        raise LaundryBookingTimeConflictError(
-            "Laundry machine is already booked"
-        )
+        raise LaundryBookingTimeConflictError("Laundry machine is already booked")
 
     laundry_booking = LaundryBooking(
         resident_id=current_user.id,
@@ -85,22 +83,18 @@ def create_laundry_booking(db: Session,
     return laundry_booking
 
 
-def end_laundry_booking(db: Session,
-                        current_user: User,
-                        laundry_booking_id: int) -> LaundryBooking:
+def end_laundry_booking(
+    db: Session, current_user: User, laundry_booking_id: int
+) -> LaundryBooking:
     booking = db.get(LaundryBooking, laundry_booking_id)
 
     now = datetime.now()
 
     if booking is None:
-        raise BookingNotFoundError(
-            f"Booking with id {laundry_booking_id} not found"
-        )
+        raise BookingNotFoundError(f"Booking with id {laundry_booking_id} not found")
 
     if not booking.resident_id == current_user.id:
-        raise NotOriginalBookerError(
-            "User is not the original booker"
-        )
+        raise NotOriginalBookerError("User is not the original booker")
 
     if booking.cancelled_at is not None:
         raise BookingAlreadyEndedError(
@@ -120,8 +114,9 @@ def end_laundry_booking(db: Session,
     return booking
 
 
-def reset_machine_status_if_expired_or_return_endtime(db: Session,
-                                                      laundry_machine_id: int) -> None:
+def reset_machine_status_if_expired_or_return_endtime(
+    db: Session, laundry_machine_id: int
+) -> None:
 
     active_booking = (
         db.query(LaundryBooking)
@@ -129,7 +124,7 @@ def reset_machine_status_if_expired_or_return_endtime(db: Session,
             LaundryBooking.laundry_machine_id == laundry_machine_id,
             LaundryBooking.cancelled_at.is_(None),
             LaundryBooking.ends_at > datetime.now(),
-            )
+        )
         .first()
     )
 

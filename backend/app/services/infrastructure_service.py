@@ -1,4 +1,3 @@
-
 from sqlalchemy.orm import Session
 
 from app.models.community_room import CommunityRoom
@@ -32,9 +31,9 @@ def list_community_rooms(db: Session, current_user: User) -> list[CommunityRoom]
     return community_rooms
 
 
-def list_laundry_machines(db: Session,
-                          current_user: User,
-                          laundry_room_id: int) -> list[LaundryMachine]:
+def list_laundry_machines(
+    db: Session, current_user: User, laundry_room_id: int
+) -> list[LaundryMachine]:
 
     laundry_room = db.get(LaundryRoom, laundry_room_id)
     if laundry_room is None:
@@ -55,7 +54,8 @@ def list_laundry_machines(db: Session,
 
     for machine in machines:
         if machine.status == "Belegt":
-            machine.occupied_until = (
-                reset_machine_status_if_expired_or_return_endtime(db, machine.id))
+            machine.occupied_until = reset_machine_status_if_expired_or_return_endtime(
+                db, machine.id
+            )
 
     return machines

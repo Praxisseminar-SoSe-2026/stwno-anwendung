@@ -46,12 +46,13 @@ def create_booking(
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
-@router.patch("/booking/{laundry_booking_id}/end",
-              response_model=LaundryBookingResponse)
+@router.patch(
+    "/booking/{laundry_booking_id}/end", response_model=LaundryBookingResponse
+)
 def end_booking(
-        laundry_booking_id: int,
-        current_user: Annotated[User, Depends(get_current_user)],
-        db: Annotated[Session, Depends(get_db)],
+    laundry_booking_id: int,
+    current_user: Annotated[User, Depends(get_current_user)],
+    db: Annotated[Session, Depends(get_db)],
 ):
     try:
         return end_laundry_booking(db, current_user, laundry_booking_id)

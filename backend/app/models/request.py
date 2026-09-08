@@ -21,9 +21,9 @@ class Request(Base):
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     type: Mapped[str]
     resident_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    status: Mapped[RequestStatus] = mapped_column(Enum(RequestStatus),
-                                                  default=RequestStatus.OPEN,
-                                                  server_default="OPEN")
+    status: Mapped[RequestStatus] = mapped_column(
+        Enum(RequestStatus), default=RequestStatus.OPEN, server_default="OPEN"
+    )
     created_at: Mapped[datetime | None] = mapped_column(server_default=func.now())
 
     resident: Mapped[User] = relationship(back_populates="requests")

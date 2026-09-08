@@ -190,34 +190,36 @@ def seed() -> None:
             laundry_room_id=laundry_room.id,
             label="Maschine 1",
             type="Dryer",
-            status=LaundryStatus.FREE
+            status=LaundryStatus.FREE,
         )
         laundry_machine2 = LaundryMachine(
             laundry_room_id=laundry_room.id,
             label="Maschine 2",
-            status=LaundryStatus.OCCUPIED
+            status=LaundryStatus.OCCUPIED,
         )
         laundry_machine3 = LaundryMachine(
             laundry_room_id=laundry_room.id,
             label="Maschine 3",
-            status=LaundryStatus.OCCUPIED
+            status=LaundryStatus.OCCUPIED,
         )
 
         db.add_all([laundry_machine1, laundry_machine2, laundry_machine3])
         db.flush()
 
-        db.add_all([
-            LaundryBooking(
-                laundry_machine_id=laundry_machine2.id,
-                resident_id=resident.id,
-                ends_at=datetime.now() + timedelta(minutes=90),
-            ),
-            LaundryBooking(
-                laundry_machine_id=laundry_machine3.id,
-                resident_id=resident.id,
-                ends_at=datetime.now() + timedelta(minutes=2),
-            )
-        ])
+        db.add_all(
+            [
+                LaundryBooking(
+                    laundry_machine_id=laundry_machine2.id,
+                    resident_id=resident.id,
+                    ends_at=datetime.now() + timedelta(minutes=90),
+                ),
+                LaundryBooking(
+                    laundry_machine_id=laundry_machine3.id,
+                    resident_id=resident.id,
+                    ends_at=datetime.now() + timedelta(minutes=2),
+                ),
+            ]
+        )
 
         # FAQs
         faq_category_general = FaqCategory(name="General")

@@ -1,7 +1,9 @@
 import json
 from pathlib import Path
 
-MOCK_DATA_PATH = Path(__file__).resolve().parent.parent / "data" / "stwno_mock_data.json"  # noqa: E501
+MOCK_DATA_PATH = (
+    Path(__file__).resolve().parent.parent / "data" / "stwno_mock_data.json"
+)  # noqa: E501
 
 
 class STWNONotFoundError(Exception):
@@ -15,6 +17,7 @@ class STWNOUnavailableError(Exception):
 def _load_mock_database() -> dict:
     with MOCK_DATA_PATH.open(encoding="utf-8") as f:
         return json.load(f)
+
 
 # Toggle to simulate an outage in tests/manual testing.
 SIMULATE_OUTAGE = False
