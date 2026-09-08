@@ -22,18 +22,12 @@ import { useRequest } from '../../hooks/useRequest'
 import { useRepairRequestActions } from '../../hooks/useRepairRequestActions'
 import { useAuth } from '../../contexts/AuthContext'
 import type {
-  RequestType,
   RepairStatus,
   Comment,
   StatusHistoryEntry,
 } from '../../api/requests'
 
 const ALLOWED_ROLES = ['admin', 'mitarbeiter', 'hausmeister']
-
-const TYPE_LABELS: Record<RequestType, string> = {
-  repair: 'Reparatur',
-  room: 'Gemeinschaftsraum',
-}
 
 const REPAIR_STATUSES: RepairStatus[] = [
   'Offen',
