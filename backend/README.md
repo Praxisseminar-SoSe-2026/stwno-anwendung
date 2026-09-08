@@ -144,6 +144,8 @@ docker compose exec backend python -m app.db.seed
 python -m app.db.seed
 ```
 
+Additionally test mock data for the registration of new accounts is defined in `app/data/stwno_mock_data.json`
+
 ## Linting & Formatting
 
 **Option A (Docker):**

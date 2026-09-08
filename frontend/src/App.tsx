@@ -20,6 +20,8 @@ import { AdminCreateAnnouncementPage } from './pages/admin/AdminCreateAnnounceme
 
 //general pages
 import { LoginPage } from './pages/general/LoginPage'
+import { RegistrationPage } from './pages/general/RegistrationPage'
+import { SetPasswordPage } from './pages/general/SetPasswordPage'
 import { NotFoundPage } from './pages/general/NotFoundPage'
 
 import './App.css'
@@ -30,6 +32,8 @@ function App() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/registration" element={<RegistrationPage />} />
+      <Route path="/set-password" element={<SetPasswordPage />} />
       <Route element={<ProtectedRoute />}>
         <Route element={<Layout />}>
           {/* resident routes */}

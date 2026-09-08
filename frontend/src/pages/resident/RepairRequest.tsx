@@ -16,10 +16,13 @@ import {
   IconButton,
   Alert,
   Stack,
+  CircularProgress,
 } from '@mui/material'
 import UploadIcon from '@mui/icons-material/Upload'
+import CloseIcon from '@mui/icons-material/Close'
 import { useAuth } from '../../contexts/AuthContext'
 import { useCreateRepairRequest } from '../../hooks/useCreateRepairRequest'
+import { useImageUpload } from '../../hooks/useImageUpload'
 
 // Business hours of facility management
 const BUSINESS_START_HOUR = 8
@@ -70,6 +73,7 @@ export function RepairRequest() {
   const location = ownFlat === 'yes' ? (user?.flat_number ?? '') : locationText
   const slotsValid = slots.every((slot) => isValidSlot(slot))
   const minDateTime = toLocalDateTimeValue(new Date())
+  const imageUpload = useImageUpload()
 
   // for submit description + location is needed
   // check on entry permission OR three proposed dates OR
@@ -77,6 +81,7 @@ export function RepairRequest() {
   const canSubmit =
     description.trim().length > 0 &&
     location.trim().length > 0 &&
+    !imageUpload.uploading &&
     (entryPermission === 'yes' ||
       (noSlotWorks ? proposedDateNote.trim().length > 0 : slotsValid))
 
@@ -96,13 +101,14 @@ export function RepairRequest() {
     const result = await submitRepairRequest({
       description,
       location,
+      image_url: imageUpload.imageUrl,
       entry_permission: entryPermission === 'yes',
       ...(entryPermission === 'no' && !noSlotWorks
         ? {
-          proposed_time_slots: slots.map((slot) => ({
-            start_time: new Date(slot).toISOString(),
-          })),
-        }
+            proposed_time_slots: slots.map((slot) => ({
+              start_time: new Date(slot).toISOString(),
+            })),
+          }
         : {}),
       ...(entryPermission === 'no' && noSlotWorks
         ? { proposed_date_note: proposedDateNote }
@@ -115,13 +121,20 @@ export function RepairRequest() {
       setLocationText('')
       setSlots(['', '', ''])
       setProposedDateNote('')
+      imageUpload.clear()
     }
   }
 
   return (
     <Paper
       variant="outlined"
-      sx={{ display: 'flex', flexDirection: 'column', width: '50%', p: 4, gap: 2 }}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: '50%',
+        p: 4,
+        gap: 2,
+      }}
     >
       <Typography variant="h2">{t('repairRequest.title')}</Typography>
 
@@ -146,12 +159,44 @@ export function RepairRequest() {
         {/* ----- optional Image ----- */}
         <FormControl>
           <FormLabel>{t('repairRequest.image')}</FormLabel>
-          <IconButton
-            disabled
-            sx={{ border: '1px solid', borderColor: 'divider', width: 48 }}
-          >
-            <UploadIcon />
-          </IconButton>
+          <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
+            <IconButton
+              component="label"
+              disabled={imageUpload.uploading}
+              sx={{ border: '1px solid', borderColor: 'divider', width: 48 }}
+            >
+              <UploadIcon />
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                hidden
+                onChange={(e) => {
+                  const file = e.target.files?.[0]
+                  if (file) void imageUpload.upload(file)
+                  e.target.value = ''
+                }}
+              />
+            </IconButton>
+            {imageUpload.uploading && <CircularProgress size={24} />}
+            {imageUpload.imageUrl && !imageUpload.uploading && (
+              <>
+                <Box
+                  component="img"
+                  src={imageUpload.imageUrl}
+                  alt=""
+                  sx={{ height: 48, width: 48, objectFit: 'cover', borderRadius: 1 }}
+                />
+                <IconButton size="small" onClick={imageUpload.clear}>
+                  <CloseIcon fontSize="small" />
+                </IconButton>
+              </>
+            )}
+          </Stack>
+          {imageUpload.error && (
+            <Typography color="error" variant="body2">
+              {imageUpload.error}
+            </Typography>
+          )}
         </FormControl>
 
         {/* ----- Location ----- */}
@@ -261,11 +306,17 @@ export function RepairRequest() {
           </Paper>
         )}
         {/* --- Submit --- */}
-        <Button type="submit" variant="contained" disabled={!canSubmit || loading}>
+        <Button
+          type="submit"
+          variant="contained"
+          disabled={!canSubmit || loading}
+        >
           {loading ? t('repairRequest.submitting') : t('repairRequest.submit')}
         </Button>
         {/* --- Submit Messages --- */}
-        {success && <Alert severity="success">{t('repairRequest.success')}</Alert>}
+        {success && (
+          <Alert severity="success">{t('repairRequest.success')}</Alert>
+        )}
         {error && <Alert severity="error">{error}</Alert>}
       </Box>
     </Paper>

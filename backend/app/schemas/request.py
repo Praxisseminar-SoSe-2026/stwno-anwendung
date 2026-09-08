@@ -11,6 +11,13 @@ if TYPE_CHECKING:
     from app.models.request import Request
 
 
+class ResidentInfo(BaseModel):
+    id: int
+    first_name: str
+    last_name: str
+    flat_number: str | None = None
+
+
 # only start time because end time is auto generated
 class AccessTimeSlotProposalCreate(BaseModel):
     start_time: datetime
@@ -22,12 +29,46 @@ class AccessTimeSlotProposalResponse(BaseModel):
     end_time: datetime
 
 
+class AccessTimeSlotSelect(BaseModel):
+    time_slot_proposal_id: int
+
+
+class AccessTimeSlotResponse(BaseModel):
+    id: int
+    start_time: datetime
+    end_time: datetime
+
+
+class CommentCreate(BaseModel):
+    text: str
+
+
+class CommentResponse(BaseModel):
+    id: int
+    author: ResidentInfo
+    text: str
+    created_at: datetime | None
+
+
+class StatusHistoryResponse(BaseModel):
+    id: int
+    status: str
+    changed_by: ResidentInfo
+    changed_at: datetime | None
+
+
+# Todo: create enum
+class RepairRequestStatusUpdate(BaseModel):
+    status: Literal["Offen", "In Bearbeitung", "Erledigt", "Abgelehnt"]
+
+
 class RequestResponse(BaseModel):
     id: int
     type: str
     status: RequestStatus
     created_at: datetime | None
-    resident_id: int
+    resident: ResidentInfo
+    can_edit: bool = False
 
     # repair-specific
     location: str | None = None
@@ -36,6 +77,9 @@ class RequestResponse(BaseModel):
     entry_permission: bool | None = None
     proposed_date_note: str | None = None
     proposed_time_slots: list[AccessTimeSlotProposalResponse] = []
+    access_time_slot: AccessTimeSlotResponse | None = None
+    comments: list[CommentResponse] = []
+    status_history: list[StatusHistoryResponse] = []
 
     # room-specific
     community_room_id: int | None = None
@@ -45,16 +89,36 @@ class RequestResponse(BaseModel):
     alternative_key_exchange_date: date | None = None
 
     @classmethod
-    def from_request(cls, request: Request) -> RequestResponse:
+    def from_request(
+        cls, request: Request, *, can_edit: bool = False
+    ) -> RequestResponse:
         from app.models.repair_request import RepairRequest
         from app.models.room_request import RoomRequest
+
+        def _resident_info(user) -> ResidentInfo:
+            return ResidentInfo(
+                id=user.id,
+                first_name=user.first_name,
+                last_name=user.last_name,
+                flat_number=user.flat_number,
+            )
 
         data = {
             "id": request.id,
             "type": request.type,
             "status": request.status,
             "created_at": request.created_at,
-            "resident_id": request.resident_id,
+            "resident": _resident_info(request.resident),
+            "can_edit": can_edit,
+            "comments": [
+                CommentResponse(
+                    id=comment.id,
+                    author=_resident_info(comment.author),
+                    text=comment.text,
+                    created_at=comment.created_at,
+                )
+                for comment in request.comments
+            ],
         }
 
         if isinstance(request, RepairRequest):
@@ -71,6 +135,24 @@ class RequestResponse(BaseModel):
                         end_time=slot.end_time,
                     )
                     for slot in request.time_slot_proposals
+                ],
+                access_time_slot=(
+                    AccessTimeSlotResponse(
+                        id=request.access_time_slot.id,
+                        start_time=request.access_time_slot.start_time,
+                        end_time=request.access_time_slot.end_time,
+                    )
+                    if request.access_time_slot
+                    else None
+                ),
+                status_history=[
+                    StatusHistoryResponse(
+                        id=entry.id,
+                        status=entry.status,
+                        changed_by=_resident_info(entry.changed_by),
+                        changed_at=entry.changed_at,
+                    )
+                    for entry in request.status_history
                 ],
             )
         elif isinstance(request, RoomRequest):

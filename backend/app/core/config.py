@@ -22,5 +22,10 @@ class Settings(BaseSettings):
     smtp_use_tls: bool = False
     smtp_from_email: str = "stwno.app@gmail.com"  # only for testing
 
+    # settings for image upload
+    backend_url: str = "http://localhost:8000"
+    upload_dir: str = "uploads"
+    max_upload_size_mb: int = 5
+
 
 settings = Settings()

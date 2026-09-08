@@ -71,7 +71,8 @@
     "submitting": "wird gesendet...",
     "success": "Reparaturanfrage erfolgreich abgeschickt.",
     "error": "Reparaturanfrage konnte nicht gesendet werden.",
-    "slotInvalid": "Termin muss in der Zukunft liegen, an einem Werktag (Mo–Fr) zwischen 08:00 und 15:00 Uhr beginnen."
+    "slotInvalid": "Termin muss in der Zukunft liegen, an einem Werktag (Mo–Fr) zwischen 08:00 und 15:00 Uhr beginnen.",
+    "imageError": "Bild konnte nicht hochgeladen werden."
   },
   "roomBooking": {
     "title": "Gemeinschaftsraumbuchung",
@@ -99,7 +100,6 @@
       "repair": "Reperaturanfrage",
       "room": "Gemeinschaftsraum"
     },
-    "exportPdf": "PDF erstellen",
     "status": {
       "open": "Offen",
       "in_progress": "In Bearbeitung",
@@ -107,6 +107,19 @@
       "denied": "Abgelehnt",
       "closed/denied": "Abgelehnt/Geschlossen"
     }
+    "exportPdf": "PDF erstellen",
+    "author": "Gemeldet von",
+    "proposedSlots": "Terminvorschläge",
+    "finalSlot": "Vereinbarter Termin",
+    "history": "Verlauf",
+    "noHistory": "Noch kein Verlauf vorhanden.",
+    "statusChanged": "Status geändert zu \"{{status}}\"",
+    "commentPlaceholder": "Kommentar schreiben …",
+    "addComment": "Kommentieren",
+    "changeStatus": "Status ändern",
+    "chooseSlot": "Termin auswählen",
+    "setEntryTime": "Termin festlegen",
+    "actionError": "Aktion fehlgeschlagen."
   },
   "login": {
     "title": "Bei STWNO-Anwendung anmelden",
@@ -120,6 +133,13 @@
     "signOut": "Abmelden",
     "error": "Login fehlgeschlagen.",
     "invalid": "Bitte einloggen."
+  },
+  "registration": {
+    "register": "Neuen Account registrieren?",
+    "person_number": "Bitte Personen-Nummer eingeben",
+    "next_button": "Weiter",
+    "password": "Passwort",
+    "create_account": "Account erstellen"
   },
   "notFound": {
     "title": "404 - Diese Seite gibts leider nicht :("

@@ -10,6 +10,10 @@ jobs:
     defaults:
       run:
         working-directory: backend
+    env:
+      DATABASE_URL: "postgresql+pg8000://test:test@localhost:5432/test"
+      FRONTEND_URL: "http://localhost:5173"
+      JWT_SECRET_KEY: "test-secret-key-for-ci"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
