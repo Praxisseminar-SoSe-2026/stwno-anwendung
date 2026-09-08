@@ -96,6 +96,17 @@
     "start": "Beginn",
     "end": "Ende",
     "location": "Ort",
+    "type": {
+      "repair": "Reperaturanfrage",
+      "room": "Gemeinschaftsraum"
+    },
+    "status": {
+      "open": "Offen",
+      "in_progress": "In Bearbeitung",
+      "closed": "Geschlossen",
+      "denied": "Abgelehnt",
+      "closed/denied": "Abgelehnt/Geschlossen"
+    }
     "exportPdf": "PDF erstellen",
     "author": "Gemeldet von",
     "proposedSlots": "Terminvorschläge",

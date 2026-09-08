@@ -29,6 +29,7 @@ export type StatusHistoryEntry = {
 
 export type RequestType = 'repair' | 'room'
 
+export type RequestStatus = 'open' | 'in_progress' | 'closed' | 'denied'
 export type RepairStatus = 'Offen' | 'In Bearbeitung' | 'Erledigt' | 'Abgelehnt'
 
 export type AccessTimeSlotProposal = {
@@ -40,7 +41,7 @@ export type AccessTimeSlotProposal = {
 export type TicketRequest = {
   id: number
   type: RequestType
-  status: string
+  status: RequestStatus
   created_at: string | null
   resident: ResidentInfo
   can_edit: boolean
@@ -73,7 +74,7 @@ export type RoomBooking = {
   dormitory_id: number
   start_datetime: string
   end_datetime: string
-  status: string
+  status: RequestStatus
 }
 
 export type RoomRequestCreate = {

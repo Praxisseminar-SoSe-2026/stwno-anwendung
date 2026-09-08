@@ -22,18 +22,12 @@ import { useRequest } from '../../hooks/useRequest'
 import { useRepairRequestActions } from '../../hooks/useRepairRequestActions'
 import { useAuth } from '../../contexts/AuthContext'
 import type {
-  RequestType,
   RepairStatus,
   Comment,
   StatusHistoryEntry,
 } from '../../api/requests'
 
 const ALLOWED_ROLES = ['admin', 'mitarbeiter', 'hausmeister']
-
-const TYPE_LABELS: Record<RequestType, string> = {
-  repair: 'Reparatur',
-  room: 'Gemeinschaftsraum',
-}
 
 const REPAIR_STATUSES: RepairStatus[] = [
   'Offen',
@@ -99,17 +93,17 @@ export function AdminTicketDetailPage() {
   return (
     <Paper variant="outlined" sx={{ p: 4 }}>
       <Stack spacing={2}>
-        <Stack direction="row" spacing={2} alignItems="center">
+        <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
           <Typography>
             {request.created_at &&
               new Date(request.created_at).toLocaleString()}
           </Typography>
           <Chip
-            label={TYPE_LABELS[request.type]}
+            label={t(`request.type.${request.type}`)}
             color={request.type === 'repair' ? 'primary' : 'secondary'}
           />
           <Typography>{`# ${request.id}`}</Typography>
-          <Chip label={request.status} />
+          <Chip label={t(`request.status.${request.status}`)} />
           <Button
             variant="outlined"
             startIcon={<PrintIcon />}

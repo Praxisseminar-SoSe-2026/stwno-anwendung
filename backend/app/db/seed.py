@@ -11,6 +11,7 @@ from __future__ import annotations
 from datetime import UTC, date, datetime, timedelta
 
 from app.core.security import hash_password
+from app.core.status import LaundryStatus, RequestStatus
 from app.db.database import SessionLocal
 from app.models import (
     Announcement,
@@ -189,34 +190,36 @@ def seed() -> None:
             laundry_room_id=laundry_room.id,
             label="Maschine 1",
             type="Dryer",
-            status="Frei"
+            status=LaundryStatus.FREE,
         )
         laundry_machine2 = LaundryMachine(
             laundry_room_id=laundry_room.id,
             label="Maschine 2",
-            status="Belegt",
+            status=LaundryStatus.OCCUPIED,
         )
         laundry_machine3 = LaundryMachine(
             laundry_room_id=laundry_room.id,
             label="Maschine 3",
-            status="Belegt",
+            status=LaundryStatus.OCCUPIED,
         )
 
         db.add_all([laundry_machine1, laundry_machine2, laundry_machine3])
         db.flush()
 
-        db.add_all([
-            LaundryBooking(
-                laundry_machine_id=laundry_machine2.id,
-                resident_id=resident.id,
-                ends_at=datetime.now() + timedelta(minutes=90),
-            ),
-            LaundryBooking(
-                laundry_machine_id=laundry_machine3.id,
-                resident_id=resident.id,
-                ends_at=datetime.now() + timedelta(minutes=2),
-            )
-        ])
+        db.add_all(
+            [
+                LaundryBooking(
+                    laundry_machine_id=laundry_machine2.id,
+                    resident_id=resident.id,
+                    ends_at=datetime.now() + timedelta(minutes=90),
+                ),
+                LaundryBooking(
+                    laundry_machine_id=laundry_machine3.id,
+                    resident_id=resident.id,
+                    ends_at=datetime.now() + timedelta(minutes=2),
+                ),
+            ]
+        )
 
         # FAQs
         faq_category_general = FaqCategory(name="General")
@@ -347,21 +350,21 @@ def seed() -> None:
         # Tickets
         repair_open = RepairRequest(
             resident_id=resident.id,
-            status="Offen",
+            status=RequestStatus.OPEN,
             description="Die Heizung geht nicht",
             location=resident.flat_number,
             assigned_dormitory_id=dorm.id,
         )
         repair_confirmed = RepairRequest(
             resident_id=resident.id,
-            status="Bestätigt",
+            status=RequestStatus.IN_PROGRESS,
             description="Es kommt kein warmes Wasser",
             location=resident.flat_number,
             assigned_dormitory_id=dorm.id,
         )
         repair_closed = RepairRequest(
             resident_id=resident.id,
-            status="Geschlossen",
+            status=RequestStatus.CLOSED,
             description="Lampe im Flur defekt",
             location="Flur, 2. OG",
             assigned_dormitory_id=dorm.id,
@@ -370,14 +373,14 @@ def seed() -> None:
 
         room_open = RoomRequest(
             resident_id=resident.id,
-            status="Offen",
+            status=RequestStatus.OPEN,
             community_room_id=community_room.id,
             start_datetime=datetime.now(UTC),
             end_datetime=datetime.now(UTC) + timedelta(days=1),
         )
         room_confirmed = RoomRequest(
             resident_id=resident.id,
-            status="Bestätigt",
+            status=RequestStatus.IN_PROGRESS,
             community_room_id=community_room.id,
             start_datetime=datetime.now(UTC) + timedelta(days=5),
             end_datetime=datetime.now(UTC) + timedelta(days=6),

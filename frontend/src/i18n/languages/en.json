@@ -93,6 +93,21 @@
     "notAuthorized": "You are not authorized to use this page."
   },
   "request": {
+    "start": "Begin",
+    "end": "End",
+    "location": "Location",
+    "type": {
+      "repair": "repair request",
+      "room": "community room booking request"
+    },
+    "exportPdf": "Create PDF",
+    "status": {
+      "open": "Open",
+      "in_progress": "In progress",
+      "closed": "Closed",
+      "denied": "Denied",
+      "closed/denied": "Closed/Denied"
+    }
     "author": "Reported by",
     "proposedSlots": "Proposed times",
     "finalSlot": "Scheduled entry time",

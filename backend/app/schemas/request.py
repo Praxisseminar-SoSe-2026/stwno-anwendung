@@ -5,6 +5,8 @@ from typing import TYPE_CHECKING, Literal
 
 from pydantic import BaseModel
 
+from app.core.status import RequestStatus
+
 if TYPE_CHECKING:
     from app.models.request import Request
 
@@ -63,7 +65,7 @@ class RepairRequestStatusUpdate(BaseModel):
 class RequestResponse(BaseModel):
     id: int
     type: str
-    status: str
+    status: RequestStatus
     created_at: datetime | None
     resident: ResidentInfo
     can_edit: bool = False
@@ -183,8 +185,7 @@ class RoomRequestCreate(BaseModel):
 
 
 class RoomRequestStatusUpdate(BaseModel):
-    # Todo: discuss concept of global standard for status
-    status: Literal["Bestätigt", "Abgelehnt"]
+    status: RequestStatus
 
 
 class RoomBookings(BaseModel):
@@ -193,4 +194,4 @@ class RoomBookings(BaseModel):
     dormitory_id: int
     start_datetime: datetime
     end_datetime: datetime
-    status: str
+    status: RequestStatus
