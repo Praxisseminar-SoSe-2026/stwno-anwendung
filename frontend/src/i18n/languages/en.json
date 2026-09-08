@@ -71,7 +71,8 @@
     "submitting": "Sending...",
     "success": "Repair request submitted successfully.",
     "error": "Repair request could not be submitted.",
-    "slotInvalid": "The appointment must be in the future and begin on a weekday (Mon–Fri) between 8:00 a.m. and 3:00 p.m."
+    "slotInvalid": "The appointment must be in the future and begin on a weekday (Mon–Fri) between 8:00 a.m. and 3:00 p.m.",
+    "imageError": "Image could not be uploaded."
   },
   "roomBooking": {
     "title": "Community Room Booking",
@@ -92,10 +93,18 @@
     "notAuthorized": "You are not authorized to use this page."
   },
   "request": {
-    "start": "Begin",
-    "end": "End",
-    "location": "Location",
-    "exportPdf": "Create PDF"
+    "author": "Reported by",
+    "proposedSlots": "Proposed times",
+    "finalSlot": "Scheduled entry time",
+    "history": "History",
+    "noHistory": "No history yet.",
+    "statusChanged": "Status changed to \"{{status}}\"",
+    "commentPlaceholder": "Write a comment …",
+    "addComment": "Comment",
+    "changeStatus": "Change status",
+    "chooseSlot": "Choose a time slot",
+    "setEntryTime": "Set entry time",
+    "actionError": "Action failed."
   },
   "login": {
     "title": "Log into STWNO-Anwendung",

@@ -1,5 +1,8 @@
+from pathlib import Path
+
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import Session
@@ -19,6 +22,7 @@ from app.routers import (
     permission,
     registration,
     request,
+    upload,
 )
 
 setup_logging(level=settings.log_level, environment=settings.environment)
@@ -30,11 +34,14 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[settings.frontend_url],
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
     allow_headers=["Authorization", "Content-Type"],
 )
 
 app.add_middleware(RequestLoggingMiddleware)
+
+Path(settings.upload_dir).mkdir(parents=True, exist_ok=True)
+app.mount("/media", StaticFiles(directory=settings.upload_dir), name="media")
 
 app.include_router(permission.router)
 app.include_router(request.router)
@@ -45,6 +52,7 @@ app.include_router(dormitory.router)
 app.include_router(auth.router)
 app.include_router(faq.router)
 app.include_router(infrastructure.router)
+app.include_router(upload.router)
 app.include_router(laundry_booking.router)
 
 

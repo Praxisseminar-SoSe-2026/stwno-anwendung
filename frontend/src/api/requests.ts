@@ -1,6 +1,35 @@
 const BASE_URL = import.meta.env.VITE_API_BASE_URL
 
+export type ResidentInfo = {
+  id: number
+  first_name: string
+  last_name: string
+  flat_number: string | null
+}
+
+export type AccessTimeSlot = {
+  id: number
+  start_time: string
+  end_time: string
+}
+
+export type Comment = {
+  id: number
+  author: ResidentInfo
+  text: string
+  created_at: string | null
+}
+
+export type StatusHistoryEntry = {
+  id: number
+  status: string
+  changed_by: ResidentInfo
+  changed_at: string | null
+}
+
 export type RequestType = 'repair' | 'room'
+
+export type RepairStatus = 'Offen' | 'In Bearbeitung' | 'Erledigt' | 'Abgelehnt'
 
 export type AccessTimeSlotProposal = {
   id: number
@@ -13,13 +42,17 @@ export type TicketRequest = {
   type: RequestType
   status: string
   created_at: string | null
-  resident_id: number
+  resident: ResidentInfo
+  can_edit: boolean
   location: string | null
   description: string | null
   image_url: string | null
   entry_permission: boolean | null
   proposed_date_note: string | null
   proposed_time_slots: AccessTimeSlotProposal[]
+  access_time_slot: AccessTimeSlot | null
+  comments: Comment[]
+  status_history: StatusHistoryEntry[]
   community_room_id: number | null
   start_datetime: string | null
   end_datetime: string | null
@@ -124,6 +157,43 @@ export async function updateRoomBookingStatus(
     method: 'PATCH',
     headers: authHeaders(),
     body: JSON.stringify(data),
+  })
+  return handleResponse(res)
+}
+
+
+export async function updateRepairStatus(
+  id: number,
+  status: RepairStatus
+): Promise<TicketRequest> {
+  const res = await fetch(`${BASE_URL}/requests/repair/${id}/status`, {
+    method: 'PATCH',
+    headers: jsonAuthHeaders(),
+    body: JSON.stringify({ status }),
+  })
+  return handleResponse(res)
+}
+
+export async function setRepairEntryTime(
+  id: number,
+  timeSlotProposalId: number
+): Promise<TicketRequest> {
+  const res = await fetch(`${BASE_URL}/requests/repair/${id}/entry-time`, {
+    method: 'POST',
+    headers: jsonAuthHeaders(),
+    body: JSON.stringify({ time_slot_proposal_id: timeSlotProposalId }),
+  })
+  return handleResponse(res)
+}
+
+export async function addRepairComment(
+  id: number,
+  text: string
+): Promise<TicketRequest> {
+  const res = await fetch(`${BASE_URL}/requests/repair/${id}/comments`, {
+    method: 'POST',
+    headers: jsonAuthHeaders(),
+    body: JSON.stringify({ text }),
   })
   return handleResponse(res)
 }

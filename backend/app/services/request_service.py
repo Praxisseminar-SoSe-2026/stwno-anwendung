@@ -3,15 +3,21 @@ from datetime import UTC, date, datetime, time, timedelta
 from sqlalchemy.orm import Session
 
 from app.core.permission import get_user_role
+from app.models.access_time_slot import AccessTimeSlot
 from app.models.access_time_slot_proposal import AccessTimeSlotProposal
 from app.models.community_room import CommunityRoom
 from app.models.dormitory_facility_manager import DormitoryFacilityManager
 from app.models.repair_request import RepairRequest
+from app.models.repair_request_status_history import RepairRequestStatusHistory
 from app.models.request import Request
+from app.models.request_comment import RequestComment
 from app.models.room_request import RoomRequest
 from app.models.user import User
 from app.schemas.request import (
+    AccessTimeSlotSelect,
+    CommentCreate,
     RepairRequestCreate,
+    RepairRequestStatusUpdate,
     RoomBookings,
     RoomRequestCreate,
     RoomRequestStatusUpdate,
@@ -65,6 +71,10 @@ class RoomNotFoundError(Exception):
     pass
 
 
+class TimeSlotProposalNotFoundError(Exception):
+    pass
+
+
 def managed_dormitory_ids(db: Session, user_id: int) -> list[int]:
     rows = (
         db.query(DormitoryFacilityManager.dormitory_id)
@@ -72,6 +82,30 @@ def managed_dormitory_ids(db: Session, user_id: int) -> list[int]:
         .all()
     )
     return [dormitory_id for (dormitory_id,) in rows]
+
+
+def can_edit_repair_request(
+    db: Session, user: User, repair_request: RepairRequest
+) -> bool:
+    roles = set(get_user_role(db, user.id))
+
+    if roles & STAFF_ROLES:
+        return True
+
+    if "hausmeister" in roles:
+        return repair_request.assigned_dormitory_id in managed_dormitory_ids(
+            db, user.id
+        )
+
+    return False
+
+
+def can_edit_request(db: Session, user: User, request: Request) -> bool:
+    if isinstance(request, RepairRequest):
+        return can_edit_repair_request(db, user, request)
+
+    roles = set(get_user_role(db, user.id))
+    return bool(roles & STAFF_ROLES)
 
 
 def list_requests(db: Session, current_user: User) -> list[Request]:
@@ -344,3 +378,98 @@ def list_room_bookings(db: Session, current_user: User) -> list[RoomBookings]:
         )
         for room_request in room_requests
     ]
+
+
+def update_repair_status(
+    db: Session,
+    request_id: int,
+    current_user: User,
+    payload: RepairRequestStatusUpdate,
+) -> RepairRequest:
+    repair_request = db.get(RepairRequest, request_id)
+    if repair_request is None:
+        raise RequestNotFoundError(f"Request {request_id} not found")
+
+    if not can_edit_repair_request(db, current_user, repair_request):
+        raise RequestAccessDeniedError("Not authorized to edit this request")
+
+    repair_request.status = payload.status
+    db.add(
+        RepairRequestStatusHistory(
+            repair_request_id=repair_request.id,
+            status=payload.status,
+            changed_by_id=current_user.id,
+        )
+    )
+
+    db.commit()
+    db.refresh(repair_request)
+    return repair_request
+
+
+def set_access_time_slot(
+    db: Session,
+    request_id: int,
+    current_user: User,
+    payload: AccessTimeSlotSelect,
+) -> RepairRequest:
+    repair_request = db.get(RepairRequest, request_id)
+    if repair_request is None:
+        raise RequestNotFoundError(f"Request {request_id} not found")
+
+    if not can_edit_repair_request(db, current_user, repair_request):
+        raise RequestAccessDeniedError("Not authorized to edit this request")
+
+    proposal = next(
+        (
+            slot
+            for slot in repair_request.time_slot_proposals
+            if slot.id == payload.time_slot_proposal_id
+        ),
+        None,
+    )
+    if proposal is None:
+        raise TimeSlotProposalNotFoundError(
+            f"Time slot proposal {payload.time_slot_proposal_id} not found "
+            "for this request"
+        )
+
+    if repair_request.access_time_slot is None:
+        repair_request.access_time_slot = AccessTimeSlot(
+            repair_request_id=repair_request.id,
+            start_time=proposal.start_time,
+            end_time=proposal.end_time,
+        )
+    else:
+        repair_request.access_time_slot.start_time = proposal.start_time
+        repair_request.access_time_slot.end_time = proposal.end_time
+
+    db.commit()
+    db.refresh(repair_request)
+    return repair_request
+
+
+def add_repair_comment(
+    db: Session,
+    request_id: int,
+    current_user: User,
+    payload: CommentCreate,
+) -> RepairRequest:
+    repair_request = db.get(RepairRequest, request_id)
+    if repair_request is None:
+        raise RequestNotFoundError(f"Request {request_id} not found")
+
+    if not can_edit_repair_request(db, current_user, repair_request):
+        raise RequestAccessDeniedError("Not authorized to comment on this request")
+
+    db.add(
+        RequestComment(
+            request_id=repair_request.id,
+            author_id=current_user.id,
+            text=payload.text,
+        )
+    )
+
+    db.commit()
+    db.refresh(repair_request)
+    return repair_request
