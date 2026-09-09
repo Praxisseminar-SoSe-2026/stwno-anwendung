@@ -178,6 +178,13 @@ export function AnnouncementDetailPage() {
               {announcement.text}
             </Typography>
 
+            {announcement.image_url && (
+              <img
+                  src={announcement.image_url}
+                  style={{maxWidth: "50%"}}
+              />
+            )}
+
             {canEdit && (
               <Stack direction="row" spacing={2}>
                 <Button variant="contained" onClick={startEditing}>

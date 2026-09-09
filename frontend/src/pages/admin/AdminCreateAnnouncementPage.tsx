@@ -12,10 +12,13 @@ import {
   Select,
   MenuItem,
   InputLabel,
-  FormControl,
+  FormControl, FormLabel, IconButton, CircularProgress, Box,
 } from '@mui/material'
 import { createAnnouncement } from '../../api/announcements'
 import { useDormitories } from '../../hooks/useDormitories'
+import {useImageUpload} from "../../hooks/useImageUpload.ts";
+import UploadIcon from "@mui/icons-material/Upload";
+import CloseIcon from "@mui/icons-material/Close";
 
 const GLOBAL_VALUE = 'global'
 
@@ -23,6 +26,7 @@ export function AdminCreateAnnouncementPage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { dormitories } = useDormitories()
+  const imageUpload = useImageUpload()
 
   const [title, setTitle] = useState('')
   const [text, setText] = useState('')
@@ -39,6 +43,7 @@ export function AdminCreateAnnouncementPage() {
         title,
         text,
         important,
+        image_url: imageUpload.imageUrl,
         dormitory_id: scope === GLOBAL_VALUE ? null : Number(scope),
       })
       navigate(`/aushang/${created.id}`)
@@ -79,6 +84,49 @@ export function AdminCreateAnnouncementPage() {
           minRows={4}
           fullWidth
         />
+
+        {/* ----- optional Image ----- */}
+        <FormControl>
+          <FormLabel>{t('repairRequest.image')}</FormLabel>
+          <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
+            <IconButton
+              component="label"
+              disabled={imageUpload.uploading}
+              sx={{ border: '1px solid', borderColor: 'divider', width: 48 }}
+            >
+              <UploadIcon />
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                hidden
+                onChange={(e) => {
+                  const file = e.target.files?.[0]
+                  if (file) void imageUpload.upload(file)
+                  e.target.value = ''
+                }}
+              />
+            </IconButton>
+            {imageUpload.uploading && <CircularProgress size={24} />}
+            {imageUpload.imageUrl && !imageUpload.uploading && (
+              <>
+                <Box
+                  component="img"
+                  src={imageUpload.imageUrl}
+                  alt=""
+                  sx={{ height: 48, width: 48, objectFit: 'cover', borderRadius: 1 }}
+                />
+                <IconButton size="small" onClick={imageUpload.clear}>
+                  <CloseIcon fontSize="small" />
+                </IconButton>
+              </>
+            )}
+          </Stack>
+          {imageUpload.error && (
+            <Typography color="error" variant="body2">
+              {imageUpload.error}
+            </Typography>
+          )}
+        </FormControl>
 
         <FormControl fullWidth>
           <InputLabel id="scope-label">{t('bulletinBoard.scope')}</InputLabel>
