@@ -107,7 +107,7 @@
       "closed": "Closed",
       "denied": "Denied",
       "closed/denied": "Closed/Denied"
-    }
+    },
     "author": "Reported by",
     "proposedSlots": "Proposed times",
     "finalSlot": "Scheduled entry time",
