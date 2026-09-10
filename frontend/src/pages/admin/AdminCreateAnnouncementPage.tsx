@@ -12,13 +12,17 @@ import {
   Select,
   MenuItem,
   InputLabel,
-  FormControl, FormLabel, IconButton, CircularProgress, Box,
+  FormControl,
+  FormLabel,
+  IconButton,
+  CircularProgress,
+  Box,
 } from '@mui/material'
 import { createAnnouncement } from '../../api/announcements'
 import { useDormitories } from '../../hooks/useDormitories'
-import {useImageUpload} from "../../hooks/useImageUpload.ts";
-import UploadIcon from "@mui/icons-material/Upload";
-import CloseIcon from "@mui/icons-material/Close";
+import { useImageUpload } from '../../hooks/useImageUpload.ts'
+import UploadIcon from '@mui/icons-material/Upload'
+import CloseIcon from '@mui/icons-material/Close'
 
 const GLOBAL_VALUE = 'global'
 
@@ -53,7 +57,6 @@ export function AdminCreateAnnouncementPage() {
     }
   }
 
-  /* TODO: Add optional image upload */
   return (
     <Paper variant="outlined" sx={{ p: 4 }}>
       <Stack spacing={2}>
@@ -113,7 +116,12 @@ export function AdminCreateAnnouncementPage() {
                   component="img"
                   src={imageUpload.imageUrl}
                   alt=""
-                  sx={{ height: 48, width: 48, objectFit: 'cover', borderRadius: 1 }}
+                  sx={{
+                    height: 48,
+                    width: 48,
+                    objectFit: 'cover',
+                    borderRadius: 1,
+                  }}
                 />
                 <IconButton size="small" onClick={imageUpload.clear}>
                   <CloseIcon fontSize="small" />

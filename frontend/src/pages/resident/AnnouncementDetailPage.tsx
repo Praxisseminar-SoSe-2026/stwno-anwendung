@@ -20,6 +20,8 @@ import { useAnnouncement } from '../../hooks/useAnnouncement'
 import { updateAnnouncement, deleteAnnouncement } from '../../api/announcements'
 import { useDormitories } from '../../hooks/useDormitories'
 import { useAuth } from '../../contexts/AuthContext'
+import { useImageUpload } from '../../hooks/useImageUpload.ts'
+import UploadIcon from '@mui/icons-material/Upload'
 
 const EDITOR_ROLES = ['admin', 'hausmeister']
 const GLOBAL_VALUE = 'global'
@@ -29,6 +31,7 @@ export function AnnouncementDetailPage() {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { hasRole } = useAuth()
+  const imageUpload = useImageUpload()
   const { announcement, loading, error, setAnnouncement } = useAnnouncement(
     Number(id)
   )
@@ -40,6 +43,7 @@ export function AnnouncementDetailPage() {
   const [important, setImportant] = useState(false)
   const [text, setText] = useState('')
   const [saving, setSaving] = useState(false)
+  const [imageRemoved, setImageRemoved] = useState(false)
   const [actionError, setActionError] = useState<string | null>(null)
   const [scope, setScope] = useState<string>(GLOBAL_VALUE)
 
@@ -55,7 +59,14 @@ export function AnnouncementDetailPage() {
         ? GLOBAL_VALUE
         : String(announcement.dormitory_id)
     )
+    setImageRemoved(false)
+    imageUpload.clear()
     setEditing(true)
+  }
+
+  const handleRemoveImage = () => {
+    setImageRemoved(true)
+    imageUpload.clear?.()
   }
 
   const handleSave = async () => {
@@ -67,6 +78,9 @@ export function AnnouncementDetailPage() {
         title,
         important,
         text,
+        image_url: imageRemoved
+          ? null
+          : (imageUpload.imageUrl ?? announcement.image_url),
         dormitory_id: scope === GLOBAL_VALUE ? null : Number(scope),
       })
       setAnnouncement(updated)
@@ -145,6 +159,56 @@ export function AnnouncementDetailPage() {
               </Select>
             </FormControl>
 
+            <Stack spacing={1}>
+              <Button
+                component="label"
+                variant="outlined"
+                startIcon={<UploadIcon />}
+                disabled={imageUpload.uploading}
+              >
+                {!imageUpload.uploading && t('bulletinBoard.uploadImage')}
+                <input
+                  type="file"
+                  hidden
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0]
+                    if (file) {
+                      setImageRemoved(false)
+                      imageUpload.upload(file)
+                    }
+                  }}
+                />
+              </Button>
+
+              {!imageRemoved &&
+                (imageUpload.imageUrl ?? announcement.image_url) && (
+                  <Stack spacing={1}>
+                    <Button
+                      component="label"
+                      variant="outlined"
+                      color="error"
+                      onClick={handleRemoveImage}
+                    >
+                      {t('bulletinBoard.removeImage')}
+                    </Button>
+                    <img
+                      src={
+                        imageUpload.imageUrl ??
+                        announcement.image_url ??
+                        undefined
+                      }
+                      alt=""
+                      style={{ maxWidth: '200px', borderRadius: 4 }}
+                    />
+                  </Stack>
+                )}
+
+              {imageUpload.error && (
+                <Typography color="error">{imageUpload.error}</Typography>
+              )}
+            </Stack>
+
             <Stack direction="row" spacing={2}>
               <Button
                 variant="contained"
@@ -179,10 +243,7 @@ export function AnnouncementDetailPage() {
             </Typography>
 
             {announcement.image_url && (
-              <img
-                  src={announcement.image_url}
-                  style={{maxWidth: "50%"}}
-              />
+              <img src={announcement.image_url} style={{ maxWidth: '50%' }} />
             )}
 
             {canEdit && (
