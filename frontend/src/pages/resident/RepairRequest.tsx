@@ -184,7 +184,12 @@ export function RepairRequest() {
                   component="img"
                   src={imageUpload.imageUrl}
                   alt=""
-                  sx={{ height: 48, width: 48, objectFit: 'cover', borderRadius: 1 }}
+                  sx={{
+                    height: 48,
+                    width: 48,
+                    objectFit: 'cover',
+                    borderRadius: 1,
+                  }}
                 />
                 <IconButton size="small" onClick={imageUpload.clear}>
                   <CloseIcon fontSize="small" />

@@ -60,10 +60,7 @@ export function IndexPage() {
                 {a.text}
               </Typography>
               {a.image_url && (
-                <img
-                    src={a.image_url}
-                    style={{maxWidth: "20%"}}
-                />
+                <img src={a.image_url} style={{ maxWidth: '20%' }} />
               )}
             </CardContent>
           </CardActionArea>
