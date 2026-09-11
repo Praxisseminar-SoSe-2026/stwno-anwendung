@@ -24,7 +24,8 @@
     "cancel": "Cancel",
     "edit": "Edit",
     "delete": "Delete",
-    "create": "Create"
+    "create": "Create",
+    "minutes": "minutes"
   },
   "faq": {
     "title": "Frequently Asked Questions",
@@ -47,6 +48,10 @@
     "washingmachines": "washingmaschines",
     "washingmachine": "washingmaschine",
     "selectLaundryRoom": "Select washroom",
+    "useMachine": "use Mashine",
+    "communicateLaundryMachineUsage": "Communicate usage of {{laundryMachineLabel}}",
+    "howLongUseMachine": "How long are you going to use the machine?",
+    "giveDurationInMinutes": "Give Duration in Minutes",
     "dryers": "dryers",
     "dryer": "dryer",
     "status": {
