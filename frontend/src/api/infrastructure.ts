@@ -65,3 +65,15 @@ export async function getLaundryMachines(
   )
   return handleResponse(res)
 }
+
+export async function getLaundryMachineById(
+  laundryMachineId: number
+): Promise<LaundryMachine> {
+  const res = await fetch(
+    `${BASE_URL}/infrastructure/laundry_machines/${laundryMachineId}`,
+    {
+      headers: authHeaders(),
+    }
+  )
+  return handleResponse(res)
+}
