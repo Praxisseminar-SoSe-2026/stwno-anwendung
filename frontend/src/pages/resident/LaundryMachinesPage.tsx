@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router'
 import {
   Stack,
   Typography,
@@ -6,6 +7,7 @@ import {
   TextField,
   MenuItem,
   CircularProgress,
+  Button,
 } from '@mui/material'
 import { useLaundryMachines } from '../../hooks/useLaundryMachines'
 import type { LaundryStatus } from '../../api/infrastructure'
@@ -56,15 +58,24 @@ export function LaundryMachinesPage() {
       <Stack spacing={3}>
         <Typography variant="h2">{t('laundry.washingmachines')}</Typography>
         <Stack direction="row" spacing={3}>
-          {washingmaschines.map((machine, index) => (
+          {washingmaschines.map((machine) => (
             <Paper key={machine.id} sx={{ p: 3, alignItems: 'center' }}>
               <Stack sx={{ alignItems: 'center' }}>
+                <Typography color="primary">"{machine.label}"</Typography>
                 <Typography color="primary">
-                  {t('laundry.washingmachine')} {index + 1}
+                  {t('laundry.washingmachine')}
                 </Typography>
                 <Typography color={statusColor[machine.status]}>
                   {t(`laundry.status.${machine.status}`)}
                 </Typography>
+                {machine.status === 'free' && (
+                  <Button
+                    component={Link}
+                    to={`/waschmaschinen/nutzen/${machine.id}`}
+                  >
+                    {t(`laundry.useMachine`)}
+                  </Button>
+                )}
               </Stack>
             </Paper>
           ))}
@@ -75,15 +86,22 @@ export function LaundryMachinesPage() {
       <Stack spacing={3}>
         <Typography variant="h2">{t('laundry.dryers')}</Typography>
         <Stack direction="row" spacing={3}>
-          {dryers.map((machine, index) => (
+          {dryers.map((machine) => (
             <Paper key={machine.id} sx={{ p: 3, alignItems: 'center' }}>
               <Stack sx={{ alignItems: 'center' }}>
-                <Typography color="primary">
-                  {t('laundry.dryer')} {index + 1}
-                </Typography>
+                <Typography color="primary">"{machine.label}"</Typography>
+                <Typography color="primary">{t('laundry.dryer')}</Typography>
                 <Typography color={statusColor[machine.status]}>
                   {t(`laundry.status.${machine.status}`)}
                 </Typography>
+                {machine.status === 'free' && (
+                  <Button
+                    component={Link}
+                    to={`/waschmaschinen/nutzen/${machine.id}`}
+                  >
+                    {t(`laundry.useMachine`)}
+                  </Button>
+                )}
               </Stack>
             </Paper>
           ))}
