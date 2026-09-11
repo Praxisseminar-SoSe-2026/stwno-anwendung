@@ -8,6 +8,7 @@ from app.models.user import User
 from app.core.status import LaundryStatus
 from app.services.laundry_booking_service import (
     reset_machine_status_if_expired_or_return_endtime,
+    MachineNotFoundError
 )
 from app.services.request_service import ResidentDormitoryError
 
@@ -73,3 +74,19 @@ def list_laundry_machines_in_laundry_room(db: Session,
                 reset_machine_status_if_expired_or_return_endtime(db, machine.id))
 
     return machines
+
+
+def get_laundry_machine(db: Session, current_user: User, laundry_machine_id: int) -> LaundryMachine:
+    laundry_machine = db.get(LaundryMachine, laundry_machine_id)
+    if laundry_machine is None:
+        raise MachineNotFoundError(f"Laundry Machine {laundry_machine_id} not found")
+
+    if laundry_machine.laundry_room.dormitory_id != current_user.dormitory_id:
+        raise ResidentDormitoryError(
+            "Laundry room with that laundry machine does not belong to the resident dormitory"
+        )
+
+    if laundry_machine.status == LaundryStatus.OCCUPIED:
+        laundry_machine.occupied_until = (
+            reset_machine_status_if_expired_or_return_endtime(db, laundry_machine.id))
+    return laundry_machine

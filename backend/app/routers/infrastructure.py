@@ -14,8 +14,11 @@ from app.services.infrastructure_service import (
     list_community_rooms,
     list_laundry_rooms,
     list_laundry_machines_in_laundry_room,
+    get_laundry_machine
 )
 from app.services.request_service import ResidentDormitoryError
+
+from app.services.laundry_booking_service import MachineNotFoundError
 
 logger = logging.getLogger(__name__)
 
@@ -53,6 +56,20 @@ def list_all_laundry_machines(
     try:
         return list_laundry_machines_in_laundry_room(db, current_user, laundry_room_id)
     except LaundryRoomNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except ResidentDormitoryError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@router.get("/laundry_machines/{laundry_machine_id}", response_model=LaundryMachineResponse)
+def get_one_laundry_machine(
+    laundry_machine_id: int,
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_user)],
+):
+    try:
+        return get_laundry_machine(db, current_user, laundry_machine_id)
+    except MachineNotFoundError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
     except ResidentDormitoryError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
