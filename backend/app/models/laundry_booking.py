@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 
 
 class LaundryBooking(Base):
-    __tablename__ = 'laundry_bookings'
+    __tablename__ = "laundry_bookings"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     resident_id: Mapped[int] = mapped_column(ForeignKey("users.id"))

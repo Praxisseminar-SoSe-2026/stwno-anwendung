@@ -49,9 +49,9 @@ def list_all_laundry_rooms(
 @router.get("/laundry_rooms/{laundry_room_id}/laundry_machines",
             response_model=list[LaundryMachineResponse])
 def list_all_laundry_machines(
-        laundry_room_id: int,
-        db: Annotated[Session, Depends(get_db)],
-        current_user: Annotated[User, Depends(get_current_user)],
+    laundry_room_id: int,
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_user)],
 ):
     try:
         return list_laundry_machines_in_laundry_room(db, current_user, laundry_room_id)

@@ -15,4 +15,3 @@ class LaundryStatus(StrEnum):
     FREE = "free"
     OCCUPIED = "occupied"
     UNKNOWN = "unknown"
-

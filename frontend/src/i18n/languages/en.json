@@ -17,7 +17,9 @@
     "newAnnouncement": "+",
     "createAnnouncement": "New announcement",
     "scope": "Visibility of the announcement",
-    "scopeGlobal": "All dormitories"
+    "scopeGlobal": "All dormitories",
+    "uploadImage": "Upload a new image",
+    "removeImage": "Remove image"
   },
   "common": {
     "save": "Save",
@@ -79,7 +81,8 @@
     "submitting": "Sending...",
     "success": "Repair request submitted successfully.",
     "error": "Repair request could not be submitted.",
-    "slotInvalid": "The appointment must be in the future and begin on a weekday (Mon–Fri) between 8:00 a.m. and 3:00 p.m."
+    "slotInvalid": "The appointment must be in the future and begin on a weekday (Mon–Fri) between 8:00 a.m. and 3:00 p.m.",
+    "imageError": "Image could not be uploaded."
   },
   "roomBooking": {
     "title": "Community Room Booking",
@@ -114,7 +117,19 @@
       "closed": "Closed",
       "denied": "Denied",
       "closed/denied": "Closed/Denied"
-    }
+    },
+    "author": "Reported by",
+    "proposedSlots": "Proposed times",
+    "finalSlot": "Scheduled entry time",
+    "history": "History",
+    "noHistory": "No history yet.",
+    "statusChanged": "Status changed to \"{{status}}\"",
+    "commentPlaceholder": "Write a comment …",
+    "addComment": "Comment",
+    "changeStatus": "Change status",
+    "chooseSlot": "Choose a time slot",
+    "setEntryTime": "Set entry time",
+    "actionError": "Action failed."
   },
   "login": {
     "title": "Log into STWNO-Anwendung",
@@ -128,6 +143,13 @@
     "signOut": "Log out",
     "error": "Login failed.",
     "invalid": "Please login"
+  },
+  "registration": {
+    "register": "Register new account?",
+    "person_number": "Please enter person number",
+    "next_button": "Next",
+    "password": "Password",
+    "create_account": "Create Account"
   },
   "notFound": {
     "title": "404 - This page unfortunately doesn't exist :("

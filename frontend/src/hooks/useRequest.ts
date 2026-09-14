@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { getRequestById, type TicketRequest } from '../api/requests'
 
 export function useRequest(id: number) {
@@ -15,5 +15,16 @@ export function useRequest(id: number) {
       .finally(() => setLoading(false))
   }, [id])
 
-  return { request, loading, error }
+  const refetch = useCallback(() => {
+    setLoading(true)
+    setError(null)
+    return getRequestById(id)
+      .then(setRequest)
+      .catch((err) =>
+        setError(err instanceof Error ? err.message : 'Failed to load')
+      )
+      .finally(() => setLoading(false))
+  }, [id])
+
+  return { request, loading, error, refetch, setRequest }
 }

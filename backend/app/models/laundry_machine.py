@@ -20,12 +20,11 @@ class LaundryMachine(Base):
     label: Mapped[str]
     laundry_room_id: Mapped[int] = mapped_column(ForeignKey("laundry_rooms.id"))
     type: Mapped[Literal["Washingmachine", "Dryer"]] = mapped_column(
-        default="Washingmachine",
-        server_default="Washingmachine"
+        default="Washingmachine", server_default="Washingmachine"
     )
-    status: Mapped[LaundryStatus] = mapped_column(Enum(LaundryStatus),
-                                                  default=LaundryStatus.UNKNOWN,
-                                                  server_default="UNKNOWN")
+    status: Mapped[LaundryStatus] = mapped_column(
+        Enum(LaundryStatus), default=LaundryStatus.UNKNOWN, server_default="UNKNOWN"
+    )
 
     laundry_room: Mapped[LaundryRoom] = relationship(back_populates="laundry_machines")
     bookings: Mapped[list[LaundryBooking]] = relationship(

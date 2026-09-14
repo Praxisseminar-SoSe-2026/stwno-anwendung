@@ -1,4 +1,3 @@
-
 from sqlalchemy.orm import Session
 
 from app.core.status import LaundryStatus
