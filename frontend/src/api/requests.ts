@@ -30,7 +30,6 @@ export type StatusHistoryEntry = {
 export type RequestType = 'repair' | 'room'
 
 export type RequestStatus = 'open' | 'in_progress' | 'closed' | 'denied'
-export type RepairStatus = 'Offen' | 'In Bearbeitung' | 'Erledigt' | 'Abgelehnt'
 
 export type AccessTimeSlotProposal = {
   id: number

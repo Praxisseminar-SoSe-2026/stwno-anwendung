@@ -57,9 +57,8 @@ class StatusHistoryResponse(BaseModel):
     changed_at: datetime | None
 
 
-# Todo: create enum
 class RepairRequestStatusUpdate(BaseModel):
-    status: Literal["Offen", "In Bearbeitung", "Erledigt", "Abgelehnt"]
+    status: RequestStatus
 
 
 class RequestResponse(BaseModel):
