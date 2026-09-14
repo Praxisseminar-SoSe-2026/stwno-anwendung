@@ -39,11 +39,11 @@ const REPAIR_STATUSES: RepairStatus[] = [
 type TimelineEntry =
   | { key: string; at: string | null; kind: 'comment'; comment: Comment }
   | {
-  key: string
-  at: string | null
-  kind: 'status'
-  entry: StatusHistoryEntry
-}
+      key: string
+      at: string | null
+      kind: 'status'
+      entry: StatusHistoryEntry
+    }
 
 export function AdminTicketDetailPage() {
   const { id } = useParams<{ id: string }>()

@@ -17,7 +17,9 @@
     "newAnnouncement": "+",
     "createAnnouncement": "New announcement",
     "scope": "Visibility of the announcement",
-    "scopeGlobal": "All dormitories"
+    "scopeGlobal": "All dormitories",
+    "uploadImage": "Upload a new image",
+    "removeImage": "Remove image"
   },
   "common": {
     "save": "Save",

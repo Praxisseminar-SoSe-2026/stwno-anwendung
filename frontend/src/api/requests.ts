@@ -162,7 +162,6 @@ export async function updateRoomBookingStatus(
   return handleResponse(res)
 }
 
-
 export async function updateRepairStatus(
   id: number,
   status: RepairStatus

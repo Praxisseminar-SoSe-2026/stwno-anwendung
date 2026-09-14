@@ -17,7 +17,9 @@
     "newAnnouncement": "+",
     "createAnnouncement": "Neue Ankündigung",
     "scope": "Sichtbarkeit der Ankündigung",
-    "scopeGlobal": "Für alle Wohnheime"
+    "scopeGlobal": "Für alle Wohnheime",
+    "uploadImage": "Neues Bild hochladen",
+    "removeImage": "Bild entfernen"
   },
   "common": {
     "save": "Speichern",
