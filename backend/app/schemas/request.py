@@ -6,6 +6,8 @@ from typing import TYPE_CHECKING
 from pydantic import BaseModel
 
 from app.core.status import RequestStatus
+from app.models.repair_request import RepairRequest
+from app.models.room_request import RoomRequest
 
 if TYPE_CHECKING:
     from app.models.request import Request
@@ -88,8 +90,6 @@ class RequestResponse(BaseModel):
     def from_request(
         cls, request: Request, *, can_edit: bool = False
     ) -> RequestResponse:
-        from app.models.repair_request import RepairRequest
-        from app.models.room_request import RoomRequest
 
         def _resident_info(user) -> ResidentInfo:
             return ResidentInfo(
