@@ -1,0 +1,157 @@
+{
+  "index": {
+    "title": "Willkommen in der STWNO-Anwendung"
+  },
+  "healthcheck": {
+    "desc": "Das Backend ",
+    "isAvailable": "ist erreichbar.",
+    "isNotAvailable": "ist nicht erreichbar.",
+    "isLoading": "lädt..."
+  },
+  "bulletinBoard": {
+    "title": "Schwarzes Brett",
+    "empty": "Keine Ankündigungen vorhanden.",
+    "important": "Wichtig",
+    "titleLabel": "Titel",
+    "textLabel": "Text",
+    "newAnnouncement": "+",
+    "createAnnouncement": "Neue Ankündigung",
+    "scope": "Sichtbarkeit der Ankündigung",
+    "scopeGlobal": "Für alle Wohnheime",
+    "uploadImage": "Neues Bild hochladen",
+    "removeImage": "Bild entfernen"
+  },
+  "common": {
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "create": "Erstellen",
+    "minutes": "Minuten"
+  },
+  "faq": {
+    "title": "Häufig gestellte Fragen",
+    "searchPlaceholder": "Suche...",
+    "noSearchResults": "Keine Ergebnisse zu dieser Suche.",
+    "category": {
+      "general": "Allgemein",
+      "washroom": "Waschküche",
+      "recycling": "Müll & Recycling",
+      "community room": "Gemeinschaftsraum",
+      "moving in and out": "Ein- und Auszug",
+      "miscellaneous": "Sonstiges"
+    },
+    "questionLabel": "Frage",
+    "answerLabel": "Antwort",
+    "categoryLabel": "Kategorie"
+  },
+  "laundry": {
+    "title": "Waschküche",
+    "washingmachines": "Waschmaschinen",
+    "washingmachine": "Waschmaschine",
+    "selectLaundryRoom": "Waschraum auswählen",
+    "useMachine": "Maschine nutzen",
+    "endMachineUsage": "Benutzung beenden",
+    "communicateLaundryMachineUsage": "Nutzung von {{laundryMachineLabel}} mitteilen",
+    "howLongUseMachine": "Wie lange wirst du die Maschine nutzen?",
+    "giveDurationInMinutes": "Zeit in Minuten angeben",
+    "dryers": "Trockner",
+    "dryer": "Trockner",
+    "status": {
+      "occupied": "besetzt",
+      "free": "frei",
+      "unknown": "defekt"
+    },
+    "occupiedUntil": "Besetzt bis {{time}} Uhr"
+  },
+  "repairRequest": {
+    "title": "Reparaturanfrage",
+    "description": "Problembeschreibung",
+    "image": "Bild (optional)",
+    "ownFlat": "In der eigenen Wohnung?",
+    "yes": "ja",
+    "no": "nein",
+    "location": "Ort",
+    "entryPermission": "Betreterlaubnis",
+    "chooseSlots": "Bitte mindestens 3 Termine wählen",
+    "slot": "Termin {{number}}",
+    "noSlotWorks": "Keiner der Termine passt",
+    "proposedDate": "Terminvorschlag",
+    "submit": "Reparaturanfrage abschicken",
+    "submitting": "wird gesendet...",
+    "success": "Reparaturanfrage erfolgreich abgeschickt.",
+    "error": "Reparaturanfrage konnte nicht gesendet werden.",
+    "slotInvalid": "Termin muss in der Zukunft liegen, an einem Werktag (Mo–Fr) zwischen 08:00 und 15:00 Uhr beginnen.",
+    "imageError": "Bild konnte nicht hochgeladen werden."
+  },
+  "roomBooking": {
+    "title": "Gemeinschaftsraumbuchung",
+    "selectCommunityRoom": "Gemeinschaftsraum auswählen",
+    "occupied": "Belegt",
+    "bookCommunityRoom": "{{communityRoomName}} buchen",
+    "startDate": "von",
+    "endDate": "bis",
+    "regularKeyExchangePossibleQuestion": "Können Sie den Schlüssel am Vorbuchungstag zwischen 9 und 11 Uhr im Büro der Hausmeister:in abholen?",
+    "alternativeKeyExchangeDate": "alternativer Tag zum Schlüsselaustausch"
+  },
+  "adminIndex": {
+    "title": "Hallo Chef!"
+  },
+  "adminTicketOverview": {
+    "title": "Ticket Übersicht (Reparatur- und Raumbuchungsanfragen)",
+    "titleShort": "Ticket Übersicht",
+    "notAuthorized": "Du hast keinen Zugriff auf diese Seite."
+  },
+  "request": {
+    "start": "Beginn",
+    "end": "Ende",
+    "location": "Ort",
+    "type": {
+      "repair": "Reperaturanfrage",
+      "room": "Gemeinschaftsraum"
+    },
+    "status": {
+      "open": "Offen",
+      "in_progress": "In Bearbeitung",
+      "closed": "Geschlossen",
+      "denied": "Abgelehnt",
+      "closed/denied": "Abgelehnt/Geschlossen"
+    },
+    "exportPdf": "PDF erstellen",
+    "author": "Gemeldet von",
+    "proposedSlots": "Terminvorschläge",
+    "finalSlot": "Vereinbarter Termin",
+    "history": "Verlauf",
+    "noHistory": "Noch kein Verlauf vorhanden.",
+    "statusChanged": "Status geändert zu \"{{status}}\"",
+    "commentPlaceholder": "Kommentar schreiben …",
+    "addComment": "Kommentieren",
+    "changeStatus": "Status ändern",
+    "chooseSlot": "Termin auswählen",
+    "setEntryTime": "Termin festlegen",
+    "actionError": "Aktion fehlgeschlagen."
+  },
+  "login": {
+    "title": "Bei STWNO-Anwendung anmelden",
+    "titleShort": "Anmelden",
+    "password": "Passwort",
+    "email": "E-Mail-Adresse",
+    "emailInvalid": "Bitte geben Sie eine gültige E-Mail Adresse an.",
+    "passwordInvalid": "Bitte geben Sie ein gültiges Passwort an.",
+    "signingIn": "wird angemeldet...",
+    "signIn": "Anmelden",
+    "signOut": "Abmelden",
+    "error": "Login fehlgeschlagen.",
+    "invalid": "Bitte einloggen."
+  },
+  "registration": {
+    "register": "Neuen Account registrieren?",
+    "person_number": "Bitte Personen-Nummer eingeben",
+    "next_button": "Weiter",
+    "password": "Passwort",
+    "create_account": "Account erstellen"
+  },
+  "notFound": {
+    "title": "404 - Diese Seite gibts leider nicht :("
+  }
+}

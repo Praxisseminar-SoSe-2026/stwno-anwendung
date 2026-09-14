@@ -131,6 +131,21 @@ docker compose exec backend alembic current
 alembic current
 ```
 
+## Seed data
+Populate the database with test data (roles, dormitories, users, sample repair/room requests, etc.). Run this **after** `alembic upgrade head`.
+
+**Option A (Docker):**
+```bash
+docker compose exec backend python -m app.db.seed
+```
+
+**Option B (local):**
+```bash
+python -m app.db.seed
+```
+
+Additionally test mock data for the registration of new accounts is defined in `app/data/stwno_mock_data.json`
+
 ## Linting & Formatting
 
 **Option A (Docker):**
@@ -144,6 +159,16 @@ docker compose exec backend ruff check app
 black app
 ruff check app 
 ```
+
+## Logging
+Logging is configured centrally in `app/core/logging.py`. Every request is logged automatically via a middleware, including method, path, status code, and response time.
+
+## Email Notification
+
+Emails are sent asynchronously via SMTP using a background task, so requests don't block while the email is being delivered.
+
+For local development, emails are caught by Mailhog instead of being delivered.
+View sent emails at http://127.0.0.1:8025 and configer settings in `.env`.
 
 ## Project structure
 ```

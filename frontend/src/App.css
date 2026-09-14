@@ -2,3 +2,21 @@ h1 {
   font-size: 30px;
   margin: 0 auto;
 }
+
+@media print {
+  .print-button {
+    display: none !important;
+  }
+
+  /* No header for print */
+  header,
+  .MuiAppBar-root {
+    display: none !important;
+  }
+
+  /* For Chip format and color */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}

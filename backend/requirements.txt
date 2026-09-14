@@ -12,3 +12,9 @@ python-dotenv
 pydantic~=2.13.4
 pg8000
 alembic~=1.18.5
+bcrypt~=4.2.0
+email-validator~=2.2.0
+pyjwt~=2.13.0
+uliweb-alembic
+aiosmtplib~=3.0.2
+python-multipart

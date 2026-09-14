@@ -1,0 +1,157 @@
+{
+  "index": {
+    "title": "Welcome to the STWNO application"
+  },
+  "healthcheck": {
+    "desc": "The backend ",
+    "isAvailable": "is available.",
+    "isNotAvailable": "is not available.",
+    "isLoading": "is loading..."
+  },
+  "bulletinBoard": {
+    "title": "Bulletin Board",
+    "empty": "No announcements available.",
+    "important": "Important",
+    "titleLabel": "Title",
+    "textLabel": "Text",
+    "newAnnouncement": "+",
+    "createAnnouncement": "New announcement",
+    "scope": "Visibility of the announcement",
+    "scopeGlobal": "All dormitories",
+    "uploadImage": "Upload a new image",
+    "removeImage": "Remove image"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "create": "Create",
+    "minutes": "minutes"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "searchPlaceholder": "Search...",
+    "noSearchResults": "No results for this search.",
+    "category": {
+      "general": "General",
+      "washroom": "Washroom",
+      "recycling": "Recycling",
+      "community room": "Community Room",
+      "moving in and out": "Moving In and Out",
+      "miscellaneous": "Miscellaneous"
+    },
+    "questionLabel": "Question",
+    "answerLabel": "Answer",
+    "categoryLabel": "Category"
+  },
+  "laundry": {
+    "title": "Washroom",
+    "washingmachines": "washingmaschines",
+    "washingmachine": "washingmaschine",
+    "selectLaundryRoom": "Select washroom",
+    "useMachine": "use Mashine",
+    "endMachineUsage": "end machine usage",
+    "communicateLaundryMachineUsage": "Communicate usage of {{laundryMachineLabel}}",
+    "howLongUseMachine": "How long are you going to use the machine?",
+    "giveDurationInMinutes": "Give Duration in Minutes",
+    "dryers": "dryers",
+    "dryer": "dryer",
+    "status": {
+      "occupied": "occupied",
+      "free": "free",
+      "unknown": "defect"
+    },
+    "occupiedUntil": "occupied until {{time}}"
+  },
+  "repairRequest": {
+    "title": "Repair Request",
+    "description": "Problem Description",
+    "image": "Image (optional)",
+    "ownFlat": "In your own apartment?",
+    "yes": "yes",
+    "no": "no",
+    "location": "Location",
+    "entryPermission": "Permission to Enter",
+    "chooseSlots": "Please select at least 3 appointments",
+    "slot": "Appointment {{number}}",
+    "noSlotWorks": "None of the appointments work",
+    "proposedDate": "Proposed Appointment",
+    "submit": "Submit Repair Request",
+    "submitting": "Sending...",
+    "success": "Repair request submitted successfully.",
+    "error": "Repair request could not be submitted.",
+    "slotInvalid": "The appointment must be in the future and begin on a weekday (Mon–Fri) between 8:00 a.m. and 3:00 p.m.",
+    "imageError": "Image could not be uploaded."
+  },
+  "roomBooking": {
+    "title": "Community Room Booking",
+    "selectCommunityRoom": "Select Community Room",
+    "occupied": "occupied",
+    "bookCommunityRoom": "Book {{communityRoomName}}",
+    "startDate": "from",
+    "endDate": "till",
+    "regularKeyExchangePossibleQuestion": "Can you pick up the key at the facility management office between 9 a.m. and 11 a.m. on the day before the booking?",
+    "alternativeKeyExchangeDate": "Alternative day for key exchange"
+  },
+  "adminIndex": {
+    "title": "Hello Boss!"
+  },
+  "adminTicketOverview": {
+    "title": "Ticket Overview (Repair and Room Booking Requests)",
+    "titleShort": "Ticket Overview",
+    "notAuthorized": "You are not authorized to use this page."
+  },
+  "request": {
+    "start": "Begin",
+    "end": "End",
+    "location": "Location",
+    "type": {
+      "repair": "repair request",
+      "room": "community room booking request"
+    },
+    "exportPdf": "Create PDF",
+    "status": {
+      "open": "Open",
+      "in_progress": "In progress",
+      "closed": "Closed",
+      "denied": "Denied",
+      "closed/denied": "Closed/Denied"
+    },
+    "author": "Reported by",
+    "proposedSlots": "Proposed times",
+    "finalSlot": "Scheduled entry time",
+    "history": "History",
+    "noHistory": "No history yet.",
+    "statusChanged": "Status changed to \"{{status}}\"",
+    "commentPlaceholder": "Write a comment …",
+    "addComment": "Comment",
+    "changeStatus": "Change status",
+    "chooseSlot": "Choose a time slot",
+    "setEntryTime": "Set entry time",
+    "actionError": "Action failed."
+  },
+  "login": {
+    "title": "Log into STWNO-Anwendung",
+    "titleShort": "Login",
+    "password": "Password",
+    "email": "Email",
+    "emailInvalid": "Please enter a valid Email.",
+    "passwordInvalid": "Please enter a valid password.",
+    "signingIn": "is signing in...",
+    "signIn": "Log in",
+    "signOut": "Log out",
+    "error": "Login failed.",
+    "invalid": "Please login"
+  },
+  "registration": {
+    "register": "Register new account?",
+    "person_number": "Please enter person number",
+    "next_button": "Next",
+    "password": "Password",
+    "create_account": "Create Account"
+  },
+  "notFound": {
+    "title": "404 - This page unfortunately doesn't exist :("
+  }
+}
