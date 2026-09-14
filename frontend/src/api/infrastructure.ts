@@ -22,6 +22,8 @@ export type LaundryMachine = {
   type: string
   status: LaundryStatus
   occupied_until: string | null
+  current_booking_id: number | null
+  is_own_booking: boolean
 }
 
 function authHeaders(): HeadersInit {
