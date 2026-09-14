@@ -30,7 +30,6 @@ export type StatusHistoryEntry = {
 export type RequestType = 'repair' | 'room'
 
 export type RequestStatus = 'open' | 'in_progress' | 'closed' | 'denied'
-export type RepairStatus = 'Offen' | 'In Bearbeitung' | 'Erledigt' | 'Abgelehnt'
 
 export type AccessTimeSlotProposal = {
   id: number
@@ -83,10 +82,6 @@ export type RoomRequestCreate = {
   end_date: string
   regular_key_exchange_possible: boolean
   alternative_key_exchange_date: string | null
-}
-
-export type RoomRequestStatusUpdate = {
-  status: 'accepted' | 'rejected'
 }
 
 function authHeaders(): HeadersInit {
@@ -152,7 +147,7 @@ export async function createRoomBooking(
 
 export async function updateRoomBookingStatus(
   id: number,
-  data: RoomRequestStatusUpdate
+  data: RequestStatus
 ): Promise<TicketRequest> {
   const res = await fetch(`${BASE_URL}/requests/room_booking/${id}`, {
     method: 'PATCH',
@@ -164,7 +159,7 @@ export async function updateRoomBookingStatus(
 
 export async function updateRepairStatus(
   id: number,
-  status: RepairStatus
+  status: RequestStatus
 ): Promise<TicketRequest> {
   const res = await fetch(`${BASE_URL}/requests/repair/${id}/status`, {
     method: 'PATCH',

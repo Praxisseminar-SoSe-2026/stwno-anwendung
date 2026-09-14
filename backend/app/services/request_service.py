@@ -17,10 +17,9 @@ from app.schemas.request import (
     AccessTimeSlotSelect,
     CommentCreate,
     RepairRequestCreate,
-    RepairRequestStatusUpdate,
+    RequestStatusUpdate,
     RoomBookings,
     RoomRequestCreate,
-    RoomRequestStatusUpdate,
 )
 
 STAFF_ROLES = {"admin", "mitarbeiter"}
@@ -332,7 +331,7 @@ def create_room_request(
 
 
 def edit_room_request(
-    db: Session, request_id: int, current_user: User, payload: RoomRequestStatusUpdate
+    db: Session, request_id: int, current_user: User, payload: RequestStatusUpdate
 ) -> RoomRequest:
     roles = set(get_user_role(db, current_user.id))
 
@@ -384,7 +383,7 @@ def update_repair_status(
     db: Session,
     request_id: int,
     current_user: User,
-    payload: RepairRequestStatusUpdate,
+    payload: RequestStatusUpdate,
 ) -> RepairRequest:
     repair_request = db.get(RepairRequest, request_id)
     if repair_request is None:

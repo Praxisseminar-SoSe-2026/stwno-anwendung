@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 from datetime import date, datetime
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING
 
 from pydantic import BaseModel
 
 from app.core.status import RequestStatus
+from app.models.repair_request import RepairRequest
+from app.models.room_request import RoomRequest
 
 if TYPE_CHECKING:
     from app.models.request import Request
@@ -57,10 +59,6 @@ class StatusHistoryResponse(BaseModel):
     changed_at: datetime | None
 
 
-# Todo: create enum
-class RepairRequestStatusUpdate(BaseModel):
-    status: Literal["Offen", "In Bearbeitung", "Erledigt", "Abgelehnt"]
-
 
 class RequestResponse(BaseModel):
     id: int
@@ -92,8 +90,6 @@ class RequestResponse(BaseModel):
     def from_request(
         cls, request: Request, *, can_edit: bool = False
     ) -> RequestResponse:
-        from app.models.repair_request import RepairRequest
-        from app.models.room_request import RoomRequest
 
         def _resident_info(user) -> ResidentInfo:
             return ResidentInfo(
@@ -184,7 +180,8 @@ class RoomRequestCreate(BaseModel):
     alternative_key_exchange_date: date | None
 
 
-class RoomRequestStatusUpdate(BaseModel):
+
+class RequestStatusUpdate(BaseModel):
     status: RequestStatus
 
 

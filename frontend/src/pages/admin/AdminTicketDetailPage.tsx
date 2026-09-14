@@ -22,18 +22,18 @@ import { useRequest } from '../../hooks/useRequest'
 import { useRepairRequestActions } from '../../hooks/useRepairRequestActions'
 import { useAuth } from '../../contexts/AuthContext'
 import type {
-  RepairStatus,
   Comment,
   StatusHistoryEntry,
+  RequestStatus,
 } from '../../api/requests'
 
 const ALLOWED_ROLES = ['admin', 'mitarbeiter', 'hausmeister']
 
-const REPAIR_STATUSES: RepairStatus[] = [
-  'Offen',
-  'In Bearbeitung',
-  'Erledigt',
-  'Abgelehnt',
+const REPAIR_STATUSES: RequestStatus[] = [
+  'open',
+  'in_progress',
+  'closed',
+  'denied',
 ]
 
 type TimelineEntry =
@@ -221,7 +221,7 @@ export function AdminTicketDetailPage() {
               label={t('request.changeStatus')}
               value={request.status}
               disabled={submitting}
-              onChange={(e) => updateStatus(e.target.value as RepairStatus)}
+              onChange={(e) => updateStatus(e.target.value as RequestStatus)}
               sx={{ maxWidth: 260 }}
             >
               {REPAIR_STATUSES.map((status) => (
