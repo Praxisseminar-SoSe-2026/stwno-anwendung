@@ -7,6 +7,25 @@ export type CommunityRoom = {
   dormitory_id: number
 }
 
+export type LaundryRoom = {
+  id: number
+  name: string
+  dormitory_id: number
+}
+
+export type LaundryStatus = 'free' | 'occupied' | 'unknown'
+
+export type LaundryMachine = {
+  id: number
+  laundry_room_id: number
+  label: string
+  type: string
+  status: LaundryStatus
+  occupied_until: string | null
+  current_booking_id: number | null
+  is_own_booking: boolean
+}
+
 function authHeaders(): HeadersInit {
   const token = localStorage.getItem('access_token')
   return {
@@ -27,5 +46,36 @@ export async function getCommunityRooms(): Promise<CommunityRoom[]> {
   const res = await fetch(`${BASE_URL}/infrastructure/community_rooms`, {
     headers: authHeaders(),
   })
+  return handleResponse(res)
+}
+
+export async function getLaundryRooms(): Promise<LaundryRoom[]> {
+  const res = await fetch(`${BASE_URL}/infrastructure/laundry_rooms`, {
+    headers: authHeaders(),
+  })
+  return handleResponse(res)
+}
+
+export async function getLaundryMachines(
+  laundryRoomId: number
+): Promise<LaundryMachine[]> {
+  const res = await fetch(
+    `${BASE_URL}/infrastructure/laundry_rooms/${laundryRoomId}/laundry_machines`,
+    {
+      headers: authHeaders(),
+    }
+  )
+  return handleResponse(res)
+}
+
+export async function getLaundryMachineById(
+  laundryMachineId: number
+): Promise<LaundryMachine> {
+  const res = await fetch(
+    `${BASE_URL}/infrastructure/laundry_machines/${laundryMachineId}`,
+    {
+      headers: authHeaders(),
+    }
+  )
   return handleResponse(res)
 }

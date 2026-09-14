@@ -26,10 +26,6 @@ class NotOriginalBookerError(Exception):
     pass
 
 
-class ResidentLaundryRoomError(Exception):
-    pass
-
-
 class BookingAlreadyEndedError(Exception):
     pass
 
@@ -51,7 +47,7 @@ def create_laundry_booking(
         )
 
     if machine.laundry_room.dormitory_id != current_user.dormitory_id:
-        raise ResidentLaundryRoomError(
+        raise ResidentDormitoryError(
             "Machine is in a laundry room, "
             "that does not belong to the resident dormitory"
         )
@@ -114,9 +110,9 @@ def end_laundry_booking(
     return booking
 
 
-def reset_machine_status_if_expired_or_return_endtime(
-    db: Session, laundry_machine_id: int
-) -> None:
+def reset_machine_status_if_expired_or_return_active_booking(db: Session,
+                                                             laundry_machine_id: int) \
+        -> LaundryBooking | None:
 
     active_booking = (
         db.query(LaundryBooking)
@@ -129,7 +125,7 @@ def reset_machine_status_if_expired_or_return_endtime(
     )
 
     if active_booking is not None:
-        return active_booking.ends_at
+        return active_booking
 
     machine = db.get(LaundryMachine, laundry_machine_id)
     if machine is not None and machine.status == LaundryStatus.OCCUPIED:

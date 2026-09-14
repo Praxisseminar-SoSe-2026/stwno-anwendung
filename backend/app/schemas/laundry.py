@@ -30,3 +30,5 @@ class LaundryMachineResponse(BaseModel):
     type: str
     status: LaundryStatus
     occupied_until: datetime | None = None
+    current_booking_id: int | None = None
+    is_own_booking: bool = False

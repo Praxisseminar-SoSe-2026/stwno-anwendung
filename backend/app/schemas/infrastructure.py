@@ -8,3 +8,9 @@ class CommunityRoomResponse(BaseModel):
     name: str
     description: str | None
     dormitory_id: int
+
+
+class LaundryRoomResponse(BaseModel):
+    id: int
+    name: str
+    dormitory_id: int

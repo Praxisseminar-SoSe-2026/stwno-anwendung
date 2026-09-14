@@ -26,7 +26,8 @@
     "cancel": "Abbrechen",
     "edit": "Bearbeiten",
     "delete": "Löschen",
-    "create": "Erstellen"
+    "create": "Erstellen",
+    "minutes": "Minuten"
   },
   "faq": {
     "title": "Häufig gestellte Fragen",
@@ -46,15 +47,22 @@
   },
   "laundry": {
     "title": "Waschküche",
-    "washingmaschines": "Waschmaschinen",
-    "washingmaschine": "Waschmaschine",
+    "washingmachines": "Waschmaschinen",
+    "washingmachine": "Waschmaschine",
+    "selectLaundryRoom": "Waschraum auswählen",
+    "useMachine": "Maschine nutzen",
+    "endMachineUsage": "Benutzung beenden",
+    "communicateLaundryMachineUsage": "Nutzung von {{laundryMachineLabel}} mitteilen",
+    "howLongUseMachine": "Wie lange wirst du die Maschine nutzen?",
+    "giveDurationInMinutes": "Zeit in Minuten angeben",
     "dryers": "Trockner",
     "dryer": "Trockner",
     "status": {
-      "running": "läuft",
-      "idle": "frei",
-      "defect": "defekt"
-    }
+      "occupied": "besetzt",
+      "free": "frei",
+      "unknown": "defekt"
+    },
+    "occupiedUntil": "Besetzt bis {{time}} Uhr"
   },
   "repairRequest": {
     "title": "Reparaturanfrage",
