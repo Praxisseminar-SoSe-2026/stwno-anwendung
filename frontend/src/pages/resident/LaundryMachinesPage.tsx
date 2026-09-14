@@ -13,6 +13,7 @@ import { useLaundryMachines } from '../../hooks/useLaundryMachines'
 import type { LaundryStatus } from '../../api/infrastructure'
 import { useLaundryRooms } from '../../hooks/useLaundryRooms'
 import { useState } from 'react'
+import { useEndLaundryBooking } from '../../hooks/useEndLaundryBooking'
 
 const statusColor: Record<LaundryStatus, 'success' | 'warning' | 'error'> = {
   occupied: 'warning',
@@ -24,12 +25,14 @@ export function LaundryMachinesPage() {
   const { t } = useTranslation()
   const { laundryRooms, loading, error } = useLaundryRooms()
   const [roomId, setRoomId] = useState<number | null>(null)
-  const machinesData = useLaundryMachines(roomId).machines
+  const { machines: machinesData, updateLaundryMachines } =
+    useLaundryMachines(roomId)
 
   const washingmaschines = machinesData.filter(
     (m) => m.type === 'Washingmachine'
   )
   const dryers = machinesData.filter((m) => m.type === 'Dryer')
+  const { submitEndLaundryBooking } = useEndLaundryBooking()
 
   return (
     <Stack spacing={10}>
@@ -76,6 +79,21 @@ export function LaundryMachinesPage() {
                     {t(`laundry.useMachine`)}
                   </Button>
                 )}
+                {machine.status === 'occupied' && machine.is_own_booking && (
+                  <Button
+                    color="error"
+                    onClick={async () => {
+                      const result = await submitEndLaundryBooking(
+                        machine.current_booking_id
+                      )
+                      if (result !== null) {
+                        updateLaundryMachines()
+                      }
+                    }}
+                  >
+                    {t(`laundry.endMachineUsage`)}
+                  </Button>
+                )}
               </Stack>
             </Paper>
           ))}
@@ -100,6 +118,21 @@ export function LaundryMachinesPage() {
                     to={`/waschmaschinen/nutzen/${machine.id}`}
                   >
                     {t(`laundry.useMachine`)}
+                  </Button>
+                )}
+                {machine.status === 'occupied' && machine.is_own_booking && (
+                  <Button
+                    color="error"
+                    onClick={async () => {
+                      const result = await submitEndLaundryBooking(
+                        machine.current_booking_id
+                      )
+                      if (result !== null) {
+                        updateLaundryMachines()
+                      }
+                    }}
+                  >
+                    {t(`laundry.endMachineUsage`)}
                   </Button>
                 )}
               </Stack>

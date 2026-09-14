@@ -49,6 +49,7 @@
     "washingmachine": "washingmaschine",
     "selectLaundryRoom": "Select washroom",
     "useMachine": "use Mashine",
+    "endMachineUsage": "end machine usage",
     "communicateLaundryMachineUsage": "Communicate usage of {{laundryMachineLabel}}",
     "howLongUseMachine": "How long are you going to use the machine?",
     "giveDurationInMinutes": "Give Duration in Minutes",

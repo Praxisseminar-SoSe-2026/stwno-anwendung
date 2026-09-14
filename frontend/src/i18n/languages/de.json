@@ -49,6 +49,7 @@
     "washingmachine": "Waschmaschine",
     "selectLaundryRoom": "Waschraum auswählen",
     "useMachine": "Maschine nutzen",
+    "endMachineUsage": "Benutzung beenden",
     "communicateLaundryMachineUsage": "Nutzung von {{laundryMachineLabel}} mitteilen",
     "howLongUseMachine": "Wie lange wirst du die Maschine nutzen?",
     "giveDurationInMinutes": "Zeit in Minuten angeben",
