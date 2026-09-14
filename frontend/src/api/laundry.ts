@@ -12,6 +12,7 @@ export type LaundryBooking = {
   started_at: string
   ends_at: string
   cancelled_at: string | null
+  current_booking_id: number | null
 }
 
 // Todo: move this functions to shared file and access it from there
@@ -39,5 +40,18 @@ export async function createLaundryBooking(
     headers: authHeaders(),
     body: JSON.stringify(data),
   })
+  return handleResponse(res)
+}
+
+export async function endLaundryBooking(
+  laundry_booking_id: number
+): Promise<LaundryBooking> {
+  const res = await fetch(
+    `${BASE_URL}/laundry/booking/${laundry_booking_id}/end`,
+    {
+      method: 'PATCH',
+      headers: authHeaders(),
+    }
+  )
   return handleResponse(res)
 }
