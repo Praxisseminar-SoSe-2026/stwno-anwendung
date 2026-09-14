@@ -84,10 +84,6 @@ export type RoomRequestCreate = {
   alternative_key_exchange_date: string | null
 }
 
-export type RoomRequestStatusUpdate = {
-  status: 'accepted' | 'rejected'
-}
-
 function authHeaders(): HeadersInit {
   const token = localStorage.getItem('access_token')
   return {
@@ -151,7 +147,7 @@ export async function createRoomBooking(
 
 export async function updateRoomBookingStatus(
   id: number,
-  data: RoomRequestStatusUpdate
+  data: RequestStatus
 ): Promise<TicketRequest> {
   const res = await fetch(`${BASE_URL}/requests/room_booking/${id}`, {
     method: 'PATCH',
@@ -163,7 +159,7 @@ export async function updateRoomBookingStatus(
 
 export async function updateRepairStatus(
   id: number,
-  status: RepairStatus
+  status: RequestStatus
 ): Promise<TicketRequest> {
   const res = await fetch(`${BASE_URL}/requests/repair/${id}/status`, {
     method: 'PATCH',
