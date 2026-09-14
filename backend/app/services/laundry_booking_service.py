@@ -117,7 +117,8 @@ def end_laundry_booking(db: Session,
 
 
 def reset_machine_status_if_expired_or_return_active_booking(db: Session,
-                                                             laundry_machine_id: int) -> LaundryBooking | None:
+                                                             laundry_machine_id: int) \
+        -> LaundryBooking | None:
 
     active_booking = (
         db.query(LaundryBooking)

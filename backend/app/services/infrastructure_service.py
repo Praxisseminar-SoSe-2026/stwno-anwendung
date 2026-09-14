@@ -1,14 +1,14 @@
 
 from sqlalchemy.orm import Session
 
+from app.core.status import LaundryStatus
 from app.models.community_room import CommunityRoom
 from app.models.laundry_machine import LaundryMachine
 from app.models.laundry_room import LaundryRoom
 from app.models.user import User
-from app.core.status import LaundryStatus
 from app.services.laundry_booking_service import (
+    MachineNotFoundError,
     reset_machine_status_if_expired_or_return_active_booking,
-    MachineNotFoundError
 )
 from app.services.request_service import ResidentDormitoryError
 
@@ -70,7 +70,10 @@ def list_laundry_machines_in_laundry_room(db: Session,
 
     for machine in machines:
         if machine.status == LaundryStatus.OCCUPIED:
-            active_booking = reset_machine_status_if_expired_or_return_active_booking(db, machine.id)
+            active_booking = reset_machine_status_if_expired_or_return_active_booking(
+                db,
+                machine.id
+            )
             if active_booking is not None:
                 machine.occupied_until = active_booking.ends_at
                 machine.current_booking_id = active_booking.id
@@ -82,18 +85,24 @@ def list_laundry_machines_in_laundry_room(db: Session,
     return machines
 
 
-def get_laundry_machine(db: Session, current_user: User, laundry_machine_id: int) -> LaundryMachine:
+def get_laundry_machine(db: Session,
+                        current_user: User,
+                        laundry_machine_id: int) -> LaundryMachine:
     laundry_machine = db.get(LaundryMachine, laundry_machine_id)
     if laundry_machine is None:
         raise MachineNotFoundError(f"Laundry Machine {laundry_machine_id} not found")
 
     if laundry_machine.laundry_room.dormitory_id != current_user.dormitory_id:
         raise ResidentDormitoryError(
-            "Laundry room with that laundry machine does not belong to the resident dormitory"
+            "Laundry room with that laundry machine does not belong "
+            "to the resident dormitory"
         )
 
     if laundry_machine.status == LaundryStatus.OCCUPIED:
-        active_booking = reset_machine_status_if_expired_or_return_active_booking(db, laundry_machine.id)
+        active_booking = reset_machine_status_if_expired_or_return_active_booking(
+            db,
+            laundry_machine.id
+        )
         if active_booking is not None:
             laundry_machine.occupied_until = active_booking.ends_at
             laundry_machine.current_booking_id = active_booking.id

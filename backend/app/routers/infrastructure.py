@@ -11,14 +11,13 @@ from app.schemas.infrastructure import CommunityRoomResponse, LaundryRoomRespons
 from app.schemas.laundry import LaundryMachineResponse
 from app.services.infrastructure_service import (
     LaundryRoomNotFoundError,
+    get_laundry_machine,
     list_community_rooms,
-    list_laundry_rooms,
     list_laundry_machines_in_laundry_room,
-    get_laundry_machine
+    list_laundry_rooms,
 )
-from app.services.request_service import ResidentDormitoryError
-
 from app.services.laundry_booking_service import MachineNotFoundError
+from app.services.request_service import ResidentDormitoryError
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +46,8 @@ def list_all_laundry_rooms(
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
-@router.get("/laundry_rooms/{laundry_room_id}/laundry_machines", response_model=list[LaundryMachineResponse])
+@router.get("/laundry_rooms/{laundry_room_id}/laundry_machines",
+            response_model=list[LaundryMachineResponse])
 def list_all_laundry_machines(
         laundry_room_id: int,
         db: Annotated[Session, Depends(get_db)],
@@ -61,7 +61,8 @@ def list_all_laundry_machines(
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
-@router.get("/laundry_machines/{laundry_machine_id}", response_model=LaundryMachineResponse)
+@router.get("/laundry_machines/{laundry_machine_id}",
+            response_model=LaundryMachineResponse)
 def get_one_laundry_machine(
     laundry_machine_id: int,
     db: Annotated[Session, Depends(get_db)],

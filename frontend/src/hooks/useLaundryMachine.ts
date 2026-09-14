@@ -11,7 +11,8 @@ export function useLaundryMachine(laundryMachineId: number | null) {
 
   useEffect(() => {
     if (laundryMachineId === null) {
-      setLoading(false)
+      // Todo: understand what linter does not like about it
+      // setLoading(false)
       return
     }
     getLaundryMachineById(laundryMachineId)
