@@ -10,10 +10,9 @@ from app.schemas.request import (
     AccessTimeSlotSelect,
     CommentCreate,
     RepairRequestCreate,
-    RepairRequestStatusUpdate,
+    RequestStatusUpdate,
     RequestResponse,
     RoomRequestCreate,
-    RoomRequestStatusUpdate,
 )
 from app.services.request_service import (
     DateInPastError,
@@ -61,7 +60,7 @@ def create_repair(
 @router.patch("/repair/{request_id}/status", response_model=RequestResponse)
 def update_repair_request_status(
     request_id: int,
-    payload: RepairRequestStatusUpdate,
+    payload: RequestStatusUpdate,
     db: Annotated[Session, Depends(get_db)],
     current_user: Annotated[User, Depends(get_current_user)],
 ):
@@ -174,7 +173,7 @@ def get_one(
 @router.patch("/room_booking/{request_id}", response_model=RequestResponse)
 def edit_room_booking_request(
     request_id: int,
-    payload: RoomRequestStatusUpdate,
+    payload: RequestStatusUpdate,
     db: Annotated[Session, Depends(get_db)],
     current_user: Annotated[User, Depends(get_current_user)],
 ):

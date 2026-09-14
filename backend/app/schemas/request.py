@@ -57,9 +57,6 @@ class StatusHistoryResponse(BaseModel):
     changed_at: datetime | None
 
 
-class RepairRequestStatusUpdate(BaseModel):
-    status: RequestStatus
-
 
 class RequestResponse(BaseModel):
     id: int
@@ -183,7 +180,8 @@ class RoomRequestCreate(BaseModel):
     alternative_key_exchange_date: date | None
 
 
-class RoomRequestStatusUpdate(BaseModel):
+
+class RequestStatusUpdate(BaseModel):
     status: RequestStatus
 
 
