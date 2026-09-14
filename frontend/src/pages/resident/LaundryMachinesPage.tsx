@@ -68,9 +68,28 @@ export function LaundryMachinesPage() {
                 <Typography color="primary">
                   {t('laundry.washingmachine')}
                 </Typography>
-                <Typography color={statusColor[machine.status]}>
-                  {t(`laundry.status.${machine.status}`)}
-                </Typography>
+                {/* status display free or unknown */}
+                {(machine.status === 'free' ||
+                  machine.status === 'unknown') && (
+                  <Typography color={statusColor[machine.status]}>
+                    {t(`laundry.status.${machine.status}`)}
+                  </Typography>
+                )}
+                {/* status display occupied  with remaining time */}
+                {machine.status === 'occupied' &&
+                  machine.occupied_until !== null && (
+                    <Typography color={statusColor[machine.status]}>
+                      {t('laundry.occupiedUntil', {
+                        time: new Date(
+                          machine.occupied_until
+                        ).toLocaleTimeString(undefined, {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        }),
+                      })}
+                    </Typography>
+                  )}
+                {/* link to createBookingPage */}
                 {machine.status === 'free' && (
                   <Button
                     component={Link}
@@ -79,6 +98,7 @@ export function LaundryMachinesPage() {
                     {t(`laundry.useMachine`)}
                   </Button>
                 )}
+                {/* endBooking */}
                 {machine.status === 'occupied' && machine.is_own_booking && (
                   <Button
                     color="error"
@@ -109,9 +129,28 @@ export function LaundryMachinesPage() {
               <Stack sx={{ alignItems: 'center' }}>
                 <Typography color="primary">"{machine.label}"</Typography>
                 <Typography color="primary">{t('laundry.dryer')}</Typography>
-                <Typography color={statusColor[machine.status]}>
-                  {t(`laundry.status.${machine.status}`)}
-                </Typography>
+                {/* status display free or unknown */}
+                {(machine.status === 'free' ||
+                  machine.status === 'unknown') && (
+                  <Typography color={statusColor[machine.status]}>
+                    {t(`laundry.status.${machine.status}`)}
+                  </Typography>
+                )}
+                {/* status display occupied  with remaining time */}
+                {machine.status === 'occupied' &&
+                  machine.occupied_until !== null && (
+                    <Typography color={statusColor[machine.status]}>
+                      {t('laundry.occupiedUntil', {
+                        time: new Date(
+                          machine.occupied_until
+                        ).toLocaleTimeString(undefined, {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        }),
+                      })}
+                    </Typography>
+                  )}
+                {/* link to createBookingPage */}
                 {machine.status === 'free' && (
                   <Button
                     component={Link}
@@ -120,6 +159,7 @@ export function LaundryMachinesPage() {
                     {t(`laundry.useMachine`)}
                   </Button>
                 )}
+                {/* endBooking */}
                 {machine.status === 'occupied' && machine.is_own_booking && (
                   <Button
                     color="error"

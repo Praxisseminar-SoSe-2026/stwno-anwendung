@@ -59,7 +59,8 @@
       "occupied": "occupied",
       "free": "free",
       "unknown": "defect"
-    }
+    },
+    "occupiedUntil": "occupied until {{time}}"
   },
   "repairRequest": {
     "title": "Repair Request",
