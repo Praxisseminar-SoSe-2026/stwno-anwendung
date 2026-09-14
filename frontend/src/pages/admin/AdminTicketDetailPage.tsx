@@ -23,7 +23,8 @@ import { useRepairRequestActions } from '../../hooks/useRepairRequestActions'
 import { useAuth } from '../../contexts/AuthContext'
 import type {
   Comment,
-  StatusHistoryEntry, RequestStatus,
+  StatusHistoryEntry,
+  RequestStatus,
 } from '../../api/requests'
 
 const ALLOWED_ROLES = ['admin', 'mitarbeiter', 'hausmeister']

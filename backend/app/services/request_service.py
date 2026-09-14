@@ -17,9 +17,9 @@ from app.schemas.request import (
     AccessTimeSlotSelect,
     CommentCreate,
     RepairRequestCreate,
+    RequestStatusUpdate,
     RoomBookings,
     RoomRequestCreate,
-    RequestStatusUpdate,
 )
 
 STAFF_ROLES = {"admin", "mitarbeiter"}
