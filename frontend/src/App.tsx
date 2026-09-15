@@ -27,7 +27,7 @@ import { NotFoundPage } from './pages/general/NotFoundPage'
 
 import './App.css'
 import { FaqDetailPage } from './pages/resident/FaqDetailPage.tsx'
-import { FaqCreatePage } from './pages/resident/FaqCreatePage.tsx'
+import { AdminFaqCreatePage } from './pages/admin/AdminFaqCreatePage.tsx'
 
 function App() {
   return (
@@ -41,7 +41,6 @@ function App() {
           <Route path="/" element={<IndexPage />} />
           <Route path="/faq" element={<FaqPage />} />
           <Route path="/faq/:id" element={<FaqDetailPage />}></Route>
-          <Route path="/faq/neu" element={<FaqCreatePage />}></Route>
           <Route path="/waschmaschinen" element={<LaundryMachinesPage />} />
           <Route
             path="/waschmaschinen/nutzen/:id"
@@ -65,6 +64,7 @@ function App() {
             path="/aushang/neu"
             element={<AdminCreateAnnouncementPage />}
           />
+          <Route path="/faq/neu" element={<AdminFaqCreatePage />}></Route>
           {/* general routes */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="*" element={<NotFoundPage />} />

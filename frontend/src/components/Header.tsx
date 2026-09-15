@@ -3,12 +3,12 @@ import { Link } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../contexts/AuthContext'
 import { useLogout } from '../hooks/useLogout.ts'
-
-const STAFF_ROLES = ['admin', 'mitarbeiter', 'hausmeister']
+import {useHasRole} from "../hooks/useHasRole.ts";
+import {STAFF_ROLES} from "../constants/roles.ts";
 
 export function Header() {
   const { t } = useTranslation()
-  const { user, hasRole, loading } = useAuth()
+  const { user, loading } = useAuth()
   const { logout } = useLogout()
 
   const links = [
@@ -19,7 +19,7 @@ export function Header() {
     { to: '/gemeinschaftsraum', label: t('roomBooking.title') },
   ]
 
-  const canViewTickets = !loading && STAFF_ROLES.some((role) => hasRole(role))
+  const canViewTickets = useHasRole(STAFF_ROLES) && !loading
 
   return (
     <AppBar position="static" color="default">

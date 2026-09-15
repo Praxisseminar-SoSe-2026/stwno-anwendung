@@ -17,8 +17,8 @@ import type {
   RequestType,
   RequestStatus,
 } from '../../api/requests'
-
-const ALLOWED_ROLES = ['admin', 'mitarbeiter', 'hausmeister']
+import {useHasRole} from "../../hooks/useHasRole.ts";
+import {STAFF_ROLES} from "../../constants/roles.ts";
 
 const STATUS_COLUMNS: { key: string; matches: RequestStatus[] }[] = [
   { key: 'Offen', matches: ['open'] },
@@ -45,12 +45,13 @@ function ticketTitle(ticket: TicketRequest): string {
 
 export function AdminTicketOverviewPage() {
   const { t } = useTranslation()
-  const { hasRole, loading: authLoading } = useAuth()
+  const { loading: authLoading } = useAuth()
   const { requests, loading, error } = useRequests()
+
+  const canView = useHasRole(STAFF_ROLES)
 
   if (authLoading || loading) return <CircularProgress />
 
-  const canView = ALLOWED_ROLES.some((role) => hasRole(role))
   if (!canView) {
     return <Typography>{t('adminTicketOverview.notAuthorized')}</Typography>
   }
