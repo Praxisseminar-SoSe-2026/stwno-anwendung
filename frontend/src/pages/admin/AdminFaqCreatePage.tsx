@@ -9,11 +9,13 @@ import {
   TextField,
   MenuItem,
 } from '@mui/material'
-import { createFaq, getFaqCategories, type FaqCategory } from '../../api/faqs.ts'
-import {useHasRole} from "../../hooks/useHasRole.ts";
-import {STAFF_ROLES} from "../../constants/roles.ts";
-
-// Todo: Add Authentification
+import {
+  createFaq,
+  getFaqCategories,
+  type FaqCategory,
+} from '../../api/faqs.ts'
+import { useHasRole } from '../../hooks/useHasRole.ts'
+import { STAFF_ROLES } from '../../constants/roles.ts'
 
 export function AdminFaqCreatePage() {
   const navigate = useNavigate()
@@ -33,7 +35,7 @@ export function AdminFaqCreatePage() {
 
   const canView = useHasRole(STAFF_ROLES)
 
-    if (!canView) {
+  if (!canView) {
     return <Typography>{t('adminTicketOverview.notAuthorized')}</Typography>
   }
 

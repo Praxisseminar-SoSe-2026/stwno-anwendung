@@ -11,8 +11,8 @@ import {
   Button,
 } from '@mui/material'
 import { useAnnouncements } from '../../hooks/useAnnouncements'
-import {useHasRole} from "../../hooks/useHasRole.ts";
-import {EDITOR_ROLES} from "../../constants/roles.ts";
+import { useHasRole } from '../../hooks/useHasRole.ts'
+import { EDITOR_ROLES } from '../../constants/roles.ts'
 
 export function IndexPage() {
   const { t } = useTranslation()

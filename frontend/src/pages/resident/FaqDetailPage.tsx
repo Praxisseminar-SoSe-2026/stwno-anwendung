@@ -17,8 +17,8 @@ import {
   getFaqCategories,
   type FaqCategory,
 } from '../../api/faqs'
-import {useHasRole} from "../../hooks/useHasRole.ts";
-import {EDITOR_ROLES} from "../../constants/roles.ts";
+import { useHasRole } from '../../hooks/useHasRole.ts'
+import { EDITOR_ROLES } from '../../constants/roles.ts'
 
 export function FaqDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -143,19 +143,19 @@ export function FaqDetailPage() {
               {faq.answer}
             </Typography>
             {canEdit && (
-            <Stack direction="row" spacing={2}>
-              <Button variant="contained" onClick={startEditing}>
-                {t('common.edit')}
-              </Button>
-              <Button
-                variant="contained"
-                color="error"
-                onClick={handleDelete}
-                disabled={saving}
-              >
-                {t('common.delete')}
-              </Button>
-            </Stack>
+              <Stack direction="row" spacing={2}>
+                <Button variant="contained" onClick={startEditing}>
+                  {t('common.edit')}
+                </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleDelete}
+                  disabled={saving}
+                >
+                  {t('common.delete')}
+                </Button>
+              </Stack>
             )}
           </>
         )}

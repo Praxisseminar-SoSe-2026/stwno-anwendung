@@ -3,8 +3,8 @@ import { Link } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../contexts/AuthContext'
 import { useLogout } from '../hooks/useLogout.ts'
-import {useHasRole} from "../hooks/useHasRole.ts";
-import {STAFF_ROLES} from "../constants/roles.ts";
+import { useHasRole } from '../hooks/useHasRole.ts'
+import { STAFF_ROLES } from '../constants/roles.ts'
 
 export function Header() {
   const { t } = useTranslation()

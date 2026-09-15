@@ -17,8 +17,8 @@ import type {
   RequestType,
   RequestStatus,
 } from '../../api/requests'
-import {useHasRole} from "../../hooks/useHasRole.ts";
-import {STAFF_ROLES} from "../../constants/roles.ts";
+import { useHasRole } from '../../hooks/useHasRole.ts'
+import { STAFF_ROLES } from '../../constants/roles.ts'
 
 const STATUS_COLUMNS: { key: string; matches: RequestStatus[] }[] = [
   { key: 'Offen', matches: ['open'] },

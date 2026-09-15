@@ -21,8 +21,8 @@ import { updateAnnouncement, deleteAnnouncement } from '../../api/announcements'
 import { useDormitories } from '../../hooks/useDormitories'
 import { useImageUpload } from '../../hooks/useImageUpload.ts'
 import UploadIcon from '@mui/icons-material/Upload'
-import {useHasRole} from "../../hooks/useHasRole.ts";
-import {EDITOR_ROLES} from "../../constants/roles.ts";
+import { useHasRole } from '../../hooks/useHasRole.ts'
+import { EDITOR_ROLES } from '../../constants/roles.ts'
 
 const GLOBAL_VALUE = 'global'
 

@@ -15,8 +15,8 @@ import { useFaqs } from '../../hooks/useFaqs'
 import type { Faq } from '../../api/faqs.ts'
 import { useState } from 'react'
 import { Link } from 'react-router'
-import {useHasRole} from "../../hooks/useHasRole.ts";
-import {EDITOR_ROLES} from "../../constants/roles.ts";
+import { useHasRole } from '../../hooks/useHasRole.ts'
+import { EDITOR_ROLES } from '../../constants/roles.ts'
 
 // creates list of all categories with their associated questions
 function groupByCategory(faqs: Faq[]): Record<string, Faq[]> {
@@ -43,7 +43,7 @@ export function FaqPage() {
     )
   })
 
-const canEdit = useHasRole(EDITOR_ROLES)
+  const canEdit = useHasRole(EDITOR_ROLES)
 
   const groupedFaqs = groupByCategory(filteredFaqs)
 
@@ -71,10 +71,10 @@ const canEdit = useHasRole(EDITOR_ROLES)
           }}
         />
         {canEdit && (
-        <Button component={Link} variant="contained" to="/faq/neu">
-          +
-        </Button>
-            )}
+          <Button component={Link} variant="contained" to="/faq/neu">
+            +
+          </Button>
+        )}
       </Stack>
 
       {/* creates element for every category and their associated questions */}
@@ -99,8 +99,8 @@ const canEdit = useHasRole(EDITOR_ROLES)
                       to={`/faq/${faq.id}`}
                       onClick={(e) => e.stopPropagation()}
                     >
-                      { canEdit && (
-                      <Button component="span">{t('common.edit')}</Button>
+                      {canEdit && (
+                        <Button component="span">{t('common.edit')}</Button>
                       )}
                     </Link>
                   </Stack>

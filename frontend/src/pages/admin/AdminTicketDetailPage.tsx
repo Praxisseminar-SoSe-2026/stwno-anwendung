@@ -26,8 +26,8 @@ import type {
   StatusHistoryEntry,
   RequestStatus,
 } from '../../api/requests'
-import {useHasRole} from "../../hooks/useHasRole.ts";
-import {STAFF_ROLES} from "../../constants/roles.ts";
+import { useHasRole } from '../../hooks/useHasRole.ts'
+import { STAFF_ROLES } from '../../constants/roles.ts'
 
 const REPAIR_STATUSES: RequestStatus[] = [
   'open',
