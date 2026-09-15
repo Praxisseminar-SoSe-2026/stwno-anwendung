@@ -1,3 +1,5 @@
+import {apiFetch} from "./apiFetch.ts";
+
 const BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 export type LoginData = {
@@ -20,7 +22,7 @@ export type LoginResponse = {
 // call API Endpoint /login
 // ToDo: adjust and complete API Call when implemented in backend
 export async function login(data: LoginData): Promise<LoginResponse> {
-  const res = await fetch(`${BASE_URL}/auth/login`, {
+  const res = await apiFetch(`${BASE_URL}/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),

@@ -1,3 +1,5 @@
+import {apiFetch} from "./apiFetch.ts";
+
 const BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 export type Announcement = {
@@ -62,7 +64,7 @@ export async function updateAnnouncement(
 }
 
 export async function deleteAnnouncement(id: number): Promise<void> {
-  const res = await fetch(`${BASE_URL}/announcements/${id}`, {
+  const res = await apiFetch(`${BASE_URL}/announcements/${id}`, {
     method: 'DELETE',
     headers: authHeaders(),
   })
@@ -75,7 +77,7 @@ export async function deleteAnnouncement(id: number): Promise<void> {
 export async function createAnnouncement(
   data: AnnouncementInput
 ): Promise<Announcement> {
-  const res = await fetch(`${BASE_URL}/announcements`, {
+  const res = await apiFetch(`${BASE_URL}/announcements`, {
     method: 'POST',
     headers: authHeaders(),
     body: JSON.stringify(data),

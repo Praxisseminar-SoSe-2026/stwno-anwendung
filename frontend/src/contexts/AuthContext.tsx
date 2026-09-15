@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import { getMe } from '../api/user'
+import {unauthorized} from "../api/apiFetch.ts";
 
 export type AuthUser = {
   id: number
@@ -41,6 +42,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       })
       .finally(() => setLoading(false))
   }, [])
+
+  useEffect(() => {
+    return unauthorized(() => {
+      localStorage.removeItem('access_token')
+      setUser(null)
+    })
+  }, []);
 
   const hasRole = (role: string) => user?.roles.includes(role) ?? false
 

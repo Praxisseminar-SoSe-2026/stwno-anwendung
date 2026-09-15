@@ -1,3 +1,5 @@
+import {apiFetch} from "./apiFetch.ts";
+
 const BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 export type CurrentUser = {
@@ -12,7 +14,7 @@ export type CurrentUser = {
 
 export async function getMe(): Promise<CurrentUser> {
   const token = localStorage.getItem('access_token')
-  const res = await fetch(`${BASE_URL}/auth/me`, {
+  const res = await apiFetch(`${BASE_URL}/auth/me`, {
     headers: { Authorization: `Bearer ${token}` },
   })
 

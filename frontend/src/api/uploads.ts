@@ -1,3 +1,5 @@
+import {apiFetch} from "./apiFetch.ts";
+
 const BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 export type UploadedImage = {
@@ -9,7 +11,7 @@ export async function uploadImage(file: File): Promise<UploadedImage> {
   const formData = new FormData()
   formData.append('file', file)
 
-  const res = await fetch(`${BASE_URL}/uploads/images`, {
+  const res = await apiFetch(`${BASE_URL}/uploads/images`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,

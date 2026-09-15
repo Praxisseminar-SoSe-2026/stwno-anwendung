@@ -1,3 +1,5 @@
+import {apiFetch} from "./apiFetch.ts";
+
 const BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 export type CreateLaundryBookingPayload = {
@@ -35,7 +37,7 @@ async function handleResponse<T>(res: Response): Promise<T> {
 export async function createLaundryBooking(
   data: CreateLaundryBookingPayload
 ): Promise<LaundryBooking> {
-  const res = await fetch(`${BASE_URL}/laundry/booking`, {
+  const res = await apiFetch(`${BASE_URL}/laundry/booking`, {
     method: 'POST',
     headers: authHeaders(),
     body: JSON.stringify(data),
@@ -46,7 +48,7 @@ export async function createLaundryBooking(
 export async function endLaundryBooking(
   laundry_booking_id: number
 ): Promise<LaundryBooking> {
-  const res = await fetch(
+  const res = await apiFetch(
     `${BASE_URL}/laundry/booking/${laundry_booking_id}/end`,
     {
       method: 'PATCH',
