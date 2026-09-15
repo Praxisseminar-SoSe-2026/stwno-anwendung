@@ -15,6 +15,10 @@ import { useFaqs } from '../../hooks/useFaqs'
 import type { Faq } from '../../api/faqs.ts'
 import { useState } from 'react'
 import { Link } from 'react-router'
+import {useAuth} from "../../contexts/AuthContext.tsx";
+
+const EDITOR_ROLES = ['admin', 'hausmeister']
+
 // creates list of all categories with their associated questions
 function groupByCategory(faqs: Faq[]): Record<string, Faq[]> {
   return faqs.reduce<Record<string, Faq[]>>((groups, faq) => {
@@ -27,6 +31,7 @@ function groupByCategory(faqs: Faq[]): Record<string, Faq[]> {
 
 export function FaqPage() {
   const { t } = useTranslation()
+  const { hasRole } = useAuth()
   const faqs = useFaqs()
 
   const [searchTerm, setSearchTerm] = useState('')
@@ -39,6 +44,9 @@ export function FaqPage() {
       faq.answer.toLowerCase().includes(term)
     )
   })
+
+  const canEdit = EDITOR_ROLES.some((role) => hasRole(role))
+
 
   const groupedFaqs = groupByCategory(filteredFaqs)
 
@@ -92,7 +100,9 @@ export function FaqPage() {
                       to={`/faq/${faq.id}`}
                       onClick={(e) => e.stopPropagation()}
                     >
+                      { canEdit && (
                       <Button component="span">{t('common.edit')}</Button>
+                      )}
                     </Link>
                   </Stack>
                 </AccordionSummary>

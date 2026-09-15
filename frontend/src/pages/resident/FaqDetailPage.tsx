@@ -17,13 +17,16 @@ import {
   getFaqCategories,
   type FaqCategory,
 } from '../../api/faqs'
+import {useAuth} from "../../contexts/AuthContext.tsx";
 
 // Todo: Add Authentification
+const EDITOR_ROLES = ['admin', 'hausmeister']
 
 export function FaqDetailPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const { hasRole } = useAuth()
   const { faq, loading, error, setFaq } = useFaq(Number(id))
 
   const [editing, setEditing] = useState(false)
@@ -34,6 +37,8 @@ export function FaqDetailPage() {
 
   const [categoryId, setCategoryId] = useState<number | null>(null)
   const [categories, setCategories] = useState<FaqCategory[]>([])
+
+  const canEdit = EDITOR_ROLES.some((role) => hasRole(role))
 
   useEffect(() => {
     getFaqCategories().then(setCategories)
@@ -140,6 +145,7 @@ export function FaqDetailPage() {
             <Typography variant="body1" color="text.secondary">
               {faq.answer}
             </Typography>
+            {canEdit && (
             <Stack direction="row" spacing={2}>
               <Button variant="contained" onClick={startEditing}>
                 {t('common.edit')}
@@ -153,6 +159,7 @@ export function FaqDetailPage() {
                 {t('common.delete')}
               </Button>
             </Stack>
+            )}
           </>
         )}
 
