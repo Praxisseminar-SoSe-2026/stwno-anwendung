@@ -17,16 +17,13 @@ import {
   getFaqCategories,
   type FaqCategory,
 } from '../../api/faqs'
-import {useAuth} from "../../contexts/AuthContext.tsx";
-
-// Todo: Add Authentification
-const EDITOR_ROLES = ['admin', 'hausmeister']
+import {useHasRole} from "../../hooks/useHasRole.ts";
+import {EDITOR_ROLES} from "../../constants/roles.ts";
 
 export function FaqDetailPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { t } = useTranslation()
-  const { hasRole } = useAuth()
   const { faq, loading, error, setFaq } = useFaq(Number(id))
 
   const [editing, setEditing] = useState(false)
@@ -38,7 +35,7 @@ export function FaqDetailPage() {
   const [categoryId, setCategoryId] = useState<number | null>(null)
   const [categories, setCategories] = useState<FaqCategory[]>([])
 
-  const canEdit = EDITOR_ROLES.some((role) => hasRole(role))
+  const canEdit = useHasRole(EDITOR_ROLES)
 
   useEffect(() => {
     getFaqCategories().then(setCategories)

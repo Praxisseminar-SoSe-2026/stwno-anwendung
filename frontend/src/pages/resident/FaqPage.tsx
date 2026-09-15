@@ -15,9 +15,8 @@ import { useFaqs } from '../../hooks/useFaqs'
 import type { Faq } from '../../api/faqs.ts'
 import { useState } from 'react'
 import { Link } from 'react-router'
-import {useAuth} from "../../contexts/AuthContext.tsx";
-
-const EDITOR_ROLES = ['admin', 'hausmeister']
+import {useHasRole} from "../../hooks/useHasRole.ts";
+import {EDITOR_ROLES} from "../../constants/roles.ts";
 
 // creates list of all categories with their associated questions
 function groupByCategory(faqs: Faq[]): Record<string, Faq[]> {
@@ -31,7 +30,6 @@ function groupByCategory(faqs: Faq[]): Record<string, Faq[]> {
 
 export function FaqPage() {
   const { t } = useTranslation()
-  const { hasRole } = useAuth()
   const faqs = useFaqs()
 
   const [searchTerm, setSearchTerm] = useState('')
@@ -45,8 +43,7 @@ export function FaqPage() {
     )
   })
 
-  const canEdit = EDITOR_ROLES.some((role) => hasRole(role))
-
+const canEdit = useHasRole(EDITOR_ROLES)
 
   const groupedFaqs = groupByCategory(filteredFaqs)
 
@@ -73,9 +70,11 @@ export function FaqPage() {
             borderRadius: 1,
           }}
         />
+        {canEdit && (
         <Button component={Link} variant="contained" to="/faq/neu">
           +
         </Button>
+            )}
       </Stack>
 
       {/* creates element for every category and their associated questions */}

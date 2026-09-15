@@ -19,18 +19,17 @@ import {
 import { useAnnouncement } from '../../hooks/useAnnouncement'
 import { updateAnnouncement, deleteAnnouncement } from '../../api/announcements'
 import { useDormitories } from '../../hooks/useDormitories'
-import { useAuth } from '../../contexts/AuthContext'
 import { useImageUpload } from '../../hooks/useImageUpload.ts'
 import UploadIcon from '@mui/icons-material/Upload'
+import {useHasRole} from "../../hooks/useHasRole.ts";
+import {EDITOR_ROLES} from "../../constants/roles.ts";
 
-const EDITOR_ROLES = ['admin', 'hausmeister']
 const GLOBAL_VALUE = 'global'
 
 export function AnnouncementDetailPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { t } = useTranslation()
-  const { hasRole } = useAuth()
   const imageUpload = useImageUpload()
   const { announcement, loading, error, setAnnouncement } = useAnnouncement(
     Number(id)
@@ -47,7 +46,7 @@ export function AnnouncementDetailPage() {
   const [actionError, setActionError] = useState<string | null>(null)
   const [scope, setScope] = useState<string>(GLOBAL_VALUE)
 
-  const canEdit = EDITOR_ROLES.some((role) => hasRole(role))
+  const canEdit = useHasRole(EDITOR_ROLES)
 
   const startEditing = () => {
     if (!announcement) return
