@@ -21,8 +21,8 @@ from app.services.laundry_booking_service import (
     reset_machine_status_if_expired_or_return_active_booking,
 )
 from app.services.request_service import (
-    ResidentDormitoryError,
     STAFF_ROLES,
+    ResidentDormitoryError,
     managed_dormitory_ids,
 )
 
@@ -116,7 +116,8 @@ def list_laundry_rooms(db: Session, current_user: User) -> list[LaundryRoom]:
         dormitory_ids = managed_dormitory_ids(db, current_user.id)
         if not dormitory_ids:
             return []
-        return (db.query(LaundryRoom).filter(LaundryRoom.dormitory_id.in_(dormitory_ids)).all())
+        return (db.query(LaundryRoom)
+                .filter(LaundryRoom.dormitory_id.in_(dormitory_ids)).all())
     
     if current_user.dormitory_id is None:
         raise ResidentDormitoryError(

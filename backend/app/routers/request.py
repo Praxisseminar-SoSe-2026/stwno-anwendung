@@ -12,8 +12,8 @@ from app.schemas.request import (
     RepairRequestCreate,
     RequestResponse,
     RequestStatusUpdate,
-    RoomRequestCreate,
     RoomBookings,
+    RoomRequestCreate,
 )
 from app.services.request_service import (
     DateInPastError,
@@ -34,9 +34,9 @@ from app.services.request_service import (
     edit_room_request,
     get_request,
     list_requests,
+    list_room_bookings,
     set_access_time_slot,
     update_repair_status,
-    list_room_bookings,
 )
 
 router = APIRouter(prefix="/requests", tags=["requests"])
