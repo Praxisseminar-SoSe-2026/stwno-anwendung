@@ -5,6 +5,7 @@ from app.models.community_room import CommunityRoom
 from app.models.laundry_machine import LaundryMachine
 from app.models.laundry_room import LaundryRoom
 from app.models.user import User
+from app.routers.faq import delete
 from app.schemas.laundry import LaundryRoomCreateMachine
 from app.services.laundry_booking_service import (
     MachineNotFoundError,
@@ -127,3 +128,9 @@ def create_laundry_machine(
     db.commit()
     db.refresh(entry)
     return entry
+
+
+def delete_laundry_machine(db: Session, machine_id: int) -> None:
+    entry = db.query(LaundryMachine).filter(LaundryMachine.id == machine_id).first()
+    db.delete(entry)
+    db.commit()

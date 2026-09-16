@@ -16,6 +16,7 @@ from app.services.infrastructure_service import (
     list_community_rooms,
     list_laundry_machines_in_laundry_room,
     list_laundry_rooms,
+    delete_laundry_machine,
 )
 from app.services.laundry_booking_service import MachineNotFoundError
 from app.services.request_service import ResidentDormitoryError
@@ -83,3 +84,10 @@ def create(
         db: Annotated[Session, Depends(get_db)]
 ):
     return create_laundry_machine(db, payload)
+
+@router.delete("/laundry_machines/{machine_id}")
+def delete(
+        machine_id: int,
+        db: Annotated[Session, Depends(get_db)],
+):
+    delete_laundry_machine(db, machine_id)
