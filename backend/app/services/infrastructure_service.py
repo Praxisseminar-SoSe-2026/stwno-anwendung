@@ -2,6 +2,7 @@ from datetime import datetime
 
 from sqlalchemy.orm import Session
 
+from app.core.permission import get_user_role
 from app.core.status import LaundryStatus
 from app.models import LaundryBooking, RoomRequest
 from app.models.community_room import CommunityRoom
@@ -19,7 +20,11 @@ from app.services.laundry_booking_service import (
     MachineNotFoundError,
     reset_machine_status_if_expired_or_return_active_booking,
 )
-from app.services.request_service import ResidentDormitoryError
+from app.services.request_service import (
+    ResidentDormitoryError,
+    STAFF_ROLES,
+    managed_dormitory_ids,
+)
 
 
 class LaundryRoomNotFoundError(Exception):
@@ -35,6 +40,21 @@ class CommunityRoomNotFoundError(Exception):
 # Todo: this could be the file for more infrastructure related querys,
 #  e.g. rentable cleaning gadgets
 def list_community_rooms(db: Session, current_user: User) -> list[CommunityRoom]:
+    roles = set(get_user_role(db, current_user.id))
+    # TODO: Use Enums
+    if roles & STAFF_ROLES:
+        return db.query(CommunityRoom).all()
+
+    if "hausmeister" in roles:
+        dormitory_ids = managed_dormitory_ids(db, current_user.id)
+        if not dormitory_ids:
+            return []
+        return (
+            db.query(CommunityRoom)
+            .filter(CommunityRoom.dormitory_id.in_(dormitory_ids))
+            .all()
+        )
+    
     if current_user.dormitory_id is None:
         raise ResidentDormitoryError(
             "User has no dormitory assigned; cannot list community rooms"
@@ -87,6 +107,17 @@ def delete_community_room(db: Session, room_id: int) -> None:
 
 
 def list_laundry_rooms(db: Session, current_user: User) -> list[LaundryRoom]:
+    roles = set(get_user_role(db, current_user.id))
+    # TODO: Use Enums
+    if roles & STAFF_ROLES:
+        return db.query(LaundryRoom).all()
+
+    if "hausmeister" in roles:
+        dormitory_ids = managed_dormitory_ids(db, current_user.id)
+        if not dormitory_ids:
+            return []
+        return (db.query(LaundryRoom).filter(LaundryRoom.dormitory_id.in_(dormitory_ids)).all())
+    
     if current_user.dormitory_id is None:
         raise ResidentDormitoryError(
             "User has no dormitory assigned; cannot list laundry rooms"
@@ -159,10 +190,20 @@ def list_laundry_machines_in_laundry_room(db: Session,
             f"Laundry room with id {laundry_room_id} not found"
         )
 
-    if laundry_room.dormitory_id != current_user.dormitory_id:
-        raise ResidentDormitoryError(
-            "Laundry room does not belong to the resident dormitory"
-        )
+    roles = set(get_user_role(db, current_user.id))
+    
+    if not (roles & STAFF_ROLES):
+        if "hausmeister" in roles:
+            if laundry_room.dormitory_id not in managed_dormitory_ids(
+                db, current_user.id
+            ):
+                raise ResidentDormitoryError(
+                    "Laundry room does not belong to a dormitory managed by this user"
+                )
+        elif laundry_room.dormitory_id != current_user.dormitory_id:
+            raise ResidentDormitoryError(
+                "Laundry room does not belong to the resident dormitory"
+            )
 
     machines = (
         db.query(LaundryMachine)
@@ -194,11 +235,21 @@ def get_laundry_machine(db: Session,
     if laundry_machine is None:
         raise MachineNotFoundError(f"Laundry Machine {laundry_machine_id} not found")
 
-    if laundry_machine.laundry_room.dormitory_id != current_user.dormitory_id:
-        raise ResidentDormitoryError(
-            "Laundry room with that laundry machine does not belong "
-            "to the resident dormitory"
-        )
+    roles = set(get_user_role(db, current_user.id))
+    room_dormitory_id = laundry_machine.laundry_room.dormitory_id
+
+    if not (roles & STAFF_ROLES):
+        if "hausmeister" in roles:
+            if room_dormitory_id not in managed_dormitory_ids(db, current_user.id):
+                raise ResidentDormitoryError(
+                    "Laundry room with that laundry machine does not belong "
+                    "to a dormitory managed by this user"
+                )
+        elif room_dormitory_id != current_user.dormitory_id:
+            raise ResidentDormitoryError(
+                "Laundry room with that laundry machine does not belong "
+                "to the resident dormitory"
+            )
 
     if laundry_machine.status == LaundryStatus.OCCUPIED:
         active_booking = reset_machine_status_if_expired_or_return_active_booking(
