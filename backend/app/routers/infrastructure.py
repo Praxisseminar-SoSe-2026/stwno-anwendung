@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from app.core.dependencies import get_current_user
 from app.db.database import get_db
 from app.models.user import User
-from app.schemas.infrastructure import CommunityRoomResponse, LaundryRoomResponse, LaundryRoomCreate
+from app.schemas.infrastructure import CommunityRoomResponse, LaundryRoomResponse, LaundryRoomCreate, LaundryRoomUpdate
 from app.schemas.laundry import (
     LaundryMachineResponse,
     LaundryRoomCreateMachine,
@@ -22,7 +22,7 @@ from app.services.infrastructure_service import (
     list_community_rooms,
     list_laundry_machines_in_laundry_room,
     list_laundry_rooms,
-    update_laundry_machine, create_laundry_room,
+    update_laundry_machine, create_laundry_room, update_laundry_room,
 )
 from app.services.laundry_booking_service import MachineNotFoundError
 from app.services.request_service import ResidentDormitoryError
@@ -60,6 +60,15 @@ def create_room(
     db: Annotated[Session, Depends(get_db)],
 ):
     return create_laundry_room(db, payload)
+
+
+@router.put("/laundry_rooms/{room_id}", response_model=LaundryRoomResponse)
+def update_room(
+    room_id: int,
+    payload: LaundryRoomUpdate,
+    db: Annotated[Session, Depends(get_db)],
+):
+    return update_laundry_room(db, room_id, payload)
 
 
 @router.get("/laundry_rooms/{laundry_room_id}/laundry_machines",

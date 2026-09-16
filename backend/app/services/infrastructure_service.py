@@ -7,7 +7,7 @@ from app.models.community_room import CommunityRoom
 from app.models.laundry_machine import LaundryMachine
 from app.models.laundry_room import LaundryRoom
 from app.models.user import User
-from app.schemas.infrastructure import LaundryRoomCreate
+from app.schemas.infrastructure import LaundryRoomCreate, LaundryRoomUpdate
 from app.schemas.laundry import LaundryRoomCreateMachine, LaundryRoomUpdateMachine
 from app.services.laundry_booking_service import (
     MachineNotFoundError,
@@ -58,6 +58,19 @@ def create_laundry_room(db: Session, payload: LaundryRoomCreate) -> LaundryRoom:
     db.add(entry)
     db.commit()
     db.refresh(entry)
+    return entry
+
+def update_laundry_room(db: Session, room_id: int, payload: LaundryRoomUpdate) -> LaundryRoom:
+    entry = db.query(LaundryRoom).filter(LaundryRoom.id == room_id).first()
+    update_data = payload.model_dump(exclude_unset=True)
+
+    for field, value in update_data.items():
+        setattr(entry, field, value)
+
+    if update_data:
+        entry.updated_at = datetime.now()
+        db.commit()
+        db.refresh(entry)
     return entry
 
 
