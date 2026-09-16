@@ -22,7 +22,10 @@ from app.services.infrastructure_service import (
     list_community_rooms,
     list_laundry_machines_in_laundry_room,
     list_laundry_rooms,
-    update_laundry_machine, create_laundry_room, update_laundry_room,
+    update_laundry_machine,
+    create_laundry_room,
+    update_laundry_room,
+    delete_laundry_room,
 )
 from app.services.laundry_booking_service import MachineNotFoundError
 from app.services.request_service import ResidentDormitoryError
@@ -69,6 +72,15 @@ def update_room(
     db: Annotated[Session, Depends(get_db)],
 ):
     return update_laundry_room(db, room_id, payload)
+
+
+@router.delete("/laundry_rooms/{room_id}")
+def delete(
+    room_id: int,
+    db: Annotated[Session, Depends(get_db)],
+):
+    delete_laundry_room(db, room_id)
+
 
 
 @router.get("/laundry_rooms/{laundry_room_id}/laundry_machines",

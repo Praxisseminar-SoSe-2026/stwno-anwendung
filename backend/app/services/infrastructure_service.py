@@ -3,6 +3,7 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 
 from app.core.status import LaundryStatus
+from app.models import LaundryBooking
 from app.models.community_room import CommunityRoom
 from app.models.laundry_machine import LaundryMachine
 from app.models.laundry_room import LaundryRoom
@@ -72,6 +73,29 @@ def update_laundry_room(db: Session, room_id: int, payload: LaundryRoomUpdate) -
         db.commit()
         db.refresh(entry)
     return entry
+
+
+def delete_laundry_room(db: Session, room_id: int) -> None:
+    room = db.get(LaundryRoom, room_id)
+
+    machine_ids = [
+        machine_id
+        for (machine_id,) in db.query(LaundryMachine.id)
+        .filter(LaundryMachine.laundry_room_id == room_id)
+        .all()
+    ]
+
+    if machine_ids:
+        db.query(LaundryBooking).filter(  # noqa: F821
+            LaundryBooking.laundry_machine_id.in_(machine_ids)
+        ).delete(synchronize_session=False)
+
+        db.query(LaundryMachine).filter(
+            LaundryMachine.laundry_room_id == room_id
+        ).delete(synchronize_session=False)
+
+    db.delete(room)
+    db.commit()
 
 
 def list_laundry_machines_in_laundry_room(db: Session,
