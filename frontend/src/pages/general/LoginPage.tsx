@@ -27,6 +27,7 @@ export function LoginPage() {
 
   useEffect(() => {
     if (sessionStorage.getItem('session_expired')) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSessionExpired(true)
       sessionStorage.removeItem('session_expired')
     }
