@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import {
@@ -9,8 +9,8 @@ import {
   TextField,
   MenuItem,
 } from '@mui/material'
-import { getFaqCategories, type FaqCategory } from '../../api/faqs.ts'
 import { useCreateFaq } from '../../hooks/useCreateFaq'
+import { useFaqCategories } from '../../hooks/useFaqCategories'
 import { useHasRole } from '../../hooks/useHasRole.ts'
 import { STAFF_ROLES } from '../../constants/roles.ts'
 
@@ -22,12 +22,12 @@ export function AdminFaqCreatePage() {
   const [answer, setAnswer] = useState('')
 
   const [categoryId, setCategoryId] = useState<number | null>(null)
-  const [categories, setCategories] = useState<FaqCategory[]>([])
+  const {
+    faqCategories,
+    loading: categoriesLoading,
+    error: categoriesError,
+  } = useFaqCategories()
   const { submitFaq, loading, error } = useCreateFaq()
-
-  useEffect(() => {
-    getFaqCategories().then(setCategories)
-  }, [])
 
   const canView = useHasRole(STAFF_ROLES)
 
@@ -64,14 +64,18 @@ export function AdminFaqCreatePage() {
           label={t('faq.categoryLabel')}
           value={categoryId ?? ''}
           onChange={(e) => setCategoryId(Number(e.target.value))}
+          disabled={categoriesLoading}
           fullWidth
         >
-          {categories.map((cat) => (
+          {faqCategories.map((cat) => (
             <MenuItem key={cat.id} value={cat.id}>
               {t(`faq.category.${cat.name.toLowerCase()}`)}
             </MenuItem>
           ))}
         </TextField>
+        {categoriesError && (
+          <Typography color="error">{categoriesError}</Typography>
+        )}
         {/* answer */}
         <TextField
           label={t('faq.answerLabel')}
