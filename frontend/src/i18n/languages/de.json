@@ -17,6 +17,8 @@
     "newAnnouncement": "+",
     "createAnnouncement": "Neue Ankündigung",
     "createAnnouncementError": "Neue Ankündigung konnte nicht erstellt werden.",
+    "deleteAnnouncementError": "Ankündigung konnte nicht gelöscht werden.",
+    "updateAnnouncementError": "Ankündigung konnte nicht aktualisiert werden.",
     "scope": "Sichtbarkeit der Ankündigung",
     "scopeGlobal": "Für alle Wohnheime",
     "uploadImage": "Neues Bild hochladen",

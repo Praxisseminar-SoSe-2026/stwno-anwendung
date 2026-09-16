@@ -17,7 +17,8 @@ import {
   Select,
 } from '@mui/material'
 import { useAnnouncement } from '../../hooks/useAnnouncement'
-import { updateAnnouncement, deleteAnnouncement } from '../../api/announcements'
+import { useDeleteAnnouncement } from '../../hooks/useDeleteAnnouncement'
+import { useUpdateAnnouncement } from '../../hooks/useUpdateAnnouncement'
 import { useDormitories } from '../../hooks/useDormitories'
 import { useImageUpload } from '../../hooks/useImageUpload.ts'
 import UploadIcon from '@mui/icons-material/Upload'
@@ -35,16 +36,28 @@ export function AnnouncementDetailPage() {
     Number(id)
   )
 
+  const {
+    submitDeleteAnnouncement,
+    loading: deleteLoading,
+    error: deleteError,
+  } = useDeleteAnnouncement()
+  const {
+    submitUpdateAnnouncement,
+    loading: updateLoading,
+    error: updateError,
+  } = useUpdateAnnouncement()
+
   const { dormitories } = useDormitories()
 
   const [editing, setEditing] = useState(false)
   const [title, setTitle] = useState('')
   const [important, setImportant] = useState(false)
   const [text, setText] = useState('')
-  const [saving, setSaving] = useState(false)
   const [imageRemoved, setImageRemoved] = useState(false)
-  const [actionError, setActionError] = useState<string | null>(null)
   const [scope, setScope] = useState<string>(GLOBAL_VALUE)
+
+  const actionLoading = updateLoading || deleteLoading
+  const actionError = updateError || deleteError
 
   const canEdit = useHasRole(EDITOR_ROLES)
 
@@ -70,37 +83,27 @@ export function AnnouncementDetailPage() {
 
   const handleSave = async () => {
     if (!announcement) return
-    setSaving(true)
-    setActionError(null)
-    try {
-      const updated = await updateAnnouncement(announcement.id, {
-        title,
-        important,
-        text,
-        image_url: imageRemoved
-          ? null
-          : (imageUpload.imageUrl ?? announcement.image_url),
-        dormitory_id: scope === GLOBAL_VALUE ? null : Number(scope),
-      })
-      setAnnouncement(updated)
+
+    const result = await submitUpdateAnnouncement(announcement.id, {
+      title,
+      important,
+      text,
+      image_url: imageRemoved
+        ? null
+        : (imageUpload.imageUrl ?? announcement.image_url),
+      dormitory_id: scope === GLOBAL_VALUE ? null : Number(scope),
+    })
+    if (result) {
+      setAnnouncement(result)
       setEditing(false)
-    } catch (err) {
-      setActionError(err instanceof Error ? err.message : 'Update failed')
-    } finally {
-      setSaving(false)
     }
   }
 
   const handleDelete = async () => {
     if (!announcement) return
-    setSaving(true)
-    setActionError(null)
-    try {
-      await deleteAnnouncement(announcement.id)
+    const result = await submitDeleteAnnouncement(announcement.id)
+    if (result) {
       navigate('/aushang')
-    } catch (err) {
-      setActionError(err instanceof Error ? err.message : 'Delete failed')
-      setSaving(false)
     }
   }
 
@@ -110,9 +113,7 @@ export function AnnouncementDetailPage() {
 
   return (
     <Paper variant="outlined" sx={{ p: 4 }}>
-      <Button onClick={() => navigate(-1)}>
-        {t('common.back')}
-      </Button>
+      <Button onClick={() => navigate(-1)}>{t('common.back')}</Button>
       <Stack spacing={2}>
         {editing ? (
           <>
@@ -215,11 +216,14 @@ export function AnnouncementDetailPage() {
               <Button
                 variant="contained"
                 onClick={handleSave}
-                disabled={saving}
+                disabled={actionLoading}
               >
                 {t('common.save')}
               </Button>
-              <Button onClick={() => setEditing(false)} disabled={saving}>
+              <Button
+                onClick={() => setEditing(false)}
+                disabled={actionLoading}
+              >
                 {t('common.cancel')}
               </Button>
             </Stack>
@@ -257,7 +261,7 @@ export function AnnouncementDetailPage() {
                   variant="contained"
                   color="error"
                   onClick={handleDelete}
-                  disabled={saving}
+                  disabled={actionLoading}
                 >
                   {t('common.delete')}
                 </Button>

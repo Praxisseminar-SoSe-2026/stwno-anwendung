@@ -17,6 +17,8 @@
     "newAnnouncement": "+",
     "createAnnouncement": "New announcement",
     "createAnnouncementError": "New announcement could not be created.",
+    "deleteAnnouncementError": "Announcement could not be deleted.",
+    "updateAnnouncementError": "Announcement could not be updated.",
     "scope": "Visibility of the announcement",
     "scopeGlobal": "All dormitories",
     "uploadImage": "Upload a new image",
