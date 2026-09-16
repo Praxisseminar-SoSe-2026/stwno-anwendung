@@ -71,7 +71,10 @@ def update_room(
     payload: LaundryRoomUpdate,
     db: Annotated[Session, Depends(get_db)],
 ):
-    return update_laundry_room(db, room_id, payload)
+    try:
+        return update_laundry_room(db, room_id, payload)
+    except LaundryRoomNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
 @router.delete("/laundry_rooms/{room_id}")
@@ -79,7 +82,10 @@ def delete(
     room_id: int,
     db: Annotated[Session, Depends(get_db)],
 ):
-    delete_laundry_room(db, room_id)
+    try:
+        delete_laundry_room(db, room_id)
+    except LaundryRoomNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
 

@@ -55,28 +55,32 @@ def list_laundry_rooms(db: Session, current_user: User) -> list[LaundryRoom]:
 
 
 def create_laundry_room(db: Session, payload: LaundryRoomCreate) -> LaundryRoom:
-    entry = LaundryRoom(**payload.model_dump())
-    db.add(entry)
+    room = LaundryRoom(**payload.model_dump())
+    db.add(room)
     db.commit()
-    db.refresh(entry)
-    return entry
+    db.refresh(room)
+    return room
 
 def update_laundry_room(db: Session, room_id: int, payload: LaundryRoomUpdate) -> LaundryRoom:
-    entry = db.query(LaundryRoom).filter(LaundryRoom.id == room_id).first()
+    room = db.query(LaundryRoom).filter(LaundryRoom.id == room_id).first()
+    if room is None:
+        raise LaundryRoomNotFoundError(f"No room found with id {room_id}")
     update_data = payload.model_dump(exclude_unset=True)
 
     for field, value in update_data.items():
-        setattr(entry, field, value)
+        setattr(room, field, value)
 
     if update_data:
-        entry.updated_at = datetime.now()
+        room.updated_at = datetime.now()
         db.commit()
-        db.refresh(entry)
-    return entry
+        db.refresh(room)
+    return room
 
 
 def delete_laundry_room(db: Session, room_id: int) -> None:
     room = db.get(LaundryRoom, room_id)
+    if room is None:
+        raise LaundryRoomNotFoundError(f"No room found with id {room_id}")
 
     machine_ids = [
         machine_id
@@ -86,7 +90,7 @@ def delete_laundry_room(db: Session, room_id: int) -> None:
     ]
 
     if machine_ids:
-        db.query(LaundryBooking).filter(  # noqa: F821
+        db.query(LaundryBooking).filter(
             LaundryBooking.laundry_machine_id.in_(machine_ids)
         ).delete(synchronize_session=False)
 
