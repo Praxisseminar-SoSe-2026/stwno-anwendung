@@ -1,3 +1,5 @@
+import { apiFetch } from './apiFetch.ts'
+
 const BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 export type FaqCategory = {
@@ -29,22 +31,22 @@ async function handleResponse<T>(res: Response): Promise<T> {
 }
 
 export async function getFaqCategories(): Promise<FaqCategory[]> {
-  const res = await fetch(`${BASE_URL}/faq/categories`)
+  const res = await apiFetch(`${BASE_URL}/faq/categories`)
   return handleResponse(res)
 }
 
 export async function getFaqs(): Promise<Faq[]> {
-  const res = await fetch(`${BASE_URL}/faq`)
+  const res = await apiFetch(`${BASE_URL}/faq`)
   return handleResponse(res)
 }
 
 export async function getFaq(id: number): Promise<Faq> {
-  const res = await fetch(`${BASE_URL}/faq/${id}`)
+  const res = await apiFetch(`${BASE_URL}/faq/${id}`)
   return handleResponse(res)
 }
 
 export async function createFaq(data: FaqInput): Promise<Faq> {
-  const res = await fetch(`${BASE_URL}/faq`, {
+  const res = await apiFetch(`${BASE_URL}/faq`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -56,7 +58,7 @@ export async function updateFaq(
   id: number,
   data: Partial<FaqInput>
 ): Promise<Faq> {
-  const res = await fetch(`${BASE_URL}/faq/${id}`, {
+  const res = await apiFetch(`${BASE_URL}/faq/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -65,7 +67,7 @@ export async function updateFaq(
 }
 
 export async function deleteFaq(id: number): Promise<void> {
-  const res = await fetch(`${BASE_URL}/faq/${id}`, {
+  const res = await apiFetch(`${BASE_URL}/faq/${id}`, {
     method: 'DELETE',
   })
   if (!res.ok) {

@@ -27,7 +27,8 @@
     "edit": "Edit",
     "delete": "Delete",
     "create": "Create",
-    "minutes": "minutes"
+    "minutes": "minutes",
+    "back": "Go back"
   },
   "faq": {
     "title": "Frequently Asked Questions",
@@ -142,7 +143,8 @@
     "signIn": "Log in",
     "signOut": "Log out",
     "error": "Login failed.",
-    "invalid": "Please login"
+    "invalid": "Please login",
+    "sessionExpired": "Session expired."
   },
   "registration": {
     "register": "Register new account?",

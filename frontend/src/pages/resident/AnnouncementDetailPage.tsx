@@ -110,6 +110,9 @@ export function AnnouncementDetailPage() {
 
   return (
     <Paper variant="outlined" sx={{ p: 4 }}>
+      <Button onClick={() => navigate(-1)}>
+        {t('common.back')}
+      </Button>
       <Stack spacing={2}>
         {editing ? (
           <>

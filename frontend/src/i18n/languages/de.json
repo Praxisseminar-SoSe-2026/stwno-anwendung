@@ -27,7 +27,8 @@
     "edit": "Bearbeiten",
     "delete": "Löschen",
     "create": "Erstellen",
-    "minutes": "Minuten"
+    "minutes": "Minuten",
+    "back": "Zurück"
   },
   "faq": {
     "title": "Häufig gestellte Fragen",
@@ -142,7 +143,8 @@
     "signIn": "Anmelden",
     "signOut": "Abmelden",
     "error": "Login fehlgeschlagen.",
-    "invalid": "Bitte einloggen."
+    "invalid": "Bitte einloggen.",
+    "sessionExpired": "Session abgelaufen."
   },
   "registration": {
     "register": "Neuen Account registrieren?",

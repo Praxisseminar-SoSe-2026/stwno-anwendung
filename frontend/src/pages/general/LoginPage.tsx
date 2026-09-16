@@ -1,6 +1,6 @@
 // based on template [https://mui.com/material-ui/getting-started/templates/sign-in/]
 import { useTranslation } from 'react-i18next'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { SubmitEventHandler } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { useLogin } from '../../hooks/useLogin.ts'
@@ -21,8 +21,17 @@ export function LoginPage() {
 
   const [passwordError, setPasswordError] = useState(false)
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('')
+  const [sessionExpired, setSessionExpired] = useState(false)
 
   const { submitLogin, loading, error } = useLogin()
+
+  useEffect(() => {
+    if (sessionStorage.getItem('session_expired')) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setSessionExpired(true)
+      sessionStorage.removeItem('session_expired')
+    }
+  }, [])
 
   const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault()
@@ -80,6 +89,10 @@ export function LoginPage() {
       }}
     >
       <Typography variant="h2">{t('login.title')}</Typography>
+
+      {sessionExpired && (
+        <Typography color={'error'}>{t('login.sessionExpired')}</Typography>
+      )}
 
       <Box
         component="form"

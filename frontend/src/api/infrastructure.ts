@@ -1,3 +1,5 @@
+import { apiFetch } from './apiFetch.ts'
+
 const BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 export type CommunityRoom = {
@@ -43,14 +45,14 @@ async function handleResponse<T>(res: Response): Promise<T> {
 }
 
 export async function getCommunityRooms(): Promise<CommunityRoom[]> {
-  const res = await fetch(`${BASE_URL}/infrastructure/community_rooms`, {
+  const res = await apiFetch(`${BASE_URL}/infrastructure/community_rooms`, {
     headers: authHeaders(),
   })
   return handleResponse(res)
 }
 
 export async function getLaundryRooms(): Promise<LaundryRoom[]> {
-  const res = await fetch(`${BASE_URL}/infrastructure/laundry_rooms`, {
+  const res = await apiFetch(`${BASE_URL}/infrastructure/laundry_rooms`, {
     headers: authHeaders(),
   })
   return handleResponse(res)
@@ -59,7 +61,7 @@ export async function getLaundryRooms(): Promise<LaundryRoom[]> {
 export async function getLaundryMachines(
   laundryRoomId: number
 ): Promise<LaundryMachine[]> {
-  const res = await fetch(
+  const res = await apiFetch(
     `${BASE_URL}/infrastructure/laundry_rooms/${laundryRoomId}/laundry_machines`,
     {
       headers: authHeaders(),
@@ -71,7 +73,7 @@ export async function getLaundryMachines(
 export async function getLaundryMachineById(
   laundryMachineId: number
 ): Promise<LaundryMachine> {
-  const res = await fetch(
+  const res = await apiFetch(
     `${BASE_URL}/infrastructure/laundry_machines/${laundryMachineId}`,
     {
       headers: authHeaders(),

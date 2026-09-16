@@ -1,4 +1,4 @@
-import { useParams } from 'react-router'
+import {useNavigate, useParams} from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import {
@@ -48,7 +48,10 @@ type TimelineEntry =
 export function AdminTicketDetailPage() {
   const { id } = useParams<{ id: string }>()
   const { t } = useTranslation()
+
   const { loading: authLoading } = useAuth()
+  const navigate = useNavigate()
+
   const { request, loading, error, setRequest } = useRequest(Number(id))
   const {
     submitting,
@@ -93,6 +96,9 @@ export function AdminTicketDetailPage() {
 
   return (
     <Paper variant="outlined" sx={{ p: 4 }}>
+      <Button onClick={() => navigate(-1)}>
+        {t('common.back')}
+      </Button>
       <Stack spacing={2}>
         <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
           <Typography>
