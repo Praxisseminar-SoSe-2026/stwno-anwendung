@@ -8,7 +8,11 @@ from app.models.community_room import CommunityRoom
 from app.models.laundry_machine import LaundryMachine
 from app.models.laundry_room import LaundryRoom
 from app.models.user import User
-from app.schemas.infrastructure import LaundryRoomCreate, LaundryRoomUpdate
+from app.schemas.infrastructure import (
+    LaundryRoomCreate,
+    LaundryRoomUpdate,
+    CommunityRoomCreate,
+)
 from app.schemas.laundry import LaundryRoomCreateMachine, LaundryRoomUpdateMachine
 from app.services.laundry_booking_service import (
     MachineNotFoundError,
@@ -38,6 +42,14 @@ def list_community_rooms(db: Session, current_user: User) -> list[CommunityRoom]
     )
 
     return community_rooms
+
+
+def create_community_room(db: Session, payload: CommunityRoomCreate) -> LaundryRoom:
+    room = CommunityRoom(**payload.model_dump())
+    db.add(room)
+    db.commit()
+    db.refresh(room)
+    return room
 
 
 def list_laundry_rooms(db: Session, current_user: User) -> list[LaundryRoom]:

@@ -12,6 +12,7 @@ from app.schemas.infrastructure import (
     LaundryRoomCreate,
     LaundryRoomResponse,
     LaundryRoomUpdate,
+    CommunityRoomCreate,
 )
 from app.schemas.laundry import (
     LaundryMachineResponse,
@@ -31,6 +32,7 @@ from app.services.infrastructure_service import (
     list_laundry_rooms,
     update_laundry_machine,
     update_laundry_room,
+    create_community_room,
 )
 from app.services.laundry_booking_service import MachineNotFoundError
 from app.services.request_service import ResidentDormitoryError
@@ -49,6 +51,14 @@ def list_all_rooms(
         return list_community_rooms(db, current_user)
     except ResidentDormitoryError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
+    
+    
+@router.post("/community_rooms", response_model=CommunityRoomResponse)
+def create_room_community(
+    payload: CommunityRoomCreate,
+    db: Annotated[Session, Depends(get_db)],
+):
+    return create_community_room(db, payload)
 
 
 @router.get("/laundry_rooms", response_model=list[LaundryRoomResponse])
@@ -63,7 +73,7 @@ def list_all_laundry_rooms(
 
 
 @router.post("/laundry_rooms", response_model=LaundryRoomResponse)
-def create_room(
+def create_room_laundry(
     payload: LaundryRoomCreate,
     db: Annotated[Session, Depends(get_db)],
 ):
@@ -71,7 +81,7 @@ def create_room(
 
 
 @router.put("/laundry_rooms/{room_id}", response_model=LaundryRoomResponse)
-def update_room(
+def update_room_laundry(
     room_id: int,
     payload: LaundryRoomUpdate,
     db: Annotated[Session, Depends(get_db)],
@@ -83,7 +93,7 @@ def update_room(
 
 
 @router.delete("/laundry_rooms/{room_id}")
-def delete(
+def delete_room_laundry(
     room_id: int,
     db: Annotated[Session, Depends(get_db)],
 ):
