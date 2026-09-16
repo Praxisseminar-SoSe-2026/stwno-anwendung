@@ -3,7 +3,7 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 
 from app.core.status import LaundryStatus
-from app.models import LaundryBooking
+from app.models import LaundryBooking, RoomRequest
 from app.models.community_room import CommunityRoom
 from app.models.laundry_machine import LaundryMachine
 from app.models.laundry_room import LaundryRoom
@@ -71,6 +71,19 @@ def update_community_room(db: Session, room_id: int,
         db.commit()
         db.refresh(room)
     return room
+
+
+def delete_community_room(db: Session, room_id: int) -> None:
+    room = db.query(CommunityRoom).filter(CommunityRoom.id == room_id).first()
+    if room is None:
+        raise CommunityRoomNotFoundError(f"No community room found with id {room_id}")
+
+    db.query(RoomRequest).filter(
+        RoomRequest.community_room_id == room_id
+    ).delete(synchronize_session=False)
+
+    db.delete(room)
+    db.commit()
 
 
 def list_laundry_rooms(db: Session, current_user: User) -> list[LaundryRoom]:

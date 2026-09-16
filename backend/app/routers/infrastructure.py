@@ -34,6 +34,8 @@ from app.services.infrastructure_service import (
     update_laundry_room,
     create_community_room,
     update_community_room,
+    delete_community_room,
+    CommunityRoomNotFoundError,
 )
 from app.services.laundry_booking_service import MachineNotFoundError
 from app.services.request_service import ResidentDormitoryError
@@ -70,7 +72,18 @@ def update_room_laundry(
 ):
     try:
         return update_community_room(db, room_id, payload)
-    except LaundryRoomNotFoundError as exc:
+    except CommunityRoomNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    
+    
+@router.delete("/community_rooms/{room_id}")
+def delete_room_community(
+    room_id: int,
+    db: Annotated[Session, Depends(get_db)],
+):
+    try:
+        delete_community_room(db, room_id)
+    except CommunityRoomNotFoundError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
