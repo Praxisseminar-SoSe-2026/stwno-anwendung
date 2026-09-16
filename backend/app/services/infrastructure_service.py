@@ -61,7 +61,8 @@ def create_laundry_room(db: Session, payload: LaundryRoomCreate) -> LaundryRoom:
     db.refresh(room)
     return room
 
-def update_laundry_room(db: Session, room_id: int, payload: LaundryRoomUpdate) -> LaundryRoom:
+def update_laundry_room(db: Session, room_id: int,
+                        payload: LaundryRoomUpdate) -> LaundryRoom:
     room = db.query(LaundryRoom).filter(LaundryRoom.id == room_id).first()
     if room is None:
         raise LaundryRoomNotFoundError(f"No room found with id {room_id}")

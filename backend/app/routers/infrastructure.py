@@ -7,7 +7,12 @@ from sqlalchemy.orm import Session
 from app.core.dependencies import get_current_user
 from app.db.database import get_db
 from app.models.user import User
-from app.schemas.infrastructure import CommunityRoomResponse, LaundryRoomResponse, LaundryRoomCreate, LaundryRoomUpdate
+from app.schemas.infrastructure import (
+    CommunityRoomResponse,
+    LaundryRoomCreate,
+    LaundryRoomResponse,
+    LaundryRoomUpdate,
+)
 from app.schemas.laundry import (
     LaundryMachineResponse,
     LaundryRoomCreateMachine,
@@ -17,15 +22,15 @@ from app.services.infrastructure_service import (
     LaundryMachineNotFoundError,
     LaundryRoomNotFoundError,
     create_laundry_machine,
+    create_laundry_room,
     delete_laundry_machine,
+    delete_laundry_room,
     get_laundry_machine,
     list_community_rooms,
     list_laundry_machines_in_laundry_room,
     list_laundry_rooms,
     update_laundry_machine,
-    create_laundry_room,
     update_laundry_room,
-    delete_laundry_room,
 )
 from app.services.laundry_booking_service import MachineNotFoundError
 from app.services.request_service import ResidentDormitoryError
@@ -127,7 +132,7 @@ def create_machine(
     return create_laundry_machine(db, payload)
 
 @router.delete("/laundry_machines/{machine_id}")
-def delete(
+def delete_machine(
         machine_id: int,
         db: Annotated[Session, Depends(get_db)],
 ):
@@ -138,7 +143,7 @@ def delete(
     
     
 @router.put("/laundry_machines/{machine_id}", response_model=LaundryMachineResponse)
-def update(
+def update_machine(
         machine_id: int,
         payload: LaundryRoomUpdateMachine,
         db: Annotated[Session, Depends(get_db)],
