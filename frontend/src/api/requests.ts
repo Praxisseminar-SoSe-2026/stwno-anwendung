@@ -1,3 +1,5 @@
+import { apiFetch } from './apiFetch.ts'
+
 const BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 export type ResidentInfo = {
@@ -105,19 +107,19 @@ async function handleResponse<T>(res: Response): Promise<T> {
 }
 
 export async function getRequests(): Promise<TicketRequest[]> {
-  const res = await fetch(`${BASE_URL}/requests`, { headers: authHeaders() })
+  const res = await apiFetch(`${BASE_URL}/requests`, { headers: authHeaders() })
   return handleResponse(res)
 }
 
 export async function getRoomBookings(): Promise<RoomBooking[]> {
-  const res = await fetch(`${BASE_URL}/requests/room_booking`, {
+  const res = await apiFetch(`${BASE_URL}/requests/room_booking`, {
     headers: authHeaders(),
   })
   return handleResponse(res)
 }
 
 export async function getRequestById(id: number): Promise<TicketRequest> {
-  const res = await fetch(`${BASE_URL}/requests/${id}`, {
+  const res = await apiFetch(`${BASE_URL}/requests/${id}`, {
     headers: authHeaders(),
   })
   return handleResponse(res)
@@ -126,7 +128,7 @@ export async function getRequestById(id: number): Promise<TicketRequest> {
 export async function createRepairRequest(
   payload: CreateRepairRequestPayload
 ): Promise<TicketRequest> {
-  const res = await fetch(`${BASE_URL}/requests/repair`, {
+  const res = await apiFetch(`${BASE_URL}/requests/repair`, {
     method: 'POST',
     headers: jsonAuthHeaders(),
     body: JSON.stringify(payload),
@@ -137,7 +139,7 @@ export async function createRepairRequest(
 export async function createRoomBooking(
   data: RoomRequestCreate
 ): Promise<TicketRequest> {
-  const res = await fetch(`${BASE_URL}/requests/room_booking`, {
+  const res = await apiFetch(`${BASE_URL}/requests/room_booking`, {
     method: 'POST',
     headers: authHeaders(),
     body: JSON.stringify(data),
@@ -149,7 +151,7 @@ export async function updateRoomBookingStatus(
   id: number,
   data: RequestStatus
 ): Promise<TicketRequest> {
-  const res = await fetch(`${BASE_URL}/requests/room_booking/${id}`, {
+  const res = await apiFetch(`${BASE_URL}/requests/room_booking/${id}`, {
     method: 'PATCH',
     headers: authHeaders(),
     body: JSON.stringify(data),
@@ -161,7 +163,7 @@ export async function updateRepairStatus(
   id: number,
   status: RequestStatus
 ): Promise<TicketRequest> {
-  const res = await fetch(`${BASE_URL}/requests/repair/${id}/status`, {
+  const res = await apiFetch(`${BASE_URL}/requests/repair/${id}/status`, {
     method: 'PATCH',
     headers: jsonAuthHeaders(),
     body: JSON.stringify({ status }),
@@ -173,7 +175,7 @@ export async function setRepairEntryTime(
   id: number,
   timeSlotProposalId: number
 ): Promise<TicketRequest> {
-  const res = await fetch(`${BASE_URL}/requests/repair/${id}/entry-time`, {
+  const res = await apiFetch(`${BASE_URL}/requests/repair/${id}/entry-time`, {
     method: 'POST',
     headers: jsonAuthHeaders(),
     body: JSON.stringify({ time_slot_proposal_id: timeSlotProposalId }),
@@ -185,7 +187,7 @@ export async function addRepairComment(
   id: number,
   text: string
 ): Promise<TicketRequest> {
-  const res = await fetch(`${BASE_URL}/requests/repair/${id}/comments`, {
+  const res = await apiFetch(`${BASE_URL}/requests/repair/${id}/comments`, {
     method: 'POST',
     headers: jsonAuthHeaders(),
     body: JSON.stringify({ text }),

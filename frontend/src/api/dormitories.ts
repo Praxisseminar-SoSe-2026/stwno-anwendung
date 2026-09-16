@@ -1,3 +1,5 @@
+import { apiFetch } from './apiFetch.ts'
+
 const BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 export type Dormitory = {
@@ -10,7 +12,7 @@ export type Dormitory = {
 
 export async function getDormitories(): Promise<Dormitory[]> {
   const token = localStorage.getItem('access_token')
-  const res = await fetch(`${BASE_URL}/dormitories`, {
+  const res = await apiFetch(`${BASE_URL}/dormitories`, {
     headers: { Authorization: `Bearer ${token}` },
   })
 
