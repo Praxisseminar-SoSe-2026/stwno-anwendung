@@ -142,7 +142,8 @@
     "signIn": "Log in",
     "signOut": "Log out",
     "error": "Login failed.",
-    "invalid": "Please login"
+    "invalid": "Please login",
+    "sessionExpired": "Session expired."
   },
   "registration": {
     "register": "Register new account?",

@@ -46,6 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     return unauthorized(() => {
       localStorage.removeItem('access_token')
+      sessionStorage.setItem('session_expired', 'true')
       setUser(null)
     })
   }, []);

@@ -142,7 +142,8 @@
     "signIn": "Anmelden",
     "signOut": "Abmelden",
     "error": "Login fehlgeschlagen.",
-    "invalid": "Bitte einloggen."
+    "invalid": "Bitte einloggen.",
+    "sessionExpired": "Session abgelaufen."
   },
   "registration": {
     "register": "Neuen Account registrieren?",
