@@ -14,3 +14,8 @@ class LaundryRoomResponse(BaseModel):
     id: int
     name: str
     dormitory_id: int
+
+
+class LaundryRoomCreate(BaseModel):
+    name: str
+    dormitory_id: int
