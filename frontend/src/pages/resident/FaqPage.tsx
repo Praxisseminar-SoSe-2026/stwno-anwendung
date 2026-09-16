@@ -15,6 +15,9 @@ import { useFaqs } from '../../hooks/useFaqs'
 import type { Faq } from '../../api/faqs.ts'
 import { useState } from 'react'
 import { Link } from 'react-router'
+import { useHasRole } from '../../hooks/useHasRole.ts'
+import { EDITOR_ROLES } from '../../constants/roles.ts'
+
 // creates list of all categories with their associated questions
 function groupByCategory(faqs: Faq[]): Record<string, Faq[]> {
   return faqs.reduce<Record<string, Faq[]>>((groups, faq) => {
@@ -39,6 +42,8 @@ export function FaqPage() {
       faq.answer.toLowerCase().includes(term)
     )
   })
+
+  const canEdit = useHasRole(EDITOR_ROLES)
 
   const groupedFaqs = groupByCategory(filteredFaqs)
 
@@ -65,9 +70,11 @@ export function FaqPage() {
             borderRadius: 1,
           }}
         />
-        <Button component={Link} variant="contained" to="/faq/neu">
-          +
-        </Button>
+        {canEdit && (
+          <Button component={Link} variant="contained" to="/faq/neu">
+            +
+          </Button>
+        )}
       </Stack>
 
       {/* creates element for every category and their associated questions */}
@@ -92,7 +99,9 @@ export function FaqPage() {
                       to={`/faq/${faq.id}`}
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <Button component="span">{t('common.edit')}</Button>
+                      {canEdit && (
+                        <Button component="span">{t('common.edit')}</Button>
+                      )}
                     </Link>
                   </Stack>
                 </AccordionSummary>

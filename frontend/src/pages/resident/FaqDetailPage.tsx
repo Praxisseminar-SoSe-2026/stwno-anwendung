@@ -17,8 +17,8 @@ import {
   getFaqCategories,
   type FaqCategory,
 } from '../../api/faqs'
-
-// Todo: Add Authentification
+import { useHasRole } from '../../hooks/useHasRole.ts'
+import { EDITOR_ROLES } from '../../constants/roles.ts'
 
 export function FaqDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -34,6 +34,8 @@ export function FaqDetailPage() {
 
   const [categoryId, setCategoryId] = useState<number | null>(null)
   const [categories, setCategories] = useState<FaqCategory[]>([])
+
+  const canEdit = useHasRole(EDITOR_ROLES)
 
   useEffect(() => {
     getFaqCategories().then(setCategories)
@@ -143,19 +145,21 @@ export function FaqDetailPage() {
             <Typography variant="body1" color="text.secondary">
               {faq.answer}
             </Typography>
-            <Stack direction="row" spacing={2}>
-              <Button variant="contained" onClick={startEditing}>
-                {t('common.edit')}
-              </Button>
-              <Button
-                variant="contained"
-                color="error"
-                onClick={handleDelete}
-                disabled={saving}
-              >
-                {t('common.delete')}
-              </Button>
-            </Stack>
+            {canEdit && (
+              <Stack direction="row" spacing={2}>
+                <Button variant="contained" onClick={startEditing}>
+                  {t('common.edit')}
+                </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleDelete}
+                  disabled={saving}
+                >
+                  {t('common.delete')}
+                </Button>
+              </Stack>
+            )}
           </>
         )}
 

@@ -26,8 +26,8 @@ import type {
   StatusHistoryEntry,
   RequestStatus,
 } from '../../api/requests'
-
-const ALLOWED_ROLES = ['admin', 'mitarbeiter', 'hausmeister']
+import { useHasRole } from '../../hooks/useHasRole.ts'
+import { STAFF_ROLES } from '../../constants/roles.ts'
 
 const REPAIR_STATUSES: RequestStatus[] = [
   'open',
@@ -48,8 +48,10 @@ type TimelineEntry =
 export function AdminTicketDetailPage() {
   const { id } = useParams<{ id: string }>()
   const { t } = useTranslation()
-  const { hasRole, loading: authLoading } = useAuth()
+
+  const { loading: authLoading } = useAuth()
   const navigate = useNavigate()
+
   const { request, loading, error, setRequest } = useRequest(Number(id))
   const {
     submitting,
@@ -64,9 +66,10 @@ export function AdminTicketDetailPage() {
   )
   const [commentDraft, setCommentDraft] = useState('')
 
+  const canView = useHasRole(STAFF_ROLES)
+
   if (authLoading || loading) return <CircularProgress />
 
-  const canView = ALLOWED_ROLES.some((role) => hasRole(role))
   if (!canView) {
     return <Typography>{t('adminTicketOverview.notAuthorized')}</Typography>
   }

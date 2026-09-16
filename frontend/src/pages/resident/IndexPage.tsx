@@ -11,15 +11,13 @@ import {
   Button,
 } from '@mui/material'
 import { useAnnouncements } from '../../hooks/useAnnouncements'
-import { useAuth } from '../../contexts/AuthContext'
-
-const EDITOR_ROLES = ['admin', 'hausmeister']
+import { useHasRole } from '../../hooks/useHasRole.ts'
+import { EDITOR_ROLES } from '../../constants/roles.ts'
 
 export function IndexPage() {
   const { t } = useTranslation()
   const { announcements, loading, error } = useAnnouncements()
-  const { hasRole, loading: authLoading } = useAuth()
-  const canCreate = !authLoading && EDITOR_ROLES.some((role) => hasRole(role))
+  const canCreate = useHasRole(EDITOR_ROLES)
 
   if (loading) return <CircularProgress />
   if (error) return <Typography color="error">{t('login.invalid')}</Typography>

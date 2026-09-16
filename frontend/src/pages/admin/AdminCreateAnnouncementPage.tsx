@@ -23,6 +23,8 @@ import { useDormitories } from '../../hooks/useDormitories'
 import { useImageUpload } from '../../hooks/useImageUpload.ts'
 import UploadIcon from '@mui/icons-material/Upload'
 import CloseIcon from '@mui/icons-material/Close'
+import { useHasRole } from '../../hooks/useHasRole.ts'
+import { STAFF_ROLES } from '../../constants/roles.ts'
 
 const GLOBAL_VALUE = 'global'
 
@@ -38,6 +40,12 @@ export function AdminCreateAnnouncementPage() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [scope, setScope] = useState<string>(GLOBAL_VALUE)
+
+  const canView = useHasRole(STAFF_ROLES)
+
+  if (!canView) {
+    return <Typography>{t('adminTicketOverview.notAuthorized')}</Typography>
+  }
 
   const handleSubmit = async () => {
     setSaving(true)
