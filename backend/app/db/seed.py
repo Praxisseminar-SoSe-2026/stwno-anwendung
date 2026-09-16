@@ -8,10 +8,11 @@ existieren in der DB). Ausfuehren mit:
 
 from __future__ import annotations
 
-from datetime import UTC, date, datetime, timedelta
+from datetime import date, timedelta
 
 from app.core.security import hash_password
 from app.core.status import LaundryStatus, RequestStatus
+from app.core.time import now_utc
 from app.db.database import SessionLocal
 from app.models import (
     Announcement,
@@ -211,12 +212,12 @@ def seed() -> None:
                 LaundryBooking(
                     laundry_machine_id=laundry_machine2.id,
                     resident_id=resident.id,
-                    ends_at=datetime.now() + timedelta(minutes=90),
+                    ends_at=now_utc() + timedelta(minutes=90),
                 ),
                 LaundryBooking(
                     laundry_machine_id=laundry_machine3.id,
                     resident_id=resident.id,
-                    ends_at=datetime.now() + timedelta(minutes=2),
+                    ends_at=now_utc() + timedelta(minutes=2),
                 ),
             ]
         )
@@ -375,17 +376,17 @@ def seed() -> None:
             resident_id=resident.id,
             status=RequestStatus.OPEN,
             community_room_id=community_room.id,
-            start_datetime=datetime.now(UTC),
-            end_datetime=datetime.now(UTC) + timedelta(days=1),
+            start_datetime=now_utc(),
+            end_datetime=now_utc() + timedelta(days=1),
         )
         room_confirmed = RoomRequest(
             resident_id=resident.id,
             status=RequestStatus.IN_PROGRESS,
             community_room_id=community_room.id,
-            start_datetime=datetime.now(UTC) + timedelta(days=5),
-            end_datetime=datetime.now(UTC) + timedelta(days=6),
+            start_datetime=now_utc() + timedelta(days=5),
+            end_datetime=now_utc() + timedelta(days=6),
             decided_by_id=admin.id,
-            decided_at=datetime.now(UTC),
+            decided_at=now_utc(),
         )
         db.add_all([room_open, room_confirmed])
         db.flush()

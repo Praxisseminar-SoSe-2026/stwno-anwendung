@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import ForeignKey
+from sqlalchemy import DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.database import Base
@@ -19,8 +19,8 @@ class AccessTimeSlot(Base):
     repair_request_id: Mapped[int] = mapped_column(
         ForeignKey("repair_requests.id"), unique=True
     )
-    start_time: Mapped[datetime]
-    end_time: Mapped[datetime]
+    start_time: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    end_time: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
     repair_request: Mapped[RepairRequest] = relationship(
         back_populates="access_time_slot"

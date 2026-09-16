@@ -3,10 +3,11 @@ from __future__ import annotations
 from datetime import date, datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import ForeignKey, func
+from sqlalchemy import DateTime, ForeignKey
 from sqlalchemy import false as sql_false
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from app.core.time import now_utc
 from app.db.database import Base
 
 if TYPE_CHECKING:
@@ -44,7 +45,8 @@ class User(Base):
     dormitory_id: Mapped[int | None] = mapped_column(
         ForeignKey("dormitories.id"), default=None
     )
-    created_at: Mapped[datetime | None] = mapped_column(server_default=func.now())
+    created_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True),
+                                                        default=now_utc)
 
     dormitory: Mapped[Dormitory | None] = relationship(back_populates="residents")
     user_roles: Mapped[list[UserRole]] = relationship(back_populates="user")
