@@ -8,9 +8,10 @@ from app.core.dependencies import get_current_user
 from app.db.database import get_db
 from app.models.user import User
 from app.schemas.infrastructure import CommunityRoomResponse, LaundryRoomResponse
-from app.schemas.laundry import LaundryMachineResponse
+from app.schemas.laundry import LaundryMachineResponse, LaundryRoomCreateMachine
 from app.services.infrastructure_service import (
     LaundryRoomNotFoundError,
+    create_laundry_machine,
     get_laundry_machine,
     list_community_rooms,
     list_laundry_machines_in_laundry_room,
@@ -74,3 +75,11 @@ def get_one_laundry_machine(
         raise HTTPException(status_code=404, detail=str(exc)) from exc
     except ResidentDormitoryError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
+    
+    
+@router.post("/laundry_machines", response_model=LaundryMachineResponse)
+def create(
+        payload: LaundryRoomCreateMachine,
+        db: Annotated[Session, Depends(get_db)]
+):
+    return create_laundry_machine(db, payload)

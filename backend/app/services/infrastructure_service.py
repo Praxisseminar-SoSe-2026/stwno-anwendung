@@ -5,6 +5,7 @@ from app.models.community_room import CommunityRoom
 from app.models.laundry_machine import LaundryMachine
 from app.models.laundry_room import LaundryRoom
 from app.models.user import User
+from app.schemas.laundry import LaundryRoomCreateMachine
 from app.services.laundry_booking_service import (
     MachineNotFoundError,
     reset_machine_status_if_expired_or_return_active_booking,
@@ -110,3 +111,19 @@ def get_laundry_machine(db: Session,
             else:
                 laundry_machine.is_own_booking = False
     return laundry_machine
+
+
+def create_laundry_machine(
+    db: Session,
+    payload: LaundryRoomCreateMachine,
+) -> LaundryMachine:
+    entry = LaundryMachine(
+        label=f"Maschine {payload.id}",
+        laundry_room_id=payload.laundry_room_id,
+        type=payload.type,
+        status=payload.status
+    )
+    db.add(entry)
+    db.commit()
+    db.refresh(entry)
+    return entry
