@@ -1,4 +1,5 @@
 from datetime import datetime
+
 from sqlalchemy.orm import Session
 
 from app.core.status import LaundryStatus
@@ -6,7 +7,6 @@ from app.models.community_room import CommunityRoom
 from app.models.laundry_machine import LaundryMachine
 from app.models.laundry_room import LaundryRoom
 from app.models.user import User
-from app.routers.faq import delete
 from app.schemas.laundry import LaundryRoomCreateMachine, LaundryRoomUpdateMachine
 from app.services.laundry_booking_service import (
     MachineNotFoundError,
@@ -137,7 +137,8 @@ def delete_laundry_machine(db: Session, machine_id: int) -> None:
     db.commit()
 
 
-def update_laundry_machine(db: Session, machine_id: int, payload: LaundryRoomUpdateMachine
+def update_laundry_machine(db: Session, machine_id: int,
+                           payload: LaundryRoomUpdateMachine
                            )-> LaundryMachine:
     entry = db.query(LaundryMachine).filter(LaundryMachine.id == machine_id).first()
 
