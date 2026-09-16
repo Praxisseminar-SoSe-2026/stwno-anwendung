@@ -3,11 +3,11 @@ from __future__ import annotations
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import ForeignKey, func, DateTime
+from sqlalchemy import DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.db.database import Base
 from app.core.time import now_utc
+from app.db.database import Base
 
 if TYPE_CHECKING:
     from app.models.repair_request import RepairRequest
@@ -23,7 +23,8 @@ class Consent(Base):
     consent_given: Mapped[bool]
     consent_text_version: Mapped[str]
     # Sketch: kein NOT NULL, nur DEFAULT (now()) -> nullable
-    timestamp: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), default=now_utc)
+    timestamp: Mapped[datetime | None] = mapped_column(DateTime(timezone=True),
+                                                       default=now_utc)
 
     repair_request: Mapped[RepairRequest] = relationship(back_populates="consent")
     resident: Mapped[User] = relationship(back_populates="consents")

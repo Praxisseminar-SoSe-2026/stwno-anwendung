@@ -1,10 +1,9 @@
 from sqlalchemy.orm import Session
 
+from app.core.time import now_utc
 from app.models.faq_category import FaqCategory
 from app.models.faq_entry import FaqEntry
 from app.schemas.faq import FaqEntryCreateRequest, FaqEntryUpdateRequest
-
-from app.core.time import now_utc
 
 
 class FaqCategoryNotFoundError(Exception):
