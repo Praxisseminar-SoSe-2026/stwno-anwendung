@@ -162,6 +162,9 @@ export function AdminCreateAnnouncementPage() {
         >
           {t('common.create')}
         </Button>
+        <Button onClick={() => navigate(-1)}>
+        {t('common.cancel')}
+      </Button>
 
         {error && <Typography color="error">{error}</Typography>}
       </Stack>

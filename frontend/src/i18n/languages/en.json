@@ -27,7 +27,8 @@
     "edit": "Edit",
     "delete": "Delete",
     "create": "Create",
-    "minutes": "minutes"
+    "minutes": "minutes",
+    "back": "Go back"
   },
   "faq": {
     "title": "Frequently Asked Questions",
