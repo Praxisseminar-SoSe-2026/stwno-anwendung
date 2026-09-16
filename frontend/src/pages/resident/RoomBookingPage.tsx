@@ -69,8 +69,7 @@ export function RoomBookingPage() {
         .filter(
           (booking) =>
             booking.community_room_id === roomId &&
-            /* Todo: discuss universal naming of stati  */
-            (booking.status === 'accepted' || booking.status === 'Bestätigt')
+            (booking.status === 'in_progress' || booking.status === 'closed')
         )
         .map((booking) => ({
           id: String(booking.id),
