@@ -97,7 +97,8 @@
     "startDate": "von",
     "endDate": "bis",
     "regularKeyExchangePossibleQuestion": "Können Sie den Schlüssel am Vorbuchungstag zwischen 9 und 11 Uhr im Büro der Hausmeister:in abholen?",
-    "alternativeKeyExchangeDate": "alternativer Tag zum Schlüsselaustausch"
+    "alternativeKeyExchangeDate": "alternativer Tag zum Schlüsselaustausch",
+    "createBookingError": "Buchungsanfrage konnte nicht erstellt werden."
   },
   "adminIndex": {
     "title": "Hallo Chef!"

@@ -13,10 +13,8 @@ import {
   FormControlLabel,
   Radio,
 } from '@mui/material'
-import { createRoomBooking } from '../../api/requests'
+import { useCreateRoomBooking } from '../../hooks/useCreateRoomBooking'
 import { useCommunityRooms } from '../../hooks/useCommunityRooms'
-
-// Todo: Add Authentification
 
 export function RoomBookingCreatePage() {
   const navigate = useNavigate()
@@ -35,28 +33,21 @@ export function RoomBookingCreatePage() {
   const [alternativeKeyExchangeDate, setAlternativeKeyExchangeDate] =
     useState('')
 
-  const [saving, setSaving] = useState(false)
-  const [actionError, setActionError] = useState<string | null>(null)
+  const { submitRoomBooking, loading, error } = useCreateRoomBooking()
 
   const handleSave = async () => {
     if (communityRoomId === null || !startDate || !endDate) return
-    setSaving(true)
-    setActionError(null)
-    try {
-      await createRoomBooking({
-        community_room_id: communityRoomId,
-        start_date: startDate,
-        end_date: endDate,
-        regular_key_exchange_possible: regularKeyExchangePossible,
-        alternative_key_exchange_date: regularKeyExchangePossible
-          ? null
-          : alternativeKeyExchangeDate,
-      })
+    const result = await submitRoomBooking({
+      community_room_id: communityRoomId,
+      start_date: startDate,
+      end_date: endDate,
+      regular_key_exchange_possible: regularKeyExchangePossible,
+      alternative_key_exchange_date: regularKeyExchangePossible
+        ? null
+        : alternativeKeyExchangeDate,
+    })
+    if (result) {
       navigate(`/gemeinschaftsraum`)
-    } catch (err) {
-      setActionError(err instanceof Error ? err.message : 'Create failed')
-    } finally {
-      setSaving(false)
     }
   }
 
@@ -122,7 +113,7 @@ export function RoomBookingCreatePage() {
             variant="contained"
             onClick={handleSave}
             disabled={
-              saving ||
+              loading ||
               !startDate ||
               !endDate ||
               (!regularKeyExchangePossible && !alternativeKeyExchangeDate)
@@ -132,13 +123,13 @@ export function RoomBookingCreatePage() {
           </Button>
           <Button
             onClick={() => navigate('/gemeinschaftsraum')}
-            disabled={saving}
+            disabled={loading}
           >
             {t('common.cancel')}
           </Button>
         </Stack>
 
-        {actionError && <Typography color="error">{actionError}</Typography>}
+        {error && <Typography color="error">{error}</Typography>}
       </Stack>
     </Paper>
   )

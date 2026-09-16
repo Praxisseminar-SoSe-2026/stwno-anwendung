@@ -97,7 +97,8 @@
     "startDate": "from",
     "endDate": "till",
     "regularKeyExchangePossibleQuestion": "Can you pick up the key at the facility management office between 9 a.m. and 11 a.m. on the day before the booking?",
-    "alternativeKeyExchangeDate": "Alternative day for key exchange"
+    "alternativeKeyExchangeDate": "Alternative day for key exchange",
+    "createBookingError": "Booking request could not be created."
   },
   "adminIndex": {
     "title": "Hello Boss!"
