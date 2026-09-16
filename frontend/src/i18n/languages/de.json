@@ -45,7 +45,8 @@
     },
     "questionLabel": "Frage",
     "answerLabel": "Antwort",
-    "categoryLabel": "Kategorie"
+    "categoryLabel": "Kategorie",
+    "createFaqError": "Neue Frage konnte nicht erstellt werden."
   },
   "laundry": {
     "title": "Waschküche",

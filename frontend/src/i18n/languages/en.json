@@ -45,7 +45,8 @@
     },
     "questionLabel": "Question",
     "answerLabel": "Answer",
-    "categoryLabel": "Category"
+    "categoryLabel": "Category",
+    "createFaqError": "New question could not be created."
   },
   "laundry": {
     "title": "Washroom",

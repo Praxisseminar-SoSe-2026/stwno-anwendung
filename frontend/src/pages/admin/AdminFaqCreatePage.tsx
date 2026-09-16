@@ -9,11 +9,8 @@ import {
   TextField,
   MenuItem,
 } from '@mui/material'
-import {
-  createFaq,
-  getFaqCategories,
-  type FaqCategory,
-} from '../../api/faqs.ts'
+import { getFaqCategories, type FaqCategory } from '../../api/faqs.ts'
+import { useCreateFaq } from '../../hooks/useCreateFaq'
 import { useHasRole } from '../../hooks/useHasRole.ts'
 import { STAFF_ROLES } from '../../constants/roles.ts'
 
@@ -23,11 +20,10 @@ export function AdminFaqCreatePage() {
 
   const [question, setQuestion] = useState('')
   const [answer, setAnswer] = useState('')
-  const [saving, setSaving] = useState(false)
-  const [actionError, setActionError] = useState<string | null>(null)
 
   const [categoryId, setCategoryId] = useState<number | null>(null)
   const [categories, setCategories] = useState<FaqCategory[]>([])
+  const { submitFaq, loading, error } = useCreateFaq()
 
   useEffect(() => {
     getFaqCategories().then(setCategories)
@@ -39,21 +35,16 @@ export function AdminFaqCreatePage() {
     return <Typography>{t('adminTicketOverview.notAuthorized')}</Typography>
   }
 
-  const handleSave = async () => {
+  const handleSubmit = async () => {
     if (categoryId === null || !question.trim() || !answer.trim()) return
-    setSaving(true)
-    setActionError(null)
-    try {
-      const created = await createFaq({
-        question,
-        answer,
-        category_id: categoryId,
-      })
-      navigate(`/faq/${created.id}`)
-    } catch (err) {
-      setActionError(err instanceof Error ? err.message : 'Create failed')
-    } finally {
-      setSaving(false)
+
+    const result = await submitFaq({
+      question,
+      answer,
+      category_id: categoryId,
+    })
+    if (result) {
+      navigate(`/faq/${result.id}`)
     }
   }
 
@@ -94,9 +85,9 @@ export function AdminFaqCreatePage() {
         <Stack direction="row" spacing={2}>
           <Button
             variant="contained"
-            onClick={handleSave}
+            onClick={handleSubmit}
             disabled={
-              saving ||
+              loading ||
               categoryId === null ||
               !question.trim() ||
               !answer.trim()
@@ -104,12 +95,12 @@ export function AdminFaqCreatePage() {
           >
             {t('common.create')}
           </Button>
-          <Button onClick={() => navigate('/faq')} disabled={saving}>
+          <Button onClick={() => navigate('/faq')} disabled={loading}>
             {t('common.cancel')}
           </Button>
         </Stack>
 
-        {actionError && <Typography color="error">{actionError}</Typography>}
+        {error && <Typography color="error">{error}</Typography>}
       </Stack>
     </Paper>
   )
