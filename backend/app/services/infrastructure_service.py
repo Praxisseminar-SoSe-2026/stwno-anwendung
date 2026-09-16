@@ -18,6 +18,9 @@ from app.services.request_service import ResidentDormitoryError
 class LaundryRoomNotFoundError(Exception):
     pass
 
+class LaundryMachineNotFoundError(Exception):
+    pass
+
 
 # Todo: this could be the file for more infrastructure related querys,
 #  e.g. rentable cleaning gadgets
@@ -133,6 +136,9 @@ def create_laundry_machine(
 
 def delete_laundry_machine(db: Session, machine_id: int) -> None:
     entry = db.query(LaundryMachine).filter(LaundryMachine.id == machine_id).first()
+    if entry is None:
+        raise LaundryMachineNotFoundError(f"No Machine entry found "
+                                          f"with id {machine_id}")
     db.delete(entry)
     db.commit()
 
@@ -141,6 +147,9 @@ def update_laundry_machine(db: Session, machine_id: int,
                            payload: LaundryRoomUpdateMachine
                            )-> LaundryMachine:
     entry = db.query(LaundryMachine).filter(LaundryMachine.id == machine_id).first()
+    if entry is None:
+        raise LaundryMachineNotFoundError(f"No Machine entry found "
+                                          f"with id {machine_id}")
 
     update_data = payload.model_dump(exclude_unset=True)
 

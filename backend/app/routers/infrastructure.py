@@ -14,6 +14,7 @@ from app.schemas.laundry import (
     LaundryRoomUpdateMachine,
 )
 from app.services.infrastructure_service import (
+    LaundryMachineNotFoundError,
     LaundryRoomNotFoundError,
     create_laundry_machine,
     delete_laundry_machine,
@@ -95,7 +96,10 @@ def delete(
         machine_id: int,
         db: Annotated[Session, Depends(get_db)],
 ):
-    delete_laundry_machine(db, machine_id)
+    try:
+        delete_laundry_machine(db, machine_id)
+    except LaundryMachineNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
     
     
 @router.put("/laundry_machines/{machine_id}", response_model=LaundryMachineResponse)
@@ -104,4 +108,7 @@ def update(
         payload: LaundryRoomUpdateMachine,
         db: Annotated[Session, Depends(get_db)],
 ): 
-    return update_laundry_machine(db, machine_id, payload)
+    try:
+        return update_laundry_machine(db, machine_id, payload)
+    except LaundryMachineNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
