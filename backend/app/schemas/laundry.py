@@ -39,4 +39,11 @@ class LaundryRoomCreateMachine(BaseModel):
     laundry_room_id: int
     type: LaundryType
     status: LaundryStatus
+
+
+class LaundryRoomUpdateMachine(BaseModel):
+    id: int | None = None
+    laundry_room_id: int | None = None
+    type: LaundryType | None = None
+    status: LaundryStatus | None = None
     

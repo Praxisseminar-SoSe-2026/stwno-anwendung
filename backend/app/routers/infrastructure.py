@@ -8,7 +8,7 @@ from app.core.dependencies import get_current_user
 from app.db.database import get_db
 from app.models.user import User
 from app.schemas.infrastructure import CommunityRoomResponse, LaundryRoomResponse
-from app.schemas.laundry import LaundryMachineResponse, LaundryRoomCreateMachine
+from app.schemas.laundry import LaundryMachineResponse, LaundryRoomCreateMachine, LaundryRoomUpdateMachine
 from app.services.infrastructure_service import (
     LaundryRoomNotFoundError,
     create_laundry_machine,
@@ -17,6 +17,7 @@ from app.services.infrastructure_service import (
     list_laundry_machines_in_laundry_room,
     list_laundry_rooms,
     delete_laundry_machine,
+    update_laundry_machine,
 )
 from app.services.laundry_booking_service import MachineNotFoundError
 from app.services.request_service import ResidentDormitoryError
@@ -91,3 +92,12 @@ def delete(
         db: Annotated[Session, Depends(get_db)],
 ):
     delete_laundry_machine(db, machine_id)
+    
+    
+@router.put("/laundry_machines/{machine_id}", response_model=LaundryMachineResponse)
+def update(
+        machine_id: int,
+        payload: LaundryRoomUpdateMachine,
+        db: Annotated[Session, Depends(get_db)],
+): 
+    return update_laundry_machine(db, machine_id, payload)
