@@ -3,11 +3,12 @@ from __future__ import annotations
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import ForeignKey, Text, func
+from sqlalchemy import ForeignKey, Text, func, DateTime
 from sqlalchemy import false as sql_false
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.database import Base
+from app.core.time import now_utc
 
 if TYPE_CHECKING:
     from app.models.dormitory import Dormitory
@@ -29,7 +30,7 @@ class Announcement(Base):
         ForeignKey("dormitories.id"), default=None
     )
     # Sketch: kein NOT NULL, nur DEFAULT (now()) -> nullable
-    created_at: Mapped[datetime | None] = mapped_column(server_default=func.now())
+    created_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), default=now_utc)
 
     author: Mapped[User] = relationship(back_populates="authored_announcements")
     dormitory: Mapped[Dormitory | None] = relationship(back_populates="announcements")

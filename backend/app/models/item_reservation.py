@@ -3,10 +3,11 @@ from __future__ import annotations
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import ForeignKey, func
+from sqlalchemy import ForeignKey, func, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.database import Base
+from app.core.time import now_utc
 
 if TYPE_CHECKING:
     from app.models.item_type import ItemType
@@ -23,9 +24,9 @@ class ItemReservation(Base):
         default="Reserviert", server_default="Reserviert"
     )
     # Sketch: kein NOT NULL, nur DEFAULT (now()) -> nullable
-    reserved_at: Mapped[datetime | None] = mapped_column(server_default=func.now())
-    picked_up_at: Mapped[datetime | None] = mapped_column(default=None)
-    returned_at: Mapped[datetime | None] = mapped_column(default=None)
+    reserved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), default=now_utc)
+    picked_up_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), default=None)
+    returned_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), default=None)
 
     item_type: Mapped[ItemType] = relationship(back_populates="reservations")
     resident: Mapped[User] = relationship(back_populates="item_reservations")

@@ -1,10 +1,10 @@
-from datetime import datetime
-
 from sqlalchemy.orm import Session
 
 from app.models.faq_category import FaqCategory
 from app.models.faq_entry import FaqEntry
 from app.schemas.faq import FaqEntryCreateRequest, FaqEntryUpdateRequest
+
+from app.core.time import now_utc
 
 
 class FaqCategoryNotFoundError(Exception):
@@ -79,7 +79,7 @@ def update_faq_entry(
         setattr(entry, field, value)
 
     if update_data:
-        entry.updated_at = datetime.now()
+        entry.updated_at = now_utc()
         db.commit()
         db.refresh(entry)
     return entry

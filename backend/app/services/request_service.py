@@ -21,6 +21,7 @@ from app.schemas.request import (
     RoomBookings,
     RoomRequestCreate,
 )
+from app.core.time import now_utc
 
 STAFF_ROLES = {"admin", "mitarbeiter"}
 
@@ -130,7 +131,7 @@ def list_requests(db: Session, current_user: User) -> list[Request]:
             .all()
         )
         combined = [*repairs, *rooms]
-        combined.sort(key=lambda r: r.created_at or datetime.min, reverse=True)
+        combined.sort(key=lambda r: r.created_at or datetime.min.replace(tzinfo=UTC), reverse=True)
         return combined
 
     # Default: residents only see their own requests
@@ -172,7 +173,7 @@ def get_request(db: Session, request_id: int, current_user: User) -> Request:
 
 
 def _validate_time_slot_proposal(start_time: datetime) -> None:
-    if start_time <= datetime.now(UTC):
+    if start_time <= now_utc():
         raise InvalidTimeSlotProposalError("Proposed time slots must be in the future")
     if start_time.weekday() > 4:
         raise InvalidTimeSlotProposalError(
@@ -247,7 +248,7 @@ def create_room_request(
 
     if (
         not payload.regular_key_exchange_possible
-        and payload.alternative_key_exchange_date < date.today()
+        and payload.alternative_key_exchange_date < now_utc().today()
     ):
         raise DateInPastError("Date can not be in the past")
 
@@ -268,7 +269,7 @@ def create_room_request(
     if first_booked_day > last_booked_day:
         raise RoomBookingTimeConflictError("Start date must be before end date")
 
-    if first_booked_day < date.today():
+    if first_booked_day < now_utc().today():
         raise DateInPastError("Date can not be in the past")
 
     # check if booking is on weekend to book whole weekend, made with tutorial [https://www.geeksforgeeks.org/python/weekday-function-of-datetime-date-class-in-python/]
@@ -290,11 +291,11 @@ def create_room_request(
             "Key exchange can not happen after first day of booking"
         )
 
-    first_booked_day_datetime = datetime.combine(first_booked_day, datetime.min.time())
-    last_booked_day_datetime = datetime.combine(last_booked_day, datetime.max.time())
+    first_booked_day_datetime = datetime.combine(first_booked_day, datetime.min.time().replace(tzinfo=UTC))
+    last_booked_day_datetime = datetime.combine(last_booked_day, datetime.max.time().replace(tzinfo=UTC))
 
     alternative_key_exchange_datetime = (
-        datetime.combine(payload.alternative_key_exchange_date, datetime.min.time())
+        datetime.combine(payload.alternative_key_exchange_date, datetime.min.time().replace(tzinfo=UTC))
         if payload.alternative_key_exchange_date is not None
         else None
     )
@@ -344,7 +345,7 @@ def edit_room_request(
 
     room_request.status = payload.status
     room_request.decided_by_id = current_user.id
-    room_request.decided_at = datetime.now()
+    room_request.decided_at = now_utc()
 
     db.commit()
     db.refresh(room_request)
