@@ -9,10 +9,10 @@ from app.models.laundry_machine import LaundryMachine
 from app.models.laundry_room import LaundryRoom
 from app.models.user import User
 from app.schemas.infrastructure import (
-    LaundryRoomCreate,
-    LaundryRoomUpdate,
     CommunityRoomCreate,
     CommunityRoomUpdate,
+    LaundryRoomCreate,
+    LaundryRoomUpdate,
 )
 from app.schemas.laundry import LaundryRoomCreateMachine, LaundryRoomUpdateMachine
 from app.services.laundry_booking_service import (

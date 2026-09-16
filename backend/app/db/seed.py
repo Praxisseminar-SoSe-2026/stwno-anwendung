@@ -60,12 +60,21 @@ def seed() -> None:
         perm_manage_users = Permission(
             name="manage_users", description="Nutzer verwalten"
         )
+        perm_manage_infrastructure = Permission(
+            name="manage_infrastructure",
+            description="Waschräume, Waschmaschinen und Gemeinschaftsräume verwalten",
+        )
+        perm_manage_faq = Permission(
+            name="manage_faq", description="FAQ-Einträge verwalten"
+        )
         db.add_all(
             [
                 perm_manage_requests,
                 perm_post_announcement,
                 perm_manage_users,
                 perm_edit_announcement,
+                perm_manage_infrastructure,
+                perm_manage_faq
             ]
         )
         db.flush()
@@ -86,6 +95,19 @@ def seed() -> None:
                 RolePermission(
                     role_id=role_admin.id, permission_id=perm_manage_users.id
                 ),
+                RolePermission(
+                    role_id=role_admin.id, permission_id=perm_manage_infrastructure.id
+                ),
+                RolePermission(
+                    role_id=role_facility_manager.id,
+                    permission_id=perm_manage_infrastructure.id,
+                ),
+                RolePermission(
+                    role_id=role_admin.id,
+                    permission_id=perm_manage_faq.id),
+                RolePermission(
+                    role_id=role_facility_manager.id,
+                    permission_id=perm_manage_faq.id),
             ]
         )
 
