@@ -33,6 +33,7 @@ from app.services.infrastructure_service import (
     update_laundry_machine,
     update_laundry_room,
     create_community_room,
+    update_community_room,
 )
 from app.services.laundry_booking_service import MachineNotFoundError
 from app.services.request_service import ResidentDormitoryError
@@ -59,6 +60,18 @@ def create_room_community(
     db: Annotated[Session, Depends(get_db)],
 ):
     return create_community_room(db, payload)
+
+
+@router.put("/community_rooms/{room_id}", response_model=LaundryRoomResponse)
+def update_room_laundry(
+    room_id: int,
+    payload: LaundryRoomUpdate,
+    db: Annotated[Session, Depends(get_db)],
+):
+    try:
+        return update_community_room(db, room_id, payload)
+    except LaundryRoomNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
 @router.get("/laundry_rooms", response_model=list[LaundryRoomResponse])

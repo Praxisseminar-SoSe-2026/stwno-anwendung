@@ -16,6 +16,11 @@ class CommunityRoomCreate(BaseModel):
     dormitory_id: int
 
 
+class CommunityRoomUpdate(BaseModel):
+    name: str
+    description: str | None
+
+
 class LaundryRoomResponse(BaseModel):
     id: int
     name: str

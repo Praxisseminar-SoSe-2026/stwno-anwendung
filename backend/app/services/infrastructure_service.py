@@ -12,6 +12,7 @@ from app.schemas.infrastructure import (
     LaundryRoomCreate,
     LaundryRoomUpdate,
     CommunityRoomCreate,
+    CommunityRoomUpdate,
 )
 from app.schemas.laundry import LaundryRoomCreateMachine, LaundryRoomUpdateMachine
 from app.services.laundry_booking_service import (
@@ -25,6 +26,9 @@ class LaundryRoomNotFoundError(Exception):
     pass
 
 class LaundryMachineNotFoundError(Exception):
+    pass
+
+class CommunityRoomNotFoundError(Exception):
     pass
 
 
@@ -49,6 +53,23 @@ def create_community_room(db: Session, payload: CommunityRoomCreate) -> LaundryR
     db.add(room)
     db.commit()
     db.refresh(room)
+    return room
+
+
+def update_community_room(db: Session, room_id: int,
+                        payload: CommunityRoomUpdate) -> CommunityRoom:
+    room = db.query(CommunityRoom).filter(CommunityRoom.id == room_id).first()
+    if room is None:
+        raise CommunityRoomNotFoundError(f"No room found with id {room_id}")
+    update_data = payload.model_dump(exclude_unset=True)
+
+    for field, value in update_data.items():
+        setattr(room, field, value)
+
+    if update_data:
+        room.updated_at = datetime.now()
+        db.commit()
+        db.refresh(room)
     return room
 
 
