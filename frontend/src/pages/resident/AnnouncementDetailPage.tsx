@@ -103,7 +103,7 @@ export function AnnouncementDetailPage() {
     if (!announcement) return
     const result = await submitDeleteAnnouncement(announcement.id)
     if (result) {
-      navigate('/aushang')
+      navigate('/')
     }
   }
 
