@@ -16,6 +16,7 @@
     "textLabel": "Text",
     "newAnnouncement": "+",
     "createAnnouncement": "Neue Ankündigung",
+    "createAnnouncementError": "Neue Ankündigung konnte nicht erstellt werden.",
     "scope": "Sichtbarkeit der Ankündigung",
     "scopeGlobal": "Für alle Wohnheime",
     "uploadImage": "Neues Bild hochladen",

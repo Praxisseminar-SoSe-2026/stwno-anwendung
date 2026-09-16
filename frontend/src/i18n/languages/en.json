@@ -16,6 +16,7 @@
     "textLabel": "Text",
     "newAnnouncement": "+",
     "createAnnouncement": "New announcement",
+    "createAnnouncementError": "New announcement could not be created.",
     "scope": "Visibility of the announcement",
     "scopeGlobal": "All dormitories",
     "uploadImage": "Upload a new image",

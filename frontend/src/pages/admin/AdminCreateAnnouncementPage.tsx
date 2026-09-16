@@ -18,7 +18,7 @@ import {
   CircularProgress,
   Box,
 } from '@mui/material'
-import { createAnnouncement } from '../../api/announcements'
+import { useCreateAnnouncement } from '../../hooks/useCreateAnnouncement'
 import { useDormitories } from '../../hooks/useDormitories'
 import { useImageUpload } from '../../hooks/useImageUpload.ts'
 import UploadIcon from '@mui/icons-material/Upload'
@@ -37,9 +37,8 @@ export function AdminCreateAnnouncementPage() {
   const [title, setTitle] = useState('')
   const [text, setText] = useState('')
   const [important, setImportant] = useState(false)
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
   const [scope, setScope] = useState<string>(GLOBAL_VALUE)
+  const { submitAnnouncement, loading, error } = useCreateAnnouncement()
 
   const canView = useHasRole(STAFF_ROLES)
 
@@ -48,20 +47,16 @@ export function AdminCreateAnnouncementPage() {
   }
 
   const handleSubmit = async () => {
-    setSaving(true)
-    setError(null)
-    try {
-      const created = await createAnnouncement({
-        title,
-        text,
-        important,
-        image_url: imageUpload.imageUrl,
-        dormitory_id: scope === GLOBAL_VALUE ? null : Number(scope),
-      })
-      navigate(`/aushang/${created.id}`)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create')
-      setSaving(false)
+    const result = await submitAnnouncement({
+      title,
+      text,
+      important,
+      image_url: imageUpload.imageUrl,
+      dormitory_id: scope === GLOBAL_VALUE ? null : Number(scope),
+    })
+
+    if (result) {
+      navigate(`/aushang/${result.id}`)
     }
   }
 
@@ -166,13 +161,11 @@ export function AdminCreateAnnouncementPage() {
         <Button
           variant="contained"
           onClick={handleSubmit}
-          disabled={saving || !title || !text}
+          disabled={loading || !title || !text}
         >
           {t('common.create')}
         </Button>
-        <Button onClick={() => navigate(-1)}>
-        {t('common.cancel')}
-      </Button>
+        <Button onClick={() => navigate(-1)}>{t('common.cancel')}</Button>
 
         {error && <Typography color="error">{error}</Typography>}
       </Stack>
