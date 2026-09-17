@@ -17,8 +17,8 @@ class CommunityRoomCreate(BaseModel):
 
 
 class CommunityRoomUpdate(BaseModel):
-    name: str
-    description: str | None
+    name: str | None = None
+    description: str | None = None
 
 
 class LaundryRoomResponse(BaseModel):
@@ -33,4 +33,4 @@ class LaundryRoomCreate(BaseModel):
 
 
 class LaundryRoomUpdate(BaseModel):
-    name: str
+    name: str | None = None
