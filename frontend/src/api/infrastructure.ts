@@ -102,19 +102,25 @@ export async function updateCommunityRoom(
   id: number,
   data: CommunityRoomUpdate
 ): Promise<CommunityRoom> {
-  const res = await apiFetch(`${BASE_URL}/infrastructure/community_rooms/${id}`, {
-    method: 'PUT',
-    headers: authHeaders(),
-    body: JSON.stringify(data),
-  })
+  const res = await apiFetch(
+    `${BASE_URL}/infrastructure/community_rooms/${id}`,
+    {
+      method: 'PUT',
+      headers: authHeaders(),
+      body: JSON.stringify(data),
+    }
+  )
   return handleResponse(res)
 }
 
 export async function deleteCommunityRoom(id: number): Promise<void> {
-  const res = await apiFetch(`${BASE_URL}/infrastructure/community_rooms/${id}`, {
-    method: 'DELETE',
-    headers: authHeaders(),
-  })
+  const res = await apiFetch(
+    `${BASE_URL}/infrastructure/community_rooms/${id}`,
+    {
+      method: 'DELETE',
+      headers: authHeaders(),
+    }
+  )
   if (!res.ok) {
     const errorBody = await res.json().catch(() => null)
     throw new Error(errorBody?.detail ?? 'Request failed')
@@ -205,19 +211,25 @@ export async function updateLaundryMachine(
   id: number,
   data: LaundryMachineUpdate
 ): Promise<LaundryMachine> {
-  const res = await apiFetch(`${BASE_URL}/infrastructure/laundry_machines/${id}`, {
-    method: 'PUT',
-    headers: authHeaders(),
-    body: JSON.stringify(data),
-  })
+  const res = await apiFetch(
+    `${BASE_URL}/infrastructure/laundry_machines/${id}`,
+    {
+      method: 'PUT',
+      headers: authHeaders(),
+      body: JSON.stringify(data),
+    }
+  )
   return handleResponse(res)
 }
 
 export async function deleteLaundryMachine(id: number): Promise<void> {
-  const res = await apiFetch(`${BASE_URL}/infrastructure/laundry_machines/${id}`, {
-    method: 'DELETE',
-    headers: authHeaders(),
-  })
+  const res = await apiFetch(
+    `${BASE_URL}/infrastructure/laundry_machines/${id}`,
+    {
+      method: 'DELETE',
+      headers: authHeaders(),
+    }
+  )
   if (!res.ok) {
     const errorBody = await res.json().catch(() => null)
     throw new Error(errorBody?.detail ?? 'Request failed')

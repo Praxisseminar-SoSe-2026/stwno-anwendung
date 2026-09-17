@@ -103,6 +103,11 @@
     "titleShort": "Ticket Overview",
     "notAuthorized": "You are not authorized to use this page."
   },
+  "infrastructure": {
+    "createRoom": "Create room",
+    "name": "Name",
+    "description": "Description"
+  },
   "request": {
     "start": "Begin",
     "end": "End",

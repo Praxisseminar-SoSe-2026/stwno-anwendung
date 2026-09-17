@@ -103,6 +103,11 @@
     "titleShort": "Ticket Übersicht",
     "notAuthorized": "Du hast keinen Zugriff auf diese Seite."
   },
+  "infrastructure": {
+    "createRoom": "Raum erstellen",
+    "name": "Name",
+    "description": "Beschreibung"
+  },
   "request": {
     "start": "Beginn",
     "end": "Ende",

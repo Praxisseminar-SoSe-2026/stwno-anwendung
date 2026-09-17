@@ -8,8 +8,10 @@ import {
   TextField,
   Typography,
   useTheme,
+  IconButton,
 } from '@mui/material'
 import { Link } from 'react-router'
+import AddIcon from '@mui/icons-material/Add'
 
 import FullCalendar from '@fullcalendar/react'
 import themePlugin from '@fullcalendar/react/themes/monarch'
@@ -22,8 +24,8 @@ import '@fullcalendar/react/themes/monarch/palettes/purple.css'
 import { useCommunityRooms } from '../../hooks/useCommunityRooms'
 import { useRoomBookings } from '../../hooks/useRoomBookings'
 import { useHasRole } from '../../hooks/useHasRole.ts'
-import { STAFF_ROLES } from '../../constants/roles.ts'
-import { useDormitoryFilter } from '../../contexts/DormitoryFilterContext'
+import { STAFF_ROLES, EDITOR_ROLES } from '../../constants/roles.ts'
+import { useDormitoryFilter } from '../../contexts/DormitoryFilterContext.tsx'
 
 type RoomBookingEvent = {
   id: string
@@ -32,7 +34,6 @@ type RoomBookingEvent = {
   end: string
 }
 
-// calendar setup, made with docs [https://fullcalendar.io/docs/react]
 export default function Calendar({ events }: { events: RoomBookingEvent[] }) {
   return (
     <FullCalendar
@@ -64,6 +65,7 @@ export function RoomBookingPage() {
   const { roomBookings } = useRoomBookings()
   const { dormitoryFilter } = useDormitoryFilter()
   const isStaff = useHasRole(STAFF_ROLES)
+  const canEdit = useHasRole(EDITOR_ROLES)
   const [roomId, setRoomId] = useState<number | null>(null)
 
   const visibleRooms = useMemo(() => {
@@ -88,26 +90,43 @@ export function RoomBookingPage() {
         }))
     : []
 
+  const selectedRoom = visibleRooms.find((room) => room.id === roomId) ?? null
+
   return (
-    <Stack spacing={10}>
+    <Stack spacing={1}>
       <Typography variant="h1">{t('roomBooking.title')}</Typography>
       {error && <Typography color="error">{error}</Typography>}
 
       {/* select community room */}
-      <TextField
-        select
-        label={t('roomBooking.selectCommunityRoom')}
-        value={roomId ?? ''}
-        onChange={(e) => setRoomId(Number(e.target.value))}
-        disabled={visibleRooms.length === 0}
-        fullWidth
-      >
-        {visibleRooms.map((room) => (
-          <MenuItem key={room.id} value={room.id}>
-            {room.name}
-          </MenuItem>
-        ))}
-      </TextField>
+      <Stack direction="row">
+        <TextField
+          select
+          label={t('roomBooking.selectCommunityRoom')}
+          value={roomId ?? ''}
+          onChange={(e) => setRoomId(Number(e.target.value))}
+          disabled={visibleRooms.length === 0}
+          fullWidth
+        >
+          {visibleRooms.map((room) => (
+            <MenuItem key={room.id} value={room.id}>
+              {room.name}
+            </MenuItem>
+          ))}
+        </TextField>
+
+        {canEdit && (
+          <IconButton component={Link} to="/gemeinschaftsraum/neu">
+            <AddIcon />
+          </IconButton>
+        )}
+      </Stack>
+      {selectedRoom?.description && (
+        <Typography>
+          {t('infrastructure.description')}
+          {': '} {selectedRoom.description}
+        </Typography>
+      )}
+
       {loading && <CircularProgress />}
       {/* Todo: only display button, when communityroom is selected*/}
       <Button

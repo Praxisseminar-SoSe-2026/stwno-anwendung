@@ -28,6 +28,7 @@ import { NotFoundPage } from './pages/general/NotFoundPage'
 import './App.css'
 import { FaqDetailPage } from './pages/resident/FaqDetailPage.tsx'
 import { AdminFaqCreatePage } from './pages/admin/AdminFaqCreatePage.tsx'
+import { AdminCreateCommunityRoomPage } from './pages/admin/AdminCreateCommunityRoomPage.tsx'
 
 function App() {
   return (
@@ -65,6 +66,10 @@ function App() {
             element={<AdminCreateAnnouncementPage />}
           />
           <Route path="/faq/neu" element={<AdminFaqCreatePage />}></Route>
+          <Route
+            path="/gemeinschaftsraum/neu"
+            element={<AdminCreateCommunityRoomPage />}
+          />
           {/* general routes */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="*" element={<NotFoundPage />} />
