@@ -12,6 +12,7 @@ import {
 } from '@mui/material'
 import { Link } from 'react-router'
 import AddIcon from '@mui/icons-material/Add'
+import EditIcon from '@mui/icons-material/Edit'
 
 import FullCalendar from '@fullcalendar/react'
 import themePlugin from '@fullcalendar/react/themes/monarch'
@@ -117,6 +118,11 @@ export function RoomBookingPage() {
         {canEdit && (
           <IconButton component={Link} to="/gemeinschaftsraum/neu">
             <AddIcon />
+          </IconButton>
+        )}
+          {canEdit && roomId && (
+          <IconButton component={Link} to={`/gemeinschaftsraum/${roomId}`}>
+            <EditIcon />
           </IconButton>
         )}
       </Stack>

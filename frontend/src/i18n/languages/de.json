@@ -105,6 +105,7 @@
   },
   "infrastructure": {
     "createRoom": "Raum erstellen",
+    "editRoom": "Raum bearbeiten",
     "name": "Name",
     "description": "Beschreibung"
   },

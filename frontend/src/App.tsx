@@ -29,6 +29,7 @@ import './App.css'
 import { FaqDetailPage } from './pages/resident/FaqDetailPage.tsx'
 import { AdminFaqCreatePage } from './pages/admin/AdminFaqCreatePage.tsx'
 import { AdminCreateCommunityRoomPage } from './pages/admin/AdminCreateCommunityRoomPage.tsx'
+import {AdminCommunityRoomDetailPage} from "./pages/admin/AdminCommunityRoomDetailPage.tsx";
 
 function App() {
   return (
@@ -69,6 +70,10 @@ function App() {
           <Route
             path="/gemeinschaftsraum/neu"
             element={<AdminCreateCommunityRoomPage />}
+          />
+          <Route
+            path="/gemeinschaftsraum/:id"
+            element={<AdminCommunityRoomDetailPage />}
           />
           {/* general routes */}
           <Route path="/login" element={<LoginPage />} />
