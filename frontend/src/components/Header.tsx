@@ -1,15 +1,28 @@
-import { AppBar, Toolbar, Button, Stack, Typography } from '@mui/material'
+import {
+  AppBar,
+  Toolbar,
+  Button,
+  Stack,
+  Typography,
+  Select,
+  MenuItem,
+  FormControl,
+} from '@mui/material'
 import { Link } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../contexts/AuthContext'
 import { useLogout } from '../hooks/useLogout.ts'
 import { useHasRole } from '../hooks/useHasRole.ts'
 import { STAFF_ROLES } from '../constants/roles.ts'
+import { useDormitoryFilter } from '../contexts/DormitoryFilterContext'
+import { useDormitories } from '../hooks/useDormitories'
 
 export function Header() {
   const { t } = useTranslation()
   const { user, loading } = useAuth()
   const { logout } = useLogout()
+  const { dormitoryFilter, setDormitoryFilter } = useDormitoryFilter()
+  const { dormitories } = useDormitories()
 
   const links = [
     { to: '/', label: 'Start' },
@@ -34,6 +47,20 @@ export function Header() {
             <Button component={Link} to="/admin/tickets">
               {t('adminTicketOverview.titleShort')}
             </Button>
+          )}
+          {canViewTickets && (
+            <FormControl>
+              <Select
+                value={dormitoryFilter}
+                onChange={(e) => setDormitoryFilter(e.target.value)}
+              >
+                {dormitories.map((d) => (
+                  <MenuItem key={d.id} value={String(d.id)}>
+                    {d.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           )}
         </Stack>
         <Stack>

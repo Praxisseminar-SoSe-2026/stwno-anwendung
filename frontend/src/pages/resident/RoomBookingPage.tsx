@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { useMemo, useState } from 'react'
 import {
   Button,
   CircularProgress,
@@ -8,6 +9,7 @@ import {
   Typography,
   useTheme,
 } from '@mui/material'
+import { Link } from 'react-router'
 
 import FullCalendar from '@fullcalendar/react'
 import themePlugin from '@fullcalendar/react/themes/monarch'
@@ -19,8 +21,9 @@ import '@fullcalendar/react/themes/monarch/palettes/purple.css'
 
 import { useCommunityRooms } from '../../hooks/useCommunityRooms'
 import { useRoomBookings } from '../../hooks/useRoomBookings'
-import { useState } from 'react'
-import { Link } from 'react-router'
+import { useHasRole } from '../../hooks/useHasRole.ts'
+import { STAFF_ROLES } from '../../constants/roles.ts'
+import { useDormitoryFilter } from '../../contexts/DormitoryFilterContext'
 
 type RoomBookingEvent = {
   id: string
@@ -59,11 +62,17 @@ export function RoomBookingPage() {
   const { t } = useTranslation()
   const { communityRooms, loading, error } = useCommunityRooms()
   const { roomBookings } = useRoomBookings()
+  const { dormitoryFilter } = useDormitoryFilter()
+  const isStaff = useHasRole(STAFF_ROLES)
   const [roomId, setRoomId] = useState<number | null>(null)
 
-  {
-    /* filter roomBookings for accepted requests for selected room */
-  }
+  const visibleRooms = useMemo(() => {
+    if (!isStaff) return communityRooms
+    return communityRooms.filter(
+      (room) => room.dormitory_id === Number(dormitoryFilter)
+    )
+  }, [communityRooms, isStaff, dormitoryFilter])
+
   const roomBookingEvents: RoomBookingEvent[] = roomId
     ? roomBookings
         .filter(
@@ -90,10 +99,10 @@ export function RoomBookingPage() {
         label={t('roomBooking.selectCommunityRoom')}
         value={roomId ?? ''}
         onChange={(e) => setRoomId(Number(e.target.value))}
-        disabled={communityRooms.length === 0}
+        disabled={visibleRooms.length === 0}
         fullWidth
       >
-        {communityRooms.map((room) => (
+        {visibleRooms.map((room) => (
           <MenuItem key={room.id} value={room.id}>
             {room.name}
           </MenuItem>

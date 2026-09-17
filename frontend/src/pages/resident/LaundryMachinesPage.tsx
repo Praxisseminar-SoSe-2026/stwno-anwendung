@@ -12,8 +12,11 @@ import {
 import { useLaundryMachines } from '../../hooks/useLaundryMachines'
 import type { LaundryStatus } from '../../api/infrastructure'
 import { useLaundryRooms } from '../../hooks/useLaundryRooms'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useEndLaundryBooking } from '../../hooks/useEndLaundryBooking'
+import { useDormitoryFilter } from '../../contexts/DormitoryFilterContext.tsx'
+import { useHasRole } from '../../hooks/useHasRole.ts'
+import { STAFF_ROLES } from '../../constants/roles.ts'
 
 const statusColor: Record<LaundryStatus, 'success' | 'warning' | 'error'> = {
   occupied: 'warning',
@@ -24,9 +27,19 @@ const statusColor: Record<LaundryStatus, 'success' | 'warning' | 'error'> = {
 export function LaundryMachinesPage() {
   const { t } = useTranslation()
   const { laundryRooms, loading, error } = useLaundryRooms()
+  const { dormitoryFilter } = useDormitoryFilter()
+  const isStaff = useHasRole(STAFF_ROLES)
   const [roomId, setRoomId] = useState<number | null>(null)
   const { machines: machinesData, updateLaundryMachines } =
     useLaundryMachines(roomId)
+
+  /*useMemo to safe selected dorm value*/
+  const visibleRooms = useMemo(() => {
+    if (!isStaff) return laundryRooms
+    return laundryRooms.filter(
+      (room) => room.dormitory_id === Number(dormitoryFilter)
+    )
+  }, [laundryRooms, isStaff, dormitoryFilter])
 
   const washingmaschines = machinesData.filter(
     (m) => m.type === 'Washingmachine'
@@ -45,10 +58,10 @@ export function LaundryMachinesPage() {
         label={t('laundry.selectLaundryRoom')}
         value={roomId ?? ''}
         onChange={(e) => setRoomId(Number(e.target.value))}
-        disabled={laundryRooms.length === 0}
+        disabled={visibleRooms.length === 0}
         fullWidth
       >
-        {laundryRooms.map((room) => (
+        {visibleRooms.map((room) => (
           <MenuItem key={room.id} value={room.id}>
             {room.name}
           </MenuItem>
