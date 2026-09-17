@@ -19,6 +19,7 @@ import { useDormitoryFilter } from '../../contexts/DormitoryFilterContext.tsx'
 import { useHasRole } from '../../hooks/useHasRole.ts'
 import { EDITOR_ROLES, STAFF_ROLES } from '../../constants/roles.ts'
 import AddIcon from '@mui/icons-material/Add'
+import EditIcon from '@mui/icons-material/Edit'
 
 const statusColor: Record<LaundryStatus, 'success' | 'warning' | 'error'> = {
   occupied: 'warning',
@@ -73,6 +74,14 @@ export function LaundryMachinesPage() {
         {canEdit && (
           <IconButton component={Link} to="/waschmaschinen/waschraum/neu">
             <AddIcon />
+          </IconButton>
+        )}
+        {canEdit && roomId && (
+          <IconButton
+            component={Link}
+            to={`/waschmaschinen/waschraum/${roomId}`}
+          >
+            <EditIcon />
           </IconButton>
         )}
       </Stack>
