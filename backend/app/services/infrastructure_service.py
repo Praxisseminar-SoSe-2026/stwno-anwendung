@@ -271,8 +271,17 @@ def create_laundry_machine(
     db: Session,
     payload: LaundryRoomCreateMachine,
 ) -> LaundryMachine:
+    if payload.label:
+        label = payload.label
+    else:
+        existing_count = (
+            db.query(LaundryMachine)
+            .filter(LaundryMachine.laundry_room_id == payload.laundry_room_id)
+            .count()
+        )
+        label = f"Maschine {existing_count + 1}"
     entry = LaundryMachine(
-        label=f"Maschine {payload.id}",
+        label=label,
         laundry_room_id=payload.laundry_room_id,
         type=payload.type,
         status=payload.status

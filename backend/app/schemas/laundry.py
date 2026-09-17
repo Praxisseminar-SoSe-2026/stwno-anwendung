@@ -35,10 +35,10 @@ class LaundryMachineResponse(BaseModel):
     
     
 class LaundryRoomCreateMachine(BaseModel):
-    id: int
     laundry_room_id: int
     type: LaundryType
     status: LaundryStatus
+    label: str | None = None
 
 
 class LaundryRoomUpdateMachine(BaseModel):

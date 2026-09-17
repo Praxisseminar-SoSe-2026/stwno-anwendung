@@ -50,10 +50,10 @@ export type LaundryMachine = {
 }
 
 export type LaundryMachineCreate = {
-  id: number
   laundry_room_id: number
   type: LaundryMachineType
   status: LaundryStatus
+  label?: string
 }
 
 export type LaundryMachineUpdate = {
