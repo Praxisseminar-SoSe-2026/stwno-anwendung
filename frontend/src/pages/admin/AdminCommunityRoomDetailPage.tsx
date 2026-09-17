@@ -1,7 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
-import { Stack, Typography, Paper, Button, TextField, CircularProgress } from '@mui/material'
+import {
+  Stack,
+  Typography,
+  Paper,
+  Button,
+  TextField,
+  CircularProgress,
+} from '@mui/material'
 import {
   getCommunityRooms,
   updateCommunityRoom,

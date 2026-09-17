@@ -8,6 +8,7 @@ import {
   MenuItem,
   CircularProgress,
   Button,
+  IconButton,
 } from '@mui/material'
 import { useLaundryMachines } from '../../hooks/useLaundryMachines'
 import type { LaundryStatus } from '../../api/infrastructure'
@@ -16,7 +17,8 @@ import { useMemo, useState } from 'react'
 import { useEndLaundryBooking } from '../../hooks/useEndLaundryBooking'
 import { useDormitoryFilter } from '../../contexts/DormitoryFilterContext.tsx'
 import { useHasRole } from '../../hooks/useHasRole.ts'
-import { STAFF_ROLES } from '../../constants/roles.ts'
+import { EDITOR_ROLES, STAFF_ROLES } from '../../constants/roles.ts'
+import AddIcon from '@mui/icons-material/Add'
 
 const statusColor: Record<LaundryStatus, 'success' | 'warning' | 'error'> = {
   occupied: 'warning',
@@ -29,6 +31,7 @@ export function LaundryMachinesPage() {
   const { laundryRooms, loading, error } = useLaundryRooms()
   const { dormitoryFilter } = useDormitoryFilter()
   const isStaff = useHasRole(STAFF_ROLES)
+  const canEdit = useHasRole(EDITOR_ROLES)
   const [roomId, setRoomId] = useState<number | null>(null)
   const { machines: machinesData, updateLaundryMachines } =
     useLaundryMachines(roomId)
@@ -48,25 +51,31 @@ export function LaundryMachinesPage() {
   const { submitEndLaundryBooking } = useEndLaundryBooking()
 
   return (
-    <Stack spacing={10}>
+    <Stack spacing={1}>
       <Typography variant="h1">{t('laundry.title')}</Typography>
       {error && <Typography color="error">{error}</Typography>}
-
-      {/* select laundry room */}
-      <TextField
-        select
-        label={t('laundry.selectLaundryRoom')}
-        value={roomId ?? ''}
-        onChange={(e) => setRoomId(Number(e.target.value))}
-        disabled={visibleRooms.length === 0}
-        fullWidth
-      >
-        {visibleRooms.map((room) => (
-          <MenuItem key={room.id} value={room.id}>
-            {room.name}
-          </MenuItem>
-        ))}
-      </TextField>
+      <Stack direction="row">
+        {/* select laundry room */}
+        <TextField
+          select
+          label={t('laundry.selectLaundryRoom')}
+          value={roomId ?? ''}
+          onChange={(e) => setRoomId(Number(e.target.value))}
+          disabled={visibleRooms.length === 0}
+          fullWidth
+        >
+          {visibleRooms.map((room) => (
+            <MenuItem key={room.id} value={room.id}>
+              {room.name}
+            </MenuItem>
+          ))}
+        </TextField>
+        {canEdit && (
+          <IconButton component={Link} to="/waschmaschinen/waschraum/neu">
+            <AddIcon />
+          </IconButton>
+        )}
+      </Stack>
       {loading && <CircularProgress />}
 
       {/* Todo: only display, when laundryroom is selected*/}

@@ -120,7 +120,7 @@ export function RoomBookingPage() {
             <AddIcon />
           </IconButton>
         )}
-          {canEdit && roomId && (
+        {canEdit && roomId && (
           <IconButton component={Link} to={`/gemeinschaftsraum/${roomId}`}>
             <EditIcon />
           </IconButton>
