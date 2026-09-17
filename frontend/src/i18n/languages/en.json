@@ -48,6 +48,7 @@
   },
   "laundry": {
     "title": "Washroom",
+    "machines": "Machines",
     "washingmachines": "washingmaschines",
     "washingmachine": "washingmaschine",
     "selectLaundryRoom": "Select washroom",
@@ -107,7 +108,10 @@
     "createRoom": "Create room",
     "editRoom": "Edit room",
     "name": "Name",
-    "description": "Description"
+    "description": "Description",
+    "status": "Status",
+    "type": "Type",
+    "createMachine": "Create machine"
   },
   "request": {
     "start": "Begin",

@@ -13,7 +13,7 @@ import {
 import { useLaundryMachines } from '../../hooks/useLaundryMachines'
 import type { LaundryStatus } from '../../api/infrastructure'
 import { useLaundryRooms } from '../../hooks/useLaundryRooms'
-import { useMemo, useState } from 'react'
+import {useEffect, useMemo, useState} from 'react'
 import { useEndLaundryBooking } from '../../hooks/useEndLaundryBooking'
 import { useDormitoryFilter } from '../../contexts/DormitoryFilterContext.tsx'
 import { useHasRole } from '../../hooks/useHasRole.ts'
@@ -51,6 +51,12 @@ export function LaundryMachinesPage() {
   const dryers = machinesData.filter((m) => m.type === 'Dryer')
   const { submitEndLaundryBooking } = useEndLaundryBooking()
 
+  /* reset roomId if dorm is changed*/
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setRoomId(null)
+  }, [dormitoryFilter])
+
   return (
     <Stack spacing={1}>
       <Typography variant="h1">{t('laundry.title')}</Typography>
@@ -87,8 +93,20 @@ export function LaundryMachinesPage() {
       </Stack>
       {loading && <CircularProgress />}
 
-      {/* Todo: only display, when laundryroom is selected*/}
+      <Stack direction="row" spacing={3}>
+        <Typography variant="h1">{t('laundry.machines')}</Typography>
+        {canEdit && roomId && (
+          <IconButton
+            component={Link}
+            to={`/waschmaschinen/waschraum/${roomId}/maschine/neu`}
+          >
+            <AddIcon />
+          </IconButton>
+        )}
+      </Stack>
       {/* waschingmachines */}
+      {roomId && (
+          <>
       <Stack spacing={3}>
         <Typography variant="h2">{t('laundry.washingmachines')}</Typography>
         <Stack direction="row" spacing={3}>
@@ -211,6 +229,8 @@ export function LaundryMachinesPage() {
           ))}
         </Stack>
       </Stack>
+          </>
+      )}
     </Stack>
   )
 }

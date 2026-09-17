@@ -32,6 +32,7 @@ import { AdminCreateCommunityRoomPage } from './pages/admin/AdminCreateCommunity
 import { AdminCommunityRoomDetailPage } from './pages/admin/AdminCommunityRoomDetailPage.tsx'
 import { AdminCreateLaundryRoomPage } from './pages/admin/AdminCreateLaundryRoomPage.tsx'
 import { AdminLaundryRoomDetailPage } from './pages/admin/AdminLaundryRoomDetailPage.tsx'
+import { AdminCreateLaundryMachinePage } from './pages/admin/AdminCreateLaundryMachinePage.tsx'
 
 function App() {
   return (
@@ -84,6 +85,10 @@ function App() {
           <Route
             path="/waschmaschinen/waschraum/:id"
             element={<AdminLaundryRoomDetailPage />}
+          />
+          <Route
+            path="/waschmaschinen/waschraum/:roomId/maschine/neu"
+            element={<AdminCreateLaundryMachinePage />}
           />
           {/* general routes */}
           <Route path="/login" element={<LoginPage />} />
