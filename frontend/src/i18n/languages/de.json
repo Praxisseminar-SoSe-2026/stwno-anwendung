@@ -111,7 +111,8 @@
     "description": "Beschreibung",
     "status": "Status",
     "type": "Art",
-    "createMachine": "Maschine erstellen"
+    "createMachine": "Maschine erstellen",
+    "editMachine": "Machine bearbeiten"
   },
   "request": {
     "start": "Beginn",

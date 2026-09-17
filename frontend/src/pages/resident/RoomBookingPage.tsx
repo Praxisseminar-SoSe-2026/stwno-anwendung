@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import {useEffect, useMemo, useState} from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   Button,
   CircularProgress,
@@ -92,7 +92,6 @@ export function RoomBookingPage() {
     : []
 
   const selectedRoom = visibleRooms.find((room) => room.id === roomId) ?? null
-
 
   /* reset roomId if dorm is changed*/
   useEffect(() => {

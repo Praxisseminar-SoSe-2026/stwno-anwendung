@@ -111,7 +111,8 @@
     "description": "Description",
     "status": "Status",
     "type": "Type",
-    "createMachine": "Create machine"
+    "createMachine": "Create machine",
+    "editMachine": "Edit machine"
   },
   "request": {
     "start": "Begin",

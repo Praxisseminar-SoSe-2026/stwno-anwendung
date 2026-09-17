@@ -13,7 +13,7 @@ import {
 import { useLaundryMachines } from '../../hooks/useLaundryMachines'
 import type { LaundryStatus } from '../../api/infrastructure'
 import { useLaundryRooms } from '../../hooks/useLaundryRooms'
-import {useEffect, useMemo, useState} from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useEndLaundryBooking } from '../../hooks/useEndLaundryBooking'
 import { useDormitoryFilter } from '../../contexts/DormitoryFilterContext.tsx'
 import { useHasRole } from '../../hooks/useHasRole.ts'
@@ -106,130 +106,150 @@ export function LaundryMachinesPage() {
       </Stack>
       {/* waschingmachines */}
       {roomId && (
-          <>
-      <Stack spacing={3}>
-        <Typography variant="h2">{t('laundry.washingmachines')}</Typography>
-        <Stack direction="row" spacing={3}>
-          {washingmaschines.map((machine) => (
-            <Paper key={machine.id} sx={{ p: 3, alignItems: 'center' }}>
-              <Stack sx={{ alignItems: 'center' }}>
-                <Typography color="primary">"{machine.label}"</Typography>
-                <Typography color="primary">
-                  {t('laundry.washingmachine')}
-                </Typography>
-                {/* status display free or unknown */}
-                {(machine.status === 'free' ||
-                  machine.status === 'unknown') && (
-                  <Typography color={statusColor[machine.status]}>
-                    {t(`laundry.status.${machine.status}`)}
-                  </Typography>
-                )}
-                {/* status display occupied  with remaining time */}
-                {machine.status === 'occupied' &&
-                  machine.occupied_until !== null && (
-                    <Typography color={statusColor[machine.status]}>
-                      {t('laundry.occupiedUntil', {
-                        time: new Date(
-                          machine.occupied_until
-                        ).toLocaleTimeString(undefined, {
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        }),
-                      })}
+        <>
+          <Stack spacing={3}>
+            <Typography variant="h2">{t('laundry.washingmachines')}</Typography>
+            <Stack direction="row" spacing={3}>
+              {washingmaschines.map((machine) => (
+                <Paper key={machine.id} sx={{ p: 3, alignItems: 'center' }}>
+                  <Stack sx={{ alignItems: 'center' }}>
+                    <Typography color="primary">"{machine.label}"</Typography>
+                    <Typography color="primary">
+                      {t('laundry.washingmachine')}
                     </Typography>
-                  )}
-                {/* link to createBookingPage */}
-                {machine.status === 'free' && (
-                  <Button
-                    component={Link}
-                    to={`/waschmaschinen/nutzen/${machine.id}`}
-                  >
-                    {t(`laundry.useMachine`)}
-                  </Button>
-                )}
-                {/* endBooking */}
-                {machine.status === 'occupied' && machine.is_own_booking && (
-                  <Button
-                    color="error"
-                    onClick={async () => {
-                      const result = await submitEndLaundryBooking(
-                        machine.current_booking_id
-                      )
-                      if (result !== null) {
-                        updateLaundryMachines()
-                      }
-                    }}
-                  >
-                    {t(`laundry.endMachineUsage`)}
-                  </Button>
-                )}
-              </Stack>
-            </Paper>
-          ))}
-        </Stack>
-      </Stack>
+                    {/* status display free or unknown */}
+                    {(machine.status === 'free' ||
+                      machine.status === 'unknown') && (
+                      <Typography color={statusColor[machine.status]}>
+                        {t(`laundry.status.${machine.status}`)}
+                      </Typography>
+                    )}
+                    {/* status display occupied  with remaining time */}
+                    {machine.status === 'occupied' &&
+                      machine.occupied_until !== null && (
+                        <Typography color={statusColor[machine.status]}>
+                          {t('laundry.occupiedUntil', {
+                            time: new Date(
+                              machine.occupied_until
+                            ).toLocaleTimeString(undefined, {
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            }),
+                          })}
+                        </Typography>
+                      )}
+                    {/* link to createBookingPage */}
+                    {machine.status === 'free' && (
+                      <Button
+                        component={Link}
+                        to={`/waschmaschinen/nutzen/${machine.id}`}
+                      >
+                        {t(`laundry.useMachine`)}
+                      </Button>
+                    )}
+                    {/* endBooking */}
+                    {machine.status === 'occupied' &&
+                      machine.is_own_booking && (
+                        <Button
+                          color="error"
+                          onClick={async () => {
+                            const result = await submitEndLaundryBooking(
+                              machine.current_booking_id
+                            )
+                            if (result !== null) {
+                              updateLaundryMachines()
+                            }
+                          }}
+                        >
+                          {t(`laundry.endMachineUsage`)}
+                        </Button>
+                      )}
+                    {canEdit && (
+                      <IconButton
+                        component={Link}
+                        to={`/waschmaschinen/waschraum/${roomId}/maschine/${machine.id}`}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    )}
+                  </Stack>
+                </Paper>
+              ))}
+            </Stack>
+          </Stack>
 
-      {/* dryers */}
-      <Stack spacing={3}>
-        <Typography variant="h2">{t('laundry.dryers')}</Typography>
-        <Stack direction="row" spacing={3}>
-          {dryers.map((machine) => (
-            <Paper key={machine.id} sx={{ p: 3, alignItems: 'center' }}>
-              <Stack sx={{ alignItems: 'center' }}>
-                <Typography color="primary">"{machine.label}"</Typography>
-                <Typography color="primary">{t('laundry.dryer')}</Typography>
-                {/* status display free or unknown */}
-                {(machine.status === 'free' ||
-                  machine.status === 'unknown') && (
-                  <Typography color={statusColor[machine.status]}>
-                    {t(`laundry.status.${machine.status}`)}
-                  </Typography>
-                )}
-                {/* status display occupied  with remaining time */}
-                {machine.status === 'occupied' &&
-                  machine.occupied_until !== null && (
-                    <Typography color={statusColor[machine.status]}>
-                      {t('laundry.occupiedUntil', {
-                        time: new Date(
-                          machine.occupied_until
-                        ).toLocaleTimeString(undefined, {
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        }),
-                      })}
+          {/* dryers */}
+          <Stack spacing={3}>
+            <Typography variant="h2">{t('laundry.dryers')}</Typography>
+            <Stack direction="row" spacing={3}>
+              {dryers.map((machine) => (
+                <Paper key={machine.id} sx={{ p: 3, alignItems: 'center' }}>
+                  <Stack sx={{ alignItems: 'center' }}>
+                    <Typography color="primary">"{machine.label}"</Typography>
+                    <Typography color="primary">
+                      {t('laundry.dryer')}
                     </Typography>
-                  )}
-                {/* link to createBookingPage */}
-                {machine.status === 'free' && (
-                  <Button
-                    component={Link}
-                    to={`/waschmaschinen/nutzen/${machine.id}`}
-                  >
-                    {t(`laundry.useMachine`)}
-                  </Button>
-                )}
-                {/* endBooking */}
-                {machine.status === 'occupied' && machine.is_own_booking && (
-                  <Button
-                    color="error"
-                    onClick={async () => {
-                      const result = await submitEndLaundryBooking(
-                        machine.current_booking_id
-                      )
-                      if (result !== null) {
-                        updateLaundryMachines()
-                      }
-                    }}
-                  >
-                    {t(`laundry.endMachineUsage`)}
-                  </Button>
-                )}
-              </Stack>
-            </Paper>
-          ))}
-        </Stack>
-      </Stack>
-          </>
+                    {/* status display free or unknown */}
+                    {(machine.status === 'free' ||
+                      machine.status === 'unknown') && (
+                      <Typography color={statusColor[machine.status]}>
+                        {t(`laundry.status.${machine.status}`)}
+                      </Typography>
+                    )}
+                    {/* status display occupied  with remaining time */}
+                    {machine.status === 'occupied' &&
+                      machine.occupied_until !== null && (
+                        <Typography color={statusColor[machine.status]}>
+                          {t('laundry.occupiedUntil', {
+                            time: new Date(
+                              machine.occupied_until
+                            ).toLocaleTimeString(undefined, {
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            }),
+                          })}
+                        </Typography>
+                      )}
+                    {/* link to createBookingPage */}
+                    {machine.status === 'free' && (
+                      <Button
+                        component={Link}
+                        to={`/waschmaschinen/nutzen/${machine.id}`}
+                      >
+                        {t(`laundry.useMachine`)}
+                      </Button>
+                    )}
+                    {/* endBooking */}
+                    {machine.status === 'occupied' &&
+                      machine.is_own_booking && (
+                        <Button
+                          color="error"
+                          onClick={async () => {
+                            const result = await submitEndLaundryBooking(
+                              machine.current_booking_id
+                            )
+                            if (result !== null) {
+                              updateLaundryMachines()
+                            }
+                          }}
+                        >
+                          {t(`laundry.endMachineUsage`)}
+                        </Button>
+                      )}
+                    {canEdit && (
+                      <IconButton
+                        component={Link}
+                        to={`/waschmaschinen/waschraum/${roomId}/maschine/${machine.id}`}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    )}
+                  </Stack>
+                </Paper>
+              ))}
+            </Stack>
+          </Stack>
+        </>
       )}
     </Stack>
   )
