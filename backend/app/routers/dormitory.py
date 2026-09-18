@@ -13,6 +13,7 @@ from app.services.dormitory_service import (
     create_dormitory,
     update_dormitory,
     DormitoryNotFoundError,
+    delete_dormitory,
 )
 
 logger = logging.getLogger(__name__)
@@ -47,5 +48,17 @@ def update(
 ):
     try:
         return update_dormitory(db, dorm_id, payload)
+    except DormitoryNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+@router.delete("/{dorm_id}")
+def delete(
+        dorm_id: int,
+        db: Annotated[Session, Depends(get_db)],
+        current_user: Annotated[User, Depends(require_permission("manage_dormitories"))],
+):
+    try:
+        delete_dormitory(db, dorm_id)
     except DormitoryNotFoundError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
