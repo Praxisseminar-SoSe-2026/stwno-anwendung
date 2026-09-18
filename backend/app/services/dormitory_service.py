@@ -1,18 +1,17 @@
 from sqlalchemy.orm import Session
 
 from app.models import (
-    Dormitory,
-    community_room,
-    CommunityRoom,
-    User,
-    DormitoryFacilityManager,
-    LaundryRoom,
-    LaundryMachine,
-    LaundryBooking,
-    RoomRequest,
     Announcement,
+    CommunityRoom,
+    Dormitory,
+    DormitoryFacilityManager,
     ItemType,
+    LaundryBooking,
+    LaundryMachine,
+    LaundryRoom,
     RepairRequest,
+    RoomRequest,
+    User,
 )
 from app.schemas.dormitory import DormitoryCreate, DormitoryUpdate
 
@@ -20,6 +19,9 @@ from app.schemas.dormitory import DormitoryCreate, DormitoryUpdate
 class DormitoryNotFoundError(Exception):
     pass
 
+
+def list_all_dormitories(db: Session) -> list[Dormitory]:
+    return db.query(Dormitory).order_by(Dormitory.name).all()
 
 def create_dormitory(db: Session, payload: DormitoryCreate) -> Dormitory:
     dorm = Dormitory(**payload.model_dump())

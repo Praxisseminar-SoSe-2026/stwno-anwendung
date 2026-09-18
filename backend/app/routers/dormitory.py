@@ -6,14 +6,14 @@ from sqlalchemy.orm import Session
 
 from app.core.dependencies import get_current_user, require_permission
 from app.db.database import get_db
-from app.models.dormitory import Dormitory
 from app.models.user import User
-from app.schemas.dormitory import DormitoryResponse, DormitoryCreate, DormitoryUpdate
+from app.schemas.dormitory import DormitoryCreate, DormitoryResponse, DormitoryUpdate
 from app.services.dormitory_service import (
-    create_dormitory,
-    update_dormitory,
     DormitoryNotFoundError,
+    create_dormitory,
     delete_dormitory,
+    list_all_dormitories,
+    update_dormitory,
 )
 
 logger = logging.getLogger(__name__)
@@ -26,15 +26,15 @@ def list_all(
     db: Annotated[Session, Depends(get_db)],
     current_user: Annotated[User, Depends(get_current_user)],
 ):
-    # TODO: Move this to dormitory_service
-    return db.query(Dormitory).order_by(Dormitory.name).all()
+    return list_all_dormitories(db)
 
 
 @router.post("", response_model=DormitoryResponse)
 def create(
         payload: DormitoryCreate,
         db: Annotated[Session, Depends(get_db)],
-        current_user: Annotated[User, Depends(require_permission("manage_dormitories"))],
+        current_user: Annotated[User,
+        Depends(require_permission("manage_dormitories"))],
 ):
     return create_dormitory(db, payload)
 
@@ -44,7 +44,8 @@ def update(
         dorm_id: int,
         payload: DormitoryUpdate,
         db: Annotated[Session, Depends(get_db)],
-        current_user: Annotated[User, Depends(require_permission("manage_dormitories"))],  
+        current_user: Annotated[User,
+        Depends(require_permission("manage_dormitories"))],
 ):
     try:
         return update_dormitory(db, dorm_id, payload)
@@ -56,7 +57,8 @@ def update(
 def delete(
         dorm_id: int,
         db: Annotated[Session, Depends(get_db)],
-        current_user: Annotated[User, Depends(require_permission("manage_dormitories"))],
+        current_user: Annotated[User,
+        Depends(require_permission("manage_dormitories"))],
 ):
     try:
         delete_dormitory(db, dorm_id)
