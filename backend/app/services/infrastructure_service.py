@@ -68,7 +68,7 @@ def list_community_rooms(db: Session, current_user: User) -> list[CommunityRoom]
     return community_rooms
 
 
-def create_community_room(db: Session, payload: CommunityRoomCreate) -> LaundryRoom:
+def create_community_room(db: Session, payload: CommunityRoomCreate) -> CommunityRoom:
     room = CommunityRoom(**payload.model_dump())
     db.add(room)
     db.commit()

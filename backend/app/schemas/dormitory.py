@@ -9,3 +9,10 @@ class DormitoryResponse(BaseModel):
     address: str
     city: str
     zip_code: str
+
+
+class DormitoryCreate(BaseModel):
+    name: str
+    address: str
+    city: str
+    zip_code: str

@@ -67,6 +67,9 @@ def seed() -> None:
         perm_manage_faq = Permission(
             name="manage_faq", description="FAQ-Einträge verwalten"
         )
+        perm_manage_dormitories = Permission(
+            name="manage_dormitories", description="Wohnheime verwalten"
+        )
         db.add_all(
             [
                 perm_manage_requests,
@@ -74,7 +77,8 @@ def seed() -> None:
                 perm_manage_users,
                 perm_edit_announcement,
                 perm_manage_infrastructure,
-                perm_manage_faq
+                perm_manage_faq,
+                perm_manage_dormitories
             ]
         )
         db.flush()
@@ -108,6 +112,10 @@ def seed() -> None:
                 RolePermission(
                     role_id=role_facility_manager.id,
                     permission_id=perm_manage_faq.id),
+                RolePermission(
+                    role_id=role_admin.id, permission_id=perm_manage_dormitories.id
+                )
+
             ]
         )
 
