@@ -1,14 +1,21 @@
+import logging
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.core.dependencies import get_current_user, require_permission
 from app.db.database import get_db
 from app.models.dormitory import Dormitory
 from app.models.user import User
-from app.schemas.dormitory import DormitoryResponse, DormitoryCreate
-from app.services.dormitory_service import create_dormitory
+from app.schemas.dormitory import DormitoryResponse, DormitoryCreate, DormitoryUpdate
+from app.services.dormitory_service import (
+    create_dormitory,
+    update_dormitory,
+    DormitoryNotFoundError,
+)
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/dormitories", tags=["dormitories"])
 
@@ -29,3 +36,16 @@ def create(
         current_user: Annotated[User, Depends(require_permission("manage_dormitories"))],
 ):
     return create_dormitory(db, payload)
+
+
+@router.put("/{dorm_id}", response_model=DormitoryResponse)
+def update(
+        dorm_id: int,
+        payload: DormitoryUpdate,
+        db: Annotated[Session, Depends(get_db)],
+        current_user: Annotated[User, Depends(require_permission("manage_dormitories"))],  
+):
+    try:
+        return update_dormitory(db, dorm_id, payload)
+    except DormitoryNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
