@@ -114,6 +114,13 @@
     "createMachine": "Create machine",
     "editMachine": "Edit machine"
   },
+  "dormitory": {
+    "createDorm": "Create dormitory",
+    "name": "Name",
+    "address": "Address",
+    "city": "City",
+    "zipCode": "Zip code"
+  },
   "request": {
     "start": "Begin",
     "end": "End",

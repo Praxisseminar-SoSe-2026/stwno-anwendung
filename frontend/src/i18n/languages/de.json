@@ -114,6 +114,13 @@
     "createMachine": "Maschine erstellen",
     "editMachine": "Machine bearbeiten"
   },
+  "dormitory": {
+    "createDorm": "Wohnheim erstellen",
+    "name": "Name",
+    "address": "Adress",
+    "city": "Stadt",
+    "zipCode": "PLZ"
+  },
   "request": {
     "start": "Beginn",
     "end": "Ende",

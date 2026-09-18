@@ -24,7 +24,6 @@ export type DormitoryUpdate = {
   zip_code?: string
 }
 
-
 function authHeaders(): HeadersInit {
   const token = localStorage.getItem('access_token')
   return {
@@ -71,9 +70,7 @@ export async function updateDormitory(
   return handleResponse(res)
 }
 
-export async function deleteDormitory(
-  id: number,
-): Promise<void> {
+export async function deleteDormitory(id: number): Promise<void> {
   const res = await apiFetch(`${BASE_URL}/dormitories/${id}`, {
     method: 'DELETE',
     headers: authHeaders(),

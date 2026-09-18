@@ -7,15 +7,17 @@ import {
   Select,
   MenuItem,
   FormControl,
+  IconButton,
 } from '@mui/material'
 import { Link } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../contexts/AuthContext'
 import { useLogout } from '../hooks/useLogout.ts'
 import { useHasRole } from '../hooks/useHasRole.ts'
-import { STAFF_ROLES } from '../constants/roles.ts'
+import { ADMIN_ROLES, STAFF_ROLES } from '../constants/roles.ts'
 import { useDormitoryFilter } from '../contexts/DormitoryFilterContext'
 import { useDormitories } from '../hooks/useDormitories'
+import AddIcon from '@mui/icons-material/Add'
 
 export function Header() {
   const { t } = useTranslation()
@@ -33,6 +35,7 @@ export function Header() {
   ]
 
   const canViewTickets = useHasRole(STAFF_ROLES) && !loading
+  const isAdmin = useHasRole(ADMIN_ROLES) && !loading
 
   return (
     <AppBar position="static" color="default">
@@ -61,6 +64,12 @@ export function Header() {
                 ))}
               </Select>
             </FormControl>
+          )}
+
+          {isAdmin && (
+            <IconButton component={Link} to={'/dormitory/neu'}>
+              <AddIcon />
+            </IconButton>
           )}
         </Stack>
         <Stack>
