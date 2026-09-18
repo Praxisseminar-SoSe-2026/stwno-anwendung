@@ -119,7 +119,8 @@
     "name": "Name",
     "address": "Address",
     "city": "City",
-    "zipCode": "Zip code"
+    "zipCode": "Zip code",
+    "editDorm": "Edit dormitory"
   },
   "request": {
     "start": "Begin",

@@ -18,6 +18,7 @@ import { ADMIN_ROLES, STAFF_ROLES } from '../constants/roles.ts'
 import { useDormitoryFilter } from '../contexts/DormitoryFilterContext'
 import { useDormitories } from '../hooks/useDormitories'
 import AddIcon from '@mui/icons-material/Add'
+import EditIcon from '@mui/icons-material/Edit'
 
 export function Header() {
   const { t } = useTranslation()
@@ -65,7 +66,12 @@ export function Header() {
               </Select>
             </FormControl>
           )}
-
+          {isAdmin && dormitoryFilter && (
+            <IconButton component={Link} to={`/dormitory/${dormitoryFilter}`}>
+              <EditIcon />
+            </IconButton>
+          )}
+          
           {isAdmin && (
             <IconButton component={Link} to={'/dormitory/neu'}>
               <AddIcon />

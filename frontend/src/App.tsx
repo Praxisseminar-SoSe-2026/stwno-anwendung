@@ -35,6 +35,7 @@ import { AdminLaundryRoomDetailPage } from './pages/admin/AdminLaundryRoomDetail
 import { AdminCreateLaundryMachinePage } from './pages/admin/AdminCreateLaundryMachinePage.tsx'
 import { AdminLaundryMachineDetailPage } from './pages/admin/AdminLaundryMachineDetailPage.tsx'
 import { AdminCreateDormitoryPage } from './pages/admin/AdminCreateDormitoryPage.tsx'
+import { AdminDormitoryDetailPage } from './pages/admin/AdminDormitoryDetailPage.tsx'
 
 function App() {
   return (
@@ -97,7 +98,7 @@ function App() {
             element={<AdminLaundryMachineDetailPage />}
           />
           <Route path="/dormitory/neu" element={<AdminCreateDormitoryPage />} />
-
+          <Route path="/dormitory/:id" element={<AdminDormitoryDetailPage />} />
           {/* general routes */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="*" element={<NotFoundPage />} />

@@ -119,7 +119,8 @@
     "name": "Name",
     "address": "Adress",
     "city": "Stadt",
-    "zipCode": "PLZ"
+    "zipCode": "PLZ",
+    "editDorm": "Wohnheim bearbeiten"
   },
   "request": {
     "start": "Beginn",
