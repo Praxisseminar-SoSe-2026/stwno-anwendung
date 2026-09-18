@@ -34,6 +34,7 @@ export function AdminCreateLaundryRoomPage() {
       <Stack spacing={2}>
         <Typography>{t('infrastructure.createRoom')}</Typography>
 
+        {/* Name */}
         <TextField
           label={t('infrastructure.name')}
           value={name}

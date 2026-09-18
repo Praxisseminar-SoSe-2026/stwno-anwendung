@@ -70,24 +70,28 @@ export function AdminDormitoryDetailPage() {
       <Stack spacing={2}>
         <Typography variant="h4">{t('dormitory.editDorm')}</Typography>
 
+          {/* Name */}
         <TextField
           label={t('dormitory.name')}
           value={name}
           onChange={(e) => setName(e.target.value)}
           fullWidth
         />
+          {/* Address */}
         <TextField
           label={t('dormitory.address')}
           value={address}
           onChange={(e) => setAddress(e.target.value)}
           fullWidth
         />
+          {/* City */}
         <TextField
           label={t('dormitory.city')}
           value={city}
           onChange={(e) => setCity(e.target.value)}
           fullWidth
         />
+          {/* Zip code */}
         <TextField
           label={t('dormitory.zipCode')}
           value={zipCode}

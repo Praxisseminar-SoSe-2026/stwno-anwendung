@@ -36,12 +36,14 @@ export function AdminCreateCommunityRoomPage() {
       <Stack>
         <Typography>{t('infrastructure.createRoom')}</Typography>
 
+        {/* Name */}
         <TextField
           label={t('infrastructure.name')}
           value={name}
           onChange={(e) => setName(e.target.value)}
           fullWidth
         />
+        {/* Description */}
         <TextField
           label={t('infrastructure.description')}
           value={description}

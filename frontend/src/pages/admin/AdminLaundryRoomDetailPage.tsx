@@ -71,6 +71,7 @@ export function AdminLaundryRoomDetailPage() {
       <Stack spacing={2}>
         <Typography>{t('infrastructure.editRoom')}</Typography>
 
+        {/* Name */}
         <TextField
           label={t('infrastructure.name')}
           value={name}

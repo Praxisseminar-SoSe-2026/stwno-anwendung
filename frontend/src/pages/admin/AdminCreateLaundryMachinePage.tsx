@@ -49,6 +49,7 @@ export function AdminCreateLaundryMachinePage() {
       <Stack spacing={2}>
         <Typography>{t('infrastructure.createMachine')}</Typography>
 
+        {/* Device type */}
         <FormControl fullWidth>
           <InputLabel>{t('infrastructure.type')}</InputLabel>
           <Select
@@ -63,6 +64,7 @@ export function AdminCreateLaundryMachinePage() {
           </Select>
         </FormControl>
 
+        {/* Usage status */}
         <FormControl fullWidth>
           <InputLabel>{t('infrastructure.status')}</InputLabel>
           <Select

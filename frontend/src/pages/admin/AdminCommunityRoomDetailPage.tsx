@@ -76,12 +76,14 @@ export function AdminCommunityRoomDetailPage() {
       <Stack spacing={2}>
         <Typography variant="h4">{t('infrastructure.editRoom')}</Typography>
 
+        {/* Name */}
         <TextField
           label={t('infrastructure.name')}
           value={name}
           onChange={(e) => setName(e.target.value)}
           fullWidth
         />
+        {/* Description */}
         <TextField
           label={t('infrastructure.description')}
           value={description}

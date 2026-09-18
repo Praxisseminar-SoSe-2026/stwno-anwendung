@@ -85,6 +85,7 @@ export function AdminLaundryMachineDetailPage() {
         <Typography>{t('infrastructure.editMachine')}</Typography>
         <Typography>{machine.label}</Typography>
 
+        {/* Device type */}
         <FormControl fullWidth>
           <InputLabel>{t('infrastructure.type')}</InputLabel>
           <Select
@@ -99,6 +100,7 @@ export function AdminLaundryMachineDetailPage() {
           </Select>
         </FormControl>
 
+        {/* Usage status */}
         <FormControl>
           <InputLabel>{t('infrastructure.status')}</InputLabel>
           <Select

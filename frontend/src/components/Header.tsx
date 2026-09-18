@@ -47,11 +47,13 @@ export function Header() {
               {link.label}
             </Button>
           ))}
+          {/* Ticket Overview */}
           {canViewTickets && (
             <Button component={Link} to="/admin/tickets">
               {t('adminTicketOverview.titleShort')}
             </Button>
           )}
+          {/* Dorm selection */}
           {canViewTickets && (
             <FormControl>
               <Select
@@ -66,18 +68,21 @@ export function Header() {
               </Select>
             </FormControl>
           )}
+          {/* Dorm edit */}
           {isAdmin && dormitoryFilter && (
             <IconButton component={Link} to={`/dormitory/${dormitoryFilter}`}>
               <EditIcon />
             </IconButton>
           )}
-          
+
+          {/* Dorm create */}
           {isAdmin && (
             <IconButton component={Link} to={'/dormitory/neu'}>
               <AddIcon />
             </IconButton>
           )}
         </Stack>
+        {/* Username + Logout */}
         <Stack>
           {user ? (
             <>
