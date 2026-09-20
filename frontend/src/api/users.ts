@@ -15,6 +15,16 @@ export type UserList = {
   roles: string[]
 }
 
+export type UserUpdate = {
+  first_name?: string
+  last_name?: string
+  email?: string
+  flat_number?: string | null
+  contract_end?: string | null
+  dormitory_id?: number | null
+  roles?: string[]
+}
+
 function authHeaders(): HeadersInit {
   const token = localStorage.getItem('access_token')
   return {
@@ -33,5 +43,17 @@ async function handleResponse<T>(res: Response): Promise<T> {
 
 export async function getUsers(): Promise<UserList[]> {
   const res = await apiFetch(`${BASE_URL}/users`, { headers: authHeaders() })
+  return handleResponse(res)
+}
+
+export async function updateUser(
+  id: number,
+  data: UserUpdate
+): Promise<UserList> {
+  const res = await apiFetch(`${BASE_URL}/users/${id}`, {
+    method: 'PUT',
+    headers: authHeaders(),
+    body: JSON.stringify(data),
+  })
   return handleResponse(res)
 }

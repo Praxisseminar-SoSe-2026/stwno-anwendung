@@ -105,7 +105,17 @@
     "notAuthorized": "You are not authorized to use this page."
   },
   "userList": {
-    "title": "User List"
+    "title": "User List",
+    "editUser": "Edit user",
+    "personNumber": "Person number",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "flatNumber": "Flat number",
+    "dormitory": "Dormitory",
+    "noDormitory": "No dormitory",
+    "contractEnd": "Contract end",
+    "roles": "Roles"
   },
   "infrastructure": {
     "createRoom": "Create room",

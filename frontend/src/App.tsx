@@ -37,6 +37,7 @@ import { AdminLaundryMachineDetailPage } from './pages/admin/AdminLaundryMachine
 import { AdminCreateDormitoryPage } from './pages/admin/AdminCreateDormitoryPage.tsx'
 import { AdminDormitoryDetailPage } from './pages/admin/AdminDormitoryDetailPage.tsx'
 import { AdminUserListPage } from './pages/admin/AdminUserListPage.tsx'
+import { AdminUserListDetailPage } from './pages/admin/AdminUserListDetailPage.tsx'
 
 function App() {
   return (
@@ -101,6 +102,10 @@ function App() {
           <Route path="/dormitory/neu" element={<AdminCreateDormitoryPage />} />
           <Route path="/dormitory/:id" element={<AdminDormitoryDetailPage />} />
           <Route path="/admin/users" element={<AdminUserListPage />} />
+          <Route
+            path="/admin/users/:id"
+            element={<AdminUserListDetailPage />}
+          />
           {/* general routes */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="*" element={<NotFoundPage />} />

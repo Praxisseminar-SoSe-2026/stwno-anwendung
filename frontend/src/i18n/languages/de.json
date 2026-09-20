@@ -105,7 +105,17 @@
     "notAuthorized": "Du hast keinen Zugriff auf diese Seite."
   },
   "userList": {
-    "title": "User Liste"
+    "title": "Nutzer:innen Liste",
+    "editUser": "Nutzer:in bearbeiten",
+    "personNumber": "Personennummer",
+    "firstName": "Vorname",
+    "lastName": "Nachname",
+    "email": "E-Mail",
+    "flatNumber": "Wohnungsnummer",
+    "dormitory": "Wohnheim",
+    "noDormitory": "Kein Wohnheim",
+    "contractEnd": "Vertragsende",
+    "roles": "Rollen"
   },
   "infrastructure": {
     "createRoom": "Raum erstellen",
