@@ -104,6 +104,9 @@
     "titleShort": "Ticket Übersicht",
     "notAuthorized": "Du hast keinen Zugriff auf diese Seite."
   },
+  "userList": {
+    "title": "User Liste"
+  },
   "infrastructure": {
     "createRoom": "Raum erstellen",
     "editRoom": "Raum bearbeiten",

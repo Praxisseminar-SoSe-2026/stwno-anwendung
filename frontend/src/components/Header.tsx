@@ -81,6 +81,11 @@ export function Header() {
               <AddIcon />
             </IconButton>
           )}
+          {isAdmin && (
+            <Button component={Link} to="/admin/users">
+              {t('userList.title')}
+            </Button>
+          )}
         </Stack>
         {/* Username + Logout */}
         <Stack>
