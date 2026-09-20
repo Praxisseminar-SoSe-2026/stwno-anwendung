@@ -8,9 +8,16 @@ from app.db.database import get_db
 from app.models import User
 from app.schemas.user import UserResponse, UserUpdate
 from app.services.auth_service import UserNotFoundError
-from app.services.user_service import update_user
+from app.services.user_service import update_user, list_users
 
 router = APIRouter(prefix="/users", tags=["users"])
+
+@router.get("", response_model=list[UserResponse])
+def list_all(
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(require_permission("manage_users"))],
+):
+    return list_users(db)
 
 @router.put("/{user_id}", response_model=UserResponse)
 def update(
