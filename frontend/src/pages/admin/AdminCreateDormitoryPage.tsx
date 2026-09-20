@@ -35,28 +35,28 @@ export function AdminCreateDormitoryPage() {
       <Stack spacing={2}>
         <Typography>{t('dormitory.createDorm')}</Typography>
 
-          {/* Name */}
+        {/* Name */}
         <TextField
           label={t('dormitory.name')}
           value={name}
           onChange={(e) => setName(e.target.value)}
           fullWidth
         />
-          {/* Address */}
+        {/* Address */}
         <TextField
           label={t('dormitory.address')}
           value={address}
           onChange={(e) => setAddress(e.target.value)}
           fullWidth
         />
-          {/* City */}
+        {/* City */}
         <TextField
           label={t('dormitory.city')}
           value={city}
           onChange={(e) => setCity(e.target.value)}
           fullWidth
         />
-          {/* Zip code */}
+        {/* Zip code */}
         <TextField
           label={t('dormitory.zipCode')}
           value={zip_code}
