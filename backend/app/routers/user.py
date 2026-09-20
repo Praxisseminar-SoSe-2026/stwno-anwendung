@@ -8,7 +8,7 @@ from app.db.database import get_db
 from app.models import User
 from app.schemas.user import UserResponse, UserUpdate
 from app.services.auth_service import UserNotFoundError
-from app.services.user_service import update_user, list_users
+from app.services.user_service import list_users, update_user
 
 router = APIRouter(prefix="/users", tags=["users"])
 

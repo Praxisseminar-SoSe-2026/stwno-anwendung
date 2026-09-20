@@ -25,3 +25,4 @@ class UserUpdate(BaseModel):
     flat_number: str | None = None
     contract_end: date | None = None
     dormitory_id: int | None = None
+    roles: list[str] | None = None
