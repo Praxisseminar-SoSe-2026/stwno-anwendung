@@ -7,7 +7,6 @@ import {
   Paper,
   Button,
   TextField,
-  CircularProgress,
   MenuItem,
 } from '@mui/material'
 import { useFaq } from '../../hooks/useFaq'
@@ -16,6 +15,7 @@ import { EDITOR_ROLES } from '../../constants/roles.ts'
 import { useDeleteFaq } from '../../hooks/useDeleteFaq'
 import { useUpdateFaq } from '../../hooks/useUpdateFaq'
 import { useFaqCategories } from '../../hooks/useFaqCategories'
+import { Loading } from '../../components/Loading'
 
 export function FaqDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -80,7 +80,7 @@ export function FaqDetailPage() {
     }
   }
 
-  if (loading) return <CircularProgress />
+  if (loading) return <Loading />
   if (error) return <Typography color="error">{error}</Typography>
   if (!faq) return null
 
