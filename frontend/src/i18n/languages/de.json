@@ -31,7 +31,10 @@
     "delete": "Löschen",
     "create": "Erstellen",
     "minutes": "Minuten",
-    "back": "Zurück"
+    "back": "Zurück",
+    "loading": "Lädt...",
+    "creating": "wird erstellt..",
+    "saving": "wird gespeichert..."
   },
   "faq": {
     "title": "Häufig gestellte Fragen",

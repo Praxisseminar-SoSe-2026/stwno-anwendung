@@ -6,7 +6,6 @@ import {
   Typography,
   Paper,
   Chip,
-  CircularProgress,
   Button,
   Box,
   Divider,
@@ -28,6 +27,7 @@ import type {
 } from '../../api/requests'
 import { useHasRole } from '../../hooks/useHasRole.ts'
 import { STAFF_ROLES } from '../../constants/roles.ts'
+import { Loading } from '../../components/Loading'
 
 const REPAIR_STATUSES: RequestStatus[] = [
   'open',
@@ -68,7 +68,7 @@ export function AdminTicketDetailPage() {
 
   const canView = useHasRole(STAFF_ROLES)
 
-  if (authLoading || loading) return <CircularProgress />
+  if (authLoading || loading) return <Loading />
 
   if (!canView) {
     return <Typography>{t('adminTicketOverview.notAuthorized')}</Typography>
@@ -251,7 +251,7 @@ export function AdminTicketDetailPage() {
                     <FormControlLabel
                       key={slot.id}
                       value={slot.id}
-                      control={<Radio />}
+                      control={<Radio disabled={submitting} />}
                       label={new Date(slot.start_time).toLocaleString()}
                     />
                   ))}
@@ -265,7 +265,8 @@ export function AdminTicketDetailPage() {
                   }
                   sx={{ alignSelf: 'flex-start' }}
                 >
-                  {t('request.setEntryTime')}
+                  {/*Todo: refactor hook to return different submitting states for choosing a time and commenting */}
+                  {submitting ? t('common.saving') : t('request.setEntryTime')}
                 </Button>
               </Stack>
             )}
@@ -277,6 +278,7 @@ export function AdminTicketDetailPage() {
                 label={t('request.commentPlaceholder')}
                 value={commentDraft}
                 onChange={(e) => setCommentDraft(e.target.value)}
+                disabled={submitting}
               />
               <Button
                 variant="contained"
@@ -287,7 +289,8 @@ export function AdminTicketDetailPage() {
                 }}
                 sx={{ alignSelf: 'flex-start' }}
               >
-                {t('request.addComment')}
+                {/*Todo: refactor hook to return different submitting states for choosing a time and commenting */}
+                {submitting ? t('common.saving') : t('request.addComment')}
               </Button>
             </Stack>
           </>

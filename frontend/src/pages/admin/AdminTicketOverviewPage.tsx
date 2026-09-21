@@ -7,7 +7,6 @@ import {
   CardActionArea,
   CardContent,
   Chip,
-  CircularProgress,
   Grid,
 } from '@mui/material'
 import { useRequests } from '../../hooks/useRequests'
@@ -19,6 +18,7 @@ import type {
 } from '../../api/requests'
 import { useHasRole } from '../../hooks/useHasRole.ts'
 import { STAFF_ROLES } from '../../constants/roles.ts'
+import { Loading } from '../../components/Loading'
 
 const STATUS_COLUMNS: { key: string; matches: RequestStatus[] }[] = [
   { key: 'Offen', matches: ['open'] },
@@ -50,7 +50,7 @@ export function AdminTicketOverviewPage() {
 
   const canView = useHasRole(STAFF_ROLES)
 
-  if (authLoading || loading) return <CircularProgress />
+  if (authLoading || loading) return <Loading />
 
   if (!canView) {
     return <Typography>{t('adminTicketOverview.notAuthorized')}</Typography>

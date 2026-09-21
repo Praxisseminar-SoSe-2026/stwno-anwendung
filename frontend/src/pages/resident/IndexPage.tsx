@@ -7,19 +7,19 @@ import {
   CardActionArea,
   CardContent,
   Chip,
-  CircularProgress,
   Button,
 } from '@mui/material'
 import { useAnnouncements } from '../../hooks/useAnnouncements'
 import { useHasRole } from '../../hooks/useHasRole.ts'
 import { EDITOR_ROLES } from '../../constants/roles.ts'
+import { Loading } from '../../components/Loading.tsx'
 
 export function IndexPage() {
   const { t } = useTranslation()
   const { announcements, loading, error } = useAnnouncements()
   const canCreate = useHasRole(EDITOR_ROLES)
 
-  if (loading) return <CircularProgress />
+  if (loading) return <Loading />
   if (error) return <Typography color="error">{error}</Typography>
 
   return (

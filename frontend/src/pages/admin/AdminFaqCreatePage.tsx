@@ -8,6 +8,8 @@ import {
   Button,
   TextField,
   MenuItem,
+  InputAdornment,
+  CircularProgress,
 } from '@mui/material'
 import { useCreateFaq } from '../../hooks/useCreateFaq'
 import { useFaqCategories } from '../../hooks/useFaqCategories'
@@ -65,6 +67,15 @@ export function AdminFaqCreatePage() {
           value={categoryId ?? ''}
           onChange={(e) => setCategoryId(Number(e.target.value))}
           disabled={categoriesLoading}
+          slotProps={{
+            input: {
+              endAdornment: categoriesLoading && (
+                <InputAdornment position="end">
+                  <CircularProgress />
+                </InputAdornment>
+              ),
+            },
+          }}
           fullWidth
         >
           {faqCategories.map((cat) => (
@@ -97,7 +108,7 @@ export function AdminFaqCreatePage() {
               !answer.trim()
             }
           >
-            {t('common.create')}
+            {loading ? t('common.creating') : t('common.create')}
           </Button>
           <Button onClick={() => navigate('/faq')} disabled={loading}>
             {t('common.cancel')}

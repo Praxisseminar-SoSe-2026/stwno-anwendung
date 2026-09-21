@@ -163,7 +163,7 @@ export function AdminCreateAnnouncementPage() {
           onClick={handleSubmit}
           disabled={loading || !title || !text}
         >
-          {t('common.create')}
+          {loading ? t('common.creating') : t('common.create')}
         </Button>
         <Button onClick={() => navigate(-1)}>{t('common.cancel')}</Button>
 

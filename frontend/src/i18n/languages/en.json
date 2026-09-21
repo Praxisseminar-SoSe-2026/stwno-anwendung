@@ -31,7 +31,10 @@
     "delete": "Delete",
     "create": "Create",
     "minutes": "minutes",
-    "back": "Go back"
+    "back": "Go back",
+    "loading": "loading...",
+    "creating": "creating..",
+    "saving": "saving"
   },
   "faq": {
     "title": "Frequently Asked Questions",
