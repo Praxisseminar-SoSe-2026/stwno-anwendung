@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from app.core.permission import get_user_role
 from app.core.time import now_utc
 from app.models.access_time_slot import AccessTimeSlot
+from app.models.access_time_slot_history import AccessTimeSlotHistory
 from app.models.access_time_slot_proposal import AccessTimeSlotProposal
 from app.models.community_room import CommunityRoom
 from app.models.dormitory_facility_manager import DormitoryFacilityManager
@@ -131,8 +132,9 @@ def list_requests(db: Session, current_user: User) -> list[Request]:
             .all()
         )
         combined = [*repairs, *rooms]
-        combined.sort(key=lambda r: r.created_at or datetime.min.replace(tzinfo=UTC),
-                      reverse=True)
+        combined.sort(
+            key=lambda r: r.created_at or datetime.min.replace(tzinfo=UTC), reverse=True
+        )
         return combined
 
     # Default: residents only see their own requests
@@ -292,14 +294,18 @@ def create_room_request(
             "Key exchange can not happen after first day of booking"
         )
 
-    first_booked_day_datetime = datetime.combine(first_booked_day,
-                                                 datetime.min.time().replace(tzinfo=UTC))
-    last_booked_day_datetime = datetime.combine(last_booked_day,
-                                                datetime.max.time().replace(tzinfo=UTC))
+    first_booked_day_datetime = datetime.combine(
+        first_booked_day, datetime.min.time().replace(tzinfo=UTC)
+    )
+    last_booked_day_datetime = datetime.combine(
+        last_booked_day, datetime.max.time().replace(tzinfo=UTC)
+    )
 
     alternative_key_exchange_datetime = (
-        datetime.combine(payload.alternative_key_exchange_date,
-                         datetime.min.time().replace(tzinfo=UTC))
+        datetime.combine(
+            payload.alternative_key_exchange_date,
+            datetime.min.time().replace(tzinfo=UTC),
+        )
         if payload.alternative_key_exchange_date is not None
         else None
     )
@@ -492,6 +498,15 @@ def set_access_time_slot(
     else:
         repair_request.access_time_slot.start_time = proposal.start_time
         repair_request.access_time_slot.end_time = proposal.end_time
+
+    db.add(
+        AccessTimeSlotHistory(
+            repair_request_id=repair_request.id,
+            start_time=proposal.start_time,
+            end_time=proposal.end_time,
+            changed_by_id=current_user.id,
+        )
+    )
 
     db.commit()
     db.refresh(repair_request)

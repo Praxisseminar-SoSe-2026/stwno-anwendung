@@ -25,9 +25,17 @@ import type {
   Comment,
   StatusHistoryEntry,
   RequestStatus,
+  AccessTimeSlotHistoryEntry,
 } from '../../api/requests'
 import { useHasRole } from '../../hooks/useHasRole.ts'
 import { STAFF_ROLES } from '../../constants/roles.ts'
+import EditIcon from '@mui/icons-material/Edit'
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark'
+import EngineeringIcon from '@mui/icons-material/Engineering'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import CancelIcon from '@mui/icons-material/Cancel'
+import type { SvgIconComponent } from '@mui/icons-material'
+import EventAvailableIcon from '@mui/icons-material/EventAvailable'
 
 const REPAIR_STATUSES: RequestStatus[] = [
   'open',
@@ -36,6 +44,16 @@ const REPAIR_STATUSES: RequestStatus[] = [
   'denied',
 ]
 
+const STATUS_TIMELINE_ICONS: Record<
+  RequestStatus,
+  { Icon: SvgIconComponent; color: string }
+> = {
+  open: { Icon: QuestionMarkIcon, color: 'info.main' },
+  in_progress: { Icon: EngineeringIcon, color: 'warning.main' },
+  closed: { Icon: CheckCircleIcon, color: 'success.main' },
+  denied: { Icon: CancelIcon, color: 'error.main' },
+}
+
 type TimelineEntry =
   | { key: string; at: string | null; kind: 'comment'; comment: Comment }
   | {
@@ -43,6 +61,12 @@ type TimelineEntry =
       at: string | null
       kind: 'status'
       entry: StatusHistoryEntry
+    }
+  | {
+      key: string
+      at: string | null
+      kind: 'entry_time'
+      entry: AccessTimeSlotHistoryEntry
     }
 
 export function AdminTicketDetailPage() {
@@ -77,6 +101,7 @@ export function AdminTicketDetailPage() {
   if (error) return <Typography color="error">{error}</Typography>
   if (!request) return null
 
+  // create list of time line entries and sort them by time
   const timeline: TimelineEntry[] = [
     ...request.comments.map((comment) => ({
       key: `comment-${comment.id}`,
@@ -88,6 +113,12 @@ export function AdminTicketDetailPage() {
       key: `status-${entry.id}`,
       at: entry.changed_at,
       kind: 'status' as const,
+      entry,
+    })),
+    ...request.access_time_slot_history.map((entry) => ({
+      key: `entry-time-${entry.id}`,
+      at: entry.changed_at,
+      kind: 'entry_time' as const,
       entry,
     })),
   ].sort(
@@ -118,7 +149,7 @@ export function AdminTicketDetailPage() {
             {t('request.exportPdf')}
           </Button>
         </Stack>
-
+        {/* ---- Ticket Details ---- */}
         <Typography>
           <strong>{t('request.author')}:</strong> {request.resident.first_name}{' '}
           {request.resident.last_name}
@@ -190,23 +221,76 @@ export function AdminTicketDetailPage() {
         )}
 
         <Divider />
+        {/* ---- Ticket History ---- */}
+        <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+          {t('request.history')}
+        </Typography>
+        <Stack spacing={0}>
+          {timeline.map((item, index) => {
+            const isLast = index === timeline.length - 1
+            const { Icon, color } =
+              item.kind === 'comment'
+                ? { Icon: EditIcon, color: 'grey.600' }
+                : item.kind === 'entry_time'
+                  ? { Icon: EventAvailableIcon, color: 'secondary.main' }
+                  : STATUS_TIMELINE_ICONS[item.entry.status]
+            const authorName =
+              item.kind === 'comment'
+                ? `${item.comment.author.first_name} ${item.comment.author.last_name}`
+                : `${item.entry.changed_by.first_name} ${item.entry.changed_by.last_name}`
 
-        <Typography variant="h4">{t('request.history')}</Typography>
-        <Stack spacing={1}>
-          {timeline.map((item) => (
-            <Typography key={item.key} variant="body2">
-              <strong>
-                {item.kind === 'comment'
-                  ? `${item.comment.author.first_name} ${item.comment.author.last_name}`
-                  : `${item.entry.changed_by.first_name} ${item.entry.changed_by.last_name}`}
-              </strong>{' '}
-              {item.at && new Date(item.at).toLocaleString()}
-              {' — '}
-              {item.kind === 'comment'
-                ? item.comment.text
-                : t('request.statusChanged', { status: item.entry.status })}
-            </Typography>
-          ))}
+            return (
+              <Stack key={item.key} direction="row" spacing={1.5}>
+                <Stack sx={{ alignItems: 'center', flexShrink: 0 }}>
+                  <Box
+                    sx={{
+                      width: 24,
+                      height: 24,
+                      borderRadius: '50%',
+                      bgcolor: color,
+                      color: 'common.white',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Icon sx={{ fontSize: 14 }} />
+                  </Box>
+                  {!isLast && (
+                    <Box
+                      sx={{
+                        width: '2px',
+                        flexGrow: 1,
+                        bgcolor: 'divider',
+                        my: 0.5,
+                      }}
+                    />
+                  )}
+                </Stack>
+                <Box sx={{ pb: 2, minWidth: 0 }}>
+                  <Typography variant="caption" color="text.secondary">
+                    <strong>{authorName}</strong>{' '}
+                    {item.kind === 'comment'
+                      ? t('request.commented')
+                      : item.kind === 'entry_time'
+                        ? t('request.entryTimeSet', {
+                            time: new Date(
+                              item.entry.start_time
+                            ).toLocaleString(),
+                          })
+                        : t('request.statusChanged', {
+                            status: t(`request.status.${item.entry.status}`),
+                          })}
+                    {' · '}
+                    {item.at && new Date(item.at).toLocaleString()}
+                  </Typography>
+                  {item.kind === 'comment' && (
+                    <Typography variant="body2">{item.comment.text}</Typography>
+                  )}
+                </Box>
+              </Stack>
+            )
+          })}
           {timeline.length === 0 && (
             <Typography variant="body2" color="text.secondary">
               {t('request.noHistory')}
@@ -217,6 +301,7 @@ export function AdminTicketDetailPage() {
         {request.type === 'repair' && request.can_edit && (
           <>
             <Divider />
+            {/* ---- Edit Status ---- */}
             <Typography variant="h4">{t('common.edit')}</Typography>
 
             {actionError && <Alert severity="error">{actionError}</Alert>}
@@ -231,7 +316,7 @@ export function AdminTicketDetailPage() {
             >
               {REPAIR_STATUSES.map((status) => (
                 <MenuItem key={status} value={status}>
-                  {status}
+                  {t(`request.status.${status}`)}
                 </MenuItem>
               ))}
             </TextField>

@@ -21,8 +21,9 @@ class RepairRequestStatusHistory(Base):
     repair_request_id: Mapped[int] = mapped_column(ForeignKey("repair_requests.id"))
     status: Mapped[str]
     changed_by_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    changed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True),
-                                                        default=now_utc)
+    changed_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), default=now_utc
+    )
 
     repair_request: Mapped[RepairRequest] = relationship(
         back_populates="status_history"

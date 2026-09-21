@@ -153,6 +153,7 @@ def create_room_booking_request(
 
     return RequestResponse.from_request(room_request)
 
+
 @router.get("/room_booking", response_model=list[RoomBookings])
 def list_room_booking_availability(
     db: Annotated[Session, Depends(get_db)],
@@ -162,6 +163,7 @@ def list_room_booking_availability(
         return list_room_bookings(db, current_user)
     except ResidentDormitoryError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
+
 
 @router.get("/{request_id}", response_model=RequestResponse)
 def get_one(

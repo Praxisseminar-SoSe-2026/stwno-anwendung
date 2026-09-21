@@ -24,12 +24,15 @@ class ItemReservation(Base):
         default="Reserviert", server_default="Reserviert"
     )
     # Sketch: kein NOT NULL, nur DEFAULT (now()) -> nullable
-    reserved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True),
-                                                         default=now_utc)
-    picked_up_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True),
-                                                          default=None)
-    returned_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True),
-                                                         default=None)
+    reserved_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), default=now_utc
+    )
+    picked_up_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), default=None
+    )
+    returned_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), default=None
+    )
 
     item_type: Mapped[ItemType] = relationship(back_populates="reservations")
     resident: Mapped[User] = relationship(back_populates="item_reservations")

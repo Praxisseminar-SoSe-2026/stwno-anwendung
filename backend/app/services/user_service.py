@@ -8,6 +8,7 @@ from app.schemas.user import UserUpdate
 class UserNotFoundError(Exception):
     pass
 
+
 class RoleNotFoundError(Exception):
     pass
 
@@ -32,6 +33,7 @@ def list_users(db: Session) -> list[dict]:
             }
         )
     return result
+
 
 def update_user(db: Session, user_id: int, payload: UserUpdate) -> User:
     user = db.get(User, user_id)

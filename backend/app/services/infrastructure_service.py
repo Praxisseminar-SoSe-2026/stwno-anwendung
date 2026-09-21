@@ -30,8 +30,10 @@ from app.services.request_service import (
 class LaundryRoomNotFoundError(Exception):
     pass
 
+
 class LaundryMachineNotFoundError(Exception):
     pass
+
 
 class CommunityRoomNotFoundError(Exception):
     pass
@@ -54,7 +56,7 @@ def list_community_rooms(db: Session, current_user: User) -> list[CommunityRoom]
             .filter(CommunityRoom.dormitory_id.in_(dormitory_ids))
             .all()
         )
-    
+
     if current_user.dormitory_id is None:
         raise ResidentDormitoryError(
             "User has no dormitory assigned; cannot list community rooms"
@@ -76,8 +78,9 @@ def create_community_room(db: Session, payload: CommunityRoomCreate) -> Communit
     return room
 
 
-def update_community_room(db: Session, room_id: int,
-                        payload: CommunityRoomUpdate) -> CommunityRoom:
+def update_community_room(
+    db: Session, room_id: int, payload: CommunityRoomUpdate
+) -> CommunityRoom:
     room = db.query(CommunityRoom).filter(CommunityRoom.id == room_id).first()
     if room is None:
         raise CommunityRoomNotFoundError(f"No room found with id {room_id}")
@@ -98,9 +101,9 @@ def delete_community_room(db: Session, room_id: int) -> None:
     if room is None:
         raise CommunityRoomNotFoundError(f"No community room found with id {room_id}")
 
-    db.query(RoomRequest).filter(
-        RoomRequest.community_room_id == room_id
-    ).delete(synchronize_session=False)
+    db.query(RoomRequest).filter(RoomRequest.community_room_id == room_id).delete(
+        synchronize_session=False
+    )
 
     db.delete(room)
     db.commit()
@@ -116,9 +119,12 @@ def list_laundry_rooms(db: Session, current_user: User) -> list[LaundryRoom]:
         dormitory_ids = managed_dormitory_ids(db, current_user.id)
         if not dormitory_ids:
             return []
-        return (db.query(LaundryRoom)
-                .filter(LaundryRoom.dormitory_id.in_(dormitory_ids)).all())
-    
+        return (
+            db.query(LaundryRoom)
+            .filter(LaundryRoom.dormitory_id.in_(dormitory_ids))
+            .all()
+        )
+
     if current_user.dormitory_id is None:
         raise ResidentDormitoryError(
             "User has no dormitory assigned; cannot list laundry rooms"
@@ -139,8 +145,10 @@ def create_laundry_room(db: Session, payload: LaundryRoomCreate) -> LaundryRoom:
     db.refresh(room)
     return room
 
-def update_laundry_room(db: Session, room_id: int,
-                        payload: LaundryRoomUpdate) -> LaundryRoom:
+
+def update_laundry_room(
+    db: Session, room_id: int, payload: LaundryRoomUpdate
+) -> LaundryRoom:
     room = db.query(LaundryRoom).filter(LaundryRoom.id == room_id).first()
     if room is None:
         raise LaundryRoomNotFoundError(f"No room found with id {room_id}")
@@ -181,9 +189,9 @@ def delete_laundry_room(db: Session, room_id: int) -> None:
     db.commit()
 
 
-def list_laundry_machines_in_laundry_room(db: Session,
-                                          current_user: User,
-                                          laundry_room_id: int) -> list[LaundryMachine]:
+def list_laundry_machines_in_laundry_room(
+    db: Session, current_user: User, laundry_room_id: int
+) -> list[LaundryMachine]:
 
     laundry_room = db.get(LaundryRoom, laundry_room_id)
     if laundry_room is None:
@@ -192,7 +200,7 @@ def list_laundry_machines_in_laundry_room(db: Session,
         )
 
     roles = set(get_user_role(db, current_user.id))
-    
+
     if not (roles & STAFF_ROLES):
         if "hausmeister" in roles:
             if laundry_room.dormitory_id not in managed_dormitory_ids(
@@ -215,8 +223,7 @@ def list_laundry_machines_in_laundry_room(db: Session,
     for machine in machines:
         if machine.status == LaundryStatus.OCCUPIED:
             active_booking = reset_machine_status_if_expired_or_return_active_booking(
-                db,
-                machine.id
+                db, machine.id
             )
             if active_booking is not None:
                 machine.occupied_until = active_booking.ends_at
@@ -229,9 +236,9 @@ def list_laundry_machines_in_laundry_room(db: Session,
     return machines
 
 
-def get_laundry_machine(db: Session,
-                        current_user: User,
-                        laundry_machine_id: int) -> LaundryMachine:
+def get_laundry_machine(
+    db: Session, current_user: User, laundry_machine_id: int
+) -> LaundryMachine:
     laundry_machine = db.get(LaundryMachine, laundry_machine_id)
     if laundry_machine is None:
         raise MachineNotFoundError(f"Laundry Machine {laundry_machine_id} not found")
@@ -254,8 +261,7 @@ def get_laundry_machine(db: Session,
 
     if laundry_machine.status == LaundryStatus.OCCUPIED:
         active_booking = reset_machine_status_if_expired_or_return_active_booking(
-            db,
-            laundry_machine.id
+            db, laundry_machine.id
         )
         if active_booking is not None:
             laundry_machine.occupied_until = active_booking.ends_at
@@ -284,7 +290,7 @@ def create_laundry_machine(
         label=label,
         laundry_room_id=payload.laundry_room_id,
         type=payload.type,
-        status=payload.status
+        status=payload.status,
     )
     db.add(entry)
     db.commit()
@@ -295,19 +301,21 @@ def create_laundry_machine(
 def delete_laundry_machine(db: Session, machine_id: int) -> None:
     entry = db.query(LaundryMachine).filter(LaundryMachine.id == machine_id).first()
     if entry is None:
-        raise LaundryMachineNotFoundError(f"No Machine entry found "
-                                          f"with id {machine_id}")
+        raise LaundryMachineNotFoundError(
+            f"No Machine entry found " f"with id {machine_id}"
+        )
     db.delete(entry)
     db.commit()
 
 
-def update_laundry_machine(db: Session, machine_id: int,
-                           payload: LaundryRoomUpdateMachine
-                           )-> LaundryMachine:
+def update_laundry_machine(
+    db: Session, machine_id: int, payload: LaundryRoomUpdateMachine
+) -> LaundryMachine:
     entry = db.query(LaundryMachine).filter(LaundryMachine.id == machine_id).first()
     if entry is None:
-        raise LaundryMachineNotFoundError(f"No Machine entry found "
-                                          f"with id {machine_id}")
+        raise LaundryMachineNotFoundError(
+            f"No Machine entry found " f"with id {machine_id}"
+        )
 
     update_data = payload.model_dump(exclude_unset=True)
 

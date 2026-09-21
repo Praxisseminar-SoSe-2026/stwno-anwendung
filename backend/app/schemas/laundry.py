@@ -32,8 +32,8 @@ class LaundryMachineResponse(BaseModel):
     occupied_until: datetime | None = None
     current_booking_id: int | None = None
     is_own_booking: bool = False
-    
-    
+
+
 class LaundryRoomCreateMachine(BaseModel):
     laundry_room_id: int
     type: LaundryType
@@ -46,4 +46,3 @@ class LaundryRoomUpdateMachine(BaseModel):
     laundry_room_id: int | None = None
     type: LaundryType | None = None
     status: LaundryStatus | None = None
-    

@@ -159,10 +159,12 @@
     "statusChanged": "Status geändert zu \"{{status}}\"",
     "commentPlaceholder": "Kommentar schreiben …",
     "addComment": "Kommentieren",
+    "commented": "hat kommentiert",
     "changeStatus": "Status ändern",
     "chooseSlot": "Termin auswählen",
     "setEntryTime": "Termin festlegen",
-    "actionError": "Aktion fehlgeschlagen."
+    "actionError": "Aktion fehlgeschlagen.",
+    "entryTimeSet": "hat den Zutrittstermin auf {{time}} festgelegt"
   },
   "login": {
     "title": "Bei STWNO-Anwendung anmelden",

@@ -23,6 +23,7 @@ class DormitoryNotFoundError(Exception):
 def list_all_dormitories(db: Session) -> list[Dormitory]:
     return db.query(Dormitory).order_by(Dormitory.name).all()
 
+
 def create_dormitory(db: Session, payload: DormitoryCreate) -> Dormitory:
     dorm = Dormitory(**payload.model_dump())
     db.add(dorm)

@@ -141,7 +141,8 @@
     "location": "Location",
     "type": {
       "repair": "repair request",
-      "room": "community room booking request"
+      "room": "community room booking request",
+      "commented": "hat kommentiert"
     },
     "exportPdf": "Create PDF",
     "status": {
@@ -159,10 +160,12 @@
     "statusChanged": "Status changed to \"{{status}}\"",
     "commentPlaceholder": "Write a comment …",
     "addComment": "Comment",
+    "commented": "commented",
     "changeStatus": "Change status",
     "chooseSlot": "Choose a time slot",
     "setEntryTime": "Set entry time",
-    "actionError": "Action failed."
+    "actionError": "Action failed.",
+    "entryTimeSet": "set the entry time to {{time}}"
   },
   "login": {
     "title": "Log into STWNO-Anwendung",

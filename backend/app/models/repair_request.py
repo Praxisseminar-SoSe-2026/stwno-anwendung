@@ -10,6 +10,7 @@ from app.models.request import Request
 
 if TYPE_CHECKING:
     from app.models.access_time_slot import AccessTimeSlot
+    from app.models.access_time_slot_history import AccessTimeSlotHistory
     from app.models.access_time_slot_proposal import AccessTimeSlotProposal
     from app.models.consent import Consent
     from app.models.dormitory import Dormitory
@@ -37,6 +38,9 @@ class RepairRequest(Request):
     )
     access_time_slot: Mapped[AccessTimeSlot | None] = relationship(
         back_populates="repair_request", uselist=False
+    )
+    access_time_slot_history: Mapped[list[AccessTimeSlotHistory]] = relationship(
+        back_populates="repair_request"
     )
     time_slot_proposals: Mapped[list[AccessTimeSlotProposal]] = relationship(
         back_populates="repair_request"

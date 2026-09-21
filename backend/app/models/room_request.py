@@ -29,8 +29,9 @@ class RoomRequest(Request):
     decided_by_id: Mapped[int | None] = mapped_column(
         ForeignKey("users.id"), default=None
     )
-    decided_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True),
-                                                        default=None)
+    decided_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), default=None
+    )
 
     community_room: Mapped[CommunityRoom] = relationship(back_populates="room_requests")
     decided_by: Mapped[User | None] = relationship(
