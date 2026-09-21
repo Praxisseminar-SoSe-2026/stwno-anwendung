@@ -41,6 +41,14 @@ class AccessTimeSlotResponse(BaseModel):
     end_time: datetime
 
 
+class AccessTimeSlotHistoryResponse(BaseModel):
+    id: int
+    start_time: datetime
+    end_time: datetime
+    changed_by: ResidentInfo
+    changed_at: datetime | None
+
+
 class CommentCreate(BaseModel):
     text: str
 
@@ -77,6 +85,7 @@ class RequestResponse(BaseModel):
     access_time_slot: AccessTimeSlotResponse | None = None
     comments: list[CommentResponse] = []
     status_history: list[StatusHistoryResponse] = []
+    access_time_slot_history: list[AccessTimeSlotHistoryResponse] = []
 
     # room-specific
     community_room_id: int | None = None
@@ -140,6 +149,16 @@ class RequestResponse(BaseModel):
                     if request.access_time_slot
                     else None
                 ),
+                access_time_slot_history=[
+                    AccessTimeSlotHistoryResponse(
+                        id=entry.id,
+                        start_time=entry.start_time,
+                        end_time=entry.end_time,
+                        changed_by=_resident_info(entry.changed_by),
+                        changed_at=entry.changed_at,
+                    )
+                    for entry in request.access_time_slot_history
+                ],
                 status_history=[
                     StatusHistoryResponse(
                         id=entry.id,
