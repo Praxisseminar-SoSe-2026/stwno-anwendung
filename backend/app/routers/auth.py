@@ -16,6 +16,7 @@ from app.services.auth_service import (
     UserNotFoundError,
     authenticate,
     set_password,
+    ContractEndedError,
 )
 
 logger = logging.getLogger(__name__)
@@ -44,6 +45,9 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
     except InvalidCredentialsError as exc:
         logger.warning("Failed login attempt for email %s", payload.email)
         raise HTTPException(status_code=401, detail=str(exc)) from exc
+    except ContractEndedError as exc:
+        logger.warning("Login attempt with ended contract for email %s", payload.email)
+        raise HTTPException(status_code=403, detail=str(exc)) from exc
 
     token = create_access_token(user.id)
     roles = get_user_role(db, user.id)
