@@ -10,7 +10,7 @@ from app.models.request import Request
 
 if TYPE_CHECKING:
     from app.models.access_time_slot import AccessTimeSlot
-    from app.models.access_time_slot_history import AccessTimeSlotHistory
+    from app.models.access_time_slot_history import  AccessTimeSlotHistory
     from app.models.access_time_slot_proposal import AccessTimeSlotProposal
     from app.models.consent import Consent
     from app.models.dormitory import Dormitory
