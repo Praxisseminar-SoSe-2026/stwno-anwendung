@@ -79,7 +79,7 @@ def seed() -> None:
                 perm_edit_announcement,
                 perm_manage_infrastructure,
                 perm_manage_faq,
-                perm_manage_dormitories
+                perm_manage_dormitories,
             ]
         )
         db.flush()
@@ -107,16 +107,13 @@ def seed() -> None:
                     role_id=role_facility_manager.id,
                     permission_id=perm_manage_infrastructure.id,
                 ),
+                RolePermission(role_id=role_admin.id, permission_id=perm_manage_faq.id),
                 RolePermission(
-                    role_id=role_admin.id,
-                    permission_id=perm_manage_faq.id),
-                RolePermission(
-                    role_id=role_facility_manager.id,
-                    permission_id=perm_manage_faq.id),
+                    role_id=role_facility_manager.id, permission_id=perm_manage_faq.id
+                ),
                 RolePermission(
                     role_id=role_admin.id, permission_id=perm_manage_dormitories.id
-                )
-
+                ),
             ]
         )
 

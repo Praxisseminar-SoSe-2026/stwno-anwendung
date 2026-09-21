@@ -55,7 +55,7 @@ def list_faq_questions(db: Annotated[Session, Depends(get_db)]):
 @router.post("", response_model=FaqEntryResponse)
 def create(
     payload: FaqEntryCreateRequest,
-    db: Annotated[Session, Depends(get_db)],#
+    db: Annotated[Session, Depends(get_db)],  #
     current_user: Annotated[User, Depends(require_permission("manage_faq"))],
 ):
     try:

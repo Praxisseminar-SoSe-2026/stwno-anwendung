@@ -25,8 +25,9 @@ class Request(Base):
     status: Mapped[RequestStatus] = mapped_column(
         Enum(RequestStatus), default=RequestStatus.OPEN, server_default="OPEN"
     )
-    created_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True),
-                                                        default=now_utc)
+    created_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), default=now_utc
+    )
 
     resident: Mapped[User] = relationship(back_populates="requests")
     comments: Mapped[list[RequestComment]] = relationship(back_populates="request")

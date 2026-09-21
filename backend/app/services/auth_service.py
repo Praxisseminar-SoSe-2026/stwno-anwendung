@@ -17,6 +17,7 @@ class CredentialsAlreadySetError(Exception):
 class InvalidCredentialsError(Exception):
     pass
 
+
 class ContractEndedError(Exception):
     pass
 

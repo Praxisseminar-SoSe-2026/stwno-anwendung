@@ -31,21 +31,19 @@ def list_all(
 
 @router.post("", response_model=DormitoryResponse)
 def create(
-        payload: DormitoryCreate,
-        db: Annotated[Session, Depends(get_db)],
-        current_user: Annotated[User,
-        Depends(require_permission("manage_dormitories"))],
+    payload: DormitoryCreate,
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(require_permission("manage_dormitories"))],
 ):
     return create_dormitory(db, payload)
 
 
 @router.put("/{dorm_id}", response_model=DormitoryResponse)
 def update(
-        dorm_id: int,
-        payload: DormitoryUpdate,
-        db: Annotated[Session, Depends(get_db)],
-        current_user: Annotated[User,
-        Depends(require_permission("manage_dormitories"))],
+    dorm_id: int,
+    payload: DormitoryUpdate,
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(require_permission("manage_dormitories"))],
 ):
     try:
         return update_dormitory(db, dorm_id, payload)
@@ -55,10 +53,9 @@ def update(
 
 @router.delete("/{dorm_id}")
 def delete(
-        dorm_id: int,
-        db: Annotated[Session, Depends(get_db)],
-        current_user: Annotated[User,
-        Depends(require_permission("manage_dormitories"))],
+    dorm_id: int,
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(require_permission("manage_dormitories"))],
 ):
     try:
         delete_dormitory(db, dorm_id)

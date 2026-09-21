@@ -30,8 +30,9 @@ class Announcement(Base):
         ForeignKey("dormitories.id"), default=None
     )
     # Sketch: kein NOT NULL, nur DEFAULT (now()) -> nullable
-    created_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True),
-                                                        default=now_utc)
+    created_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), default=now_utc
+    )
 
     author: Mapped[User] = relationship(back_populates="authored_announcements")
     dormitory: Mapped[Dormitory | None] = relationship(back_populates="announcements")

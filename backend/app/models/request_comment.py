@@ -21,8 +21,9 @@ class RequestComment(Base):
     request_id: Mapped[int] = mapped_column(ForeignKey("requests.id"))
     author_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     text: Mapped[str] = mapped_column(Text)
-    created_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True),
-                                                        default=now_utc)
+    created_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), default=now_utc
+    )
 
     request: Mapped[Request] = relationship(back_populates="comments")
     author: Mapped[User] = relationship(back_populates="authored_comments")

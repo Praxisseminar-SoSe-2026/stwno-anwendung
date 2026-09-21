@@ -20,8 +20,9 @@ class LaundryMachine(Base):
     label: Mapped[str]
     laundry_room_id: Mapped[int] = mapped_column(ForeignKey("laundry_rooms.id"))
     type: Mapped[LaundryType] = mapped_column(
-        Enum(LaundryType), default=LaundryType.WASHINGMASCHINE,
-        server_default="Washingmachine"
+        Enum(LaundryType),
+        default=LaundryType.WASHINGMASCHINE,
+        server_default="Washingmachine",
     )
     status: Mapped[LaundryStatus] = mapped_column(
         Enum(LaundryStatus), default=LaundryStatus.UNKNOWN, server_default="UNKNOWN"

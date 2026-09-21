@@ -12,12 +12,14 @@ from app.services.user_service import list_users, update_user
 
 router = APIRouter(prefix="/users", tags=["users"])
 
+
 @router.get("", response_model=list[UserResponse])
 def list_all(
     db: Annotated[Session, Depends(get_db)],
     current_user: Annotated[User, Depends(require_permission("manage_users"))],
 ):
     return list_users(db)
+
 
 @router.put("/{user_id}", response_model=UserResponse)
 def update(

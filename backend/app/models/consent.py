@@ -23,8 +23,9 @@ class Consent(Base):
     consent_given: Mapped[bool]
     consent_text_version: Mapped[str]
     # Sketch: kein NOT NULL, nur DEFAULT (now()) -> nullable
-    timestamp: Mapped[datetime | None] = mapped_column(DateTime(timezone=True),
-                                                       default=now_utc)
+    timestamp: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), default=now_utc
+    )
 
     repair_request: Mapped[RepairRequest] = relationship(back_populates="consent")
     resident: Mapped[User] = relationship(back_populates="consents")

@@ -27,7 +27,8 @@ class Notification(Base):
         default=False, server_default=sql_false()
     )
     # Sketch: kein NOT NULL, nur DEFAULT (now()) -> nullable
-    created_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True),
-                                                        default=now_utc)
+    created_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), default=now_utc
+    )
 
     user: Mapped[User] = relationship(back_populates="notifications")
