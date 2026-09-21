@@ -153,6 +153,7 @@ export function RepairRequest() {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
+            disabled={loading}
           />
         </FormControl>
 
@@ -162,7 +163,7 @@ export function RepairRequest() {
           <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
             <IconButton
               component="label"
-              disabled={imageUpload.uploading}
+              disabled={imageUpload.uploading || loading}
               sx={{ border: '1px solid', borderColor: 'divider', width: 48 }}
             >
               <UploadIcon />
@@ -217,18 +218,20 @@ export function RepairRequest() {
                 value="yes"
                 control={<Radio />}
                 label={t('repairRequest.yes')}
+                disabled={loading}
               />
               <FormControlLabel
                 value="no"
                 control={<Radio />}
                 label={t('repairRequest.no')}
+                disabled={loading}
               />
             </RadioGroup>
             <TextField
               placeholder={t('repairRequest.location')}
               value={location}
               onChange={(e) => setLocationText(e.target.value)}
-              disabled={ownFlat === 'yes'}
+              disabled={ownFlat === 'yes' || loading}
               required
               sx={{ flexGrow: 1 }}
             />
@@ -247,11 +250,13 @@ export function RepairRequest() {
               value="yes"
               control={<Radio />}
               label={t('repairRequest.yes')}
+              disabled={loading}
             />
             <FormControlLabel
               value="no"
               control={<Radio />}
               label={t('repairRequest.no')}
+              disabled={loading}
             />
           </RadioGroup>
         </FormControl>
@@ -287,6 +292,7 @@ export function RepairRequest() {
                       : undefined
                   }
                   required
+                  disabled={loading}
                 />
               ))}
             {/* ----- Proposed Date Outside business hours ----- */}
@@ -296,6 +302,7 @@ export function RepairRequest() {
                 value={proposedDateNote}
                 onChange={(e) => setProposedDateNote(e.target.value)}
                 required
+                disabled={loading}
               />
             )}
             {/* ----- No Slot Works ----- */}
@@ -304,6 +311,7 @@ export function RepairRequest() {
                 <Checkbox
                   checked={noSlotWorks}
                   onChange={(e) => setNoSlotWorks(e.target.checked)}
+                  disabled={loading}
                 />
               }
               label={t('repairRequest.noSlotWorks')}
