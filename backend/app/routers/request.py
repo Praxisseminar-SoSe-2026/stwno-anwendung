@@ -13,6 +13,7 @@ from app.schemas.request import (
     RequestResponse,
     RequestStatusUpdate,
     RoomRequestCreate,
+    RoomBookings
 )
 from app.services.request_service import (
     DateInPastError,
@@ -35,6 +36,7 @@ from app.services.request_service import (
     list_requests,
     set_access_time_slot,
     update_repair_status,
+    list_room_bookings
 )
 
 router = APIRouter(prefix="/requests", tags=["requests"])
@@ -126,6 +128,17 @@ def list_all(
         RequestResponse.from_request(r, can_edit=can_edit_request(db, current_user, r))
         for r in requests
     ]
+
+
+@router.get("/room_booking", response_model=list[RoomBookings])
+def list_all_room_booking_requests(
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_user)],
+):
+    try:
+        return list_room_bookings(db, current_user)
+    except ResidentDormitoryError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
 @router.post("/room_booking", response_model=RequestResponse)
