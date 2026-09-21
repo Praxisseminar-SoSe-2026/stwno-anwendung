@@ -35,7 +35,8 @@
     "loading": "loading...",
     "creating": "creating..",
     "saving": "saving...",
-    "deleting": "deleting..."
+    "deleting": "deleting...",
+    "ending": "ending..."
   },
   "faq": {
     "title": "Frequently Asked Questions",
