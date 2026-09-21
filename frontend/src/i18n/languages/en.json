@@ -52,7 +52,9 @@
     "questionLabel": "Question",
     "answerLabel": "Answer",
     "categoryLabel": "Category",
-    "createFaqError": "New question could not be created."
+    "createFaqError": "New question could not be created.",
+    "updateFaqError": "Question could not be edited.",
+    "deleteFaqError": "Question could not be deleted."
   },
   "laundry": {
     "title": "Washroom",

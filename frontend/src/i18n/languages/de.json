@@ -52,7 +52,9 @@
     "questionLabel": "Frage",
     "answerLabel": "Antwort",
     "categoryLabel": "Kategorie",
-    "createFaqError": "Neue Frage konnte nicht erstellt werden."
+    "createFaqError": "Neue Frage konnte nicht erstellt werden.",
+    "updateFaqError": "Frage konnte nicht bearbeitet werden.",
+    "deleteFaqError": "Frage konnte nicht gelöscht werden."
   },
   "laundry": {
     "title": "Waschküche",
