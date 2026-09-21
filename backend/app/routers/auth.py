@@ -11,12 +11,12 @@ from app.models import User
 from app.schemas.auth import LoginRequest, LoginResponse, SetPasswordRequest
 from app.schemas.user import UserResponse
 from app.services.auth_service import (
+    ContractEndedError,
     CredentialsAlreadySetError,
     InvalidCredentialsError,
     UserNotFoundError,
     authenticate,
     set_password,
-    ContractEndedError,
 )
 
 logger = logging.getLogger(__name__)
