@@ -15,3 +15,8 @@ class LaundryStatus(StrEnum):
     FREE = "free"
     OCCUPIED = "occupied"
     UNKNOWN = "unknown"
+
+
+class LaundryType(StrEnum):
+    WASHINGMASCHINE = "Washingmachine"
+    DRYER = "Dryer"

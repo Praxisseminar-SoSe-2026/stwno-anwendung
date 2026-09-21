@@ -1,3 +1,5 @@
+from datetime import date
+
 from sqlalchemy.orm import Session
 
 from app.core.security import hash_password, verify_password
@@ -13,6 +15,9 @@ class CredentialsAlreadySetError(Exception):
 
 
 class InvalidCredentialsError(Exception):
+    pass
+
+class ContractEndedError(Exception):
     pass
 
 
@@ -39,5 +44,8 @@ def authenticate(db: Session, email: str, password: str) -> User:
 
     if not verify_password(password, user.password_hash):
         raise InvalidCredentialsError("Invalid email or password")
+
+    if user.contract_end is not None and user.contract_end < date.today():
+        raise ContractEndedError("Your contract has ended")
 
     return user

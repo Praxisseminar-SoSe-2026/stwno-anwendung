@@ -359,6 +359,51 @@ def edit_room_request(
 # Todo: staff should be able to look at these kind of information
 #  (independent of having a dormitory assigned)
 def list_room_bookings(db: Session, current_user: User) -> list[RoomBookings]:
+    roles = set(get_user_role(db, current_user.id))
+
+    if roles & STAFF_ROLES:
+        room_requests = (
+            db.query(RoomRequest)
+            .join(CommunityRoom, RoomRequest.community_room_id == CommunityRoom.id)
+            .all()
+        )
+
+        # TODO: move this redundancy in separate function
+        return [
+            RoomBookings(
+                id=room_request.id,
+                community_room_id=room_request.community_room_id,
+                dormitory_id=room_request.community_room.dormitory_id,
+                start_datetime=room_request.start_datetime,
+                end_datetime=room_request.end_datetime,
+                status=room_request.status,
+            )
+            for room_request in room_requests
+        ]
+
+    if "hausmeister" in roles:
+        dormitory_ids = managed_dormitory_ids(db, current_user.id)
+        if not dormitory_ids:
+            return []
+        room_requests = (
+            db.query(RoomRequest)
+            .join(CommunityRoom, RoomRequest.community_room_id == CommunityRoom.id)
+            .filter(CommunityRoom.dormitory_id.in_(dormitory_ids))
+            .all()
+        )
+
+        return [
+            RoomBookings(
+                id=room_request.id,
+                community_room_id=room_request.community_room_id,
+                dormitory_id=room_request.community_room.dormitory_id,
+                start_datetime=room_request.start_datetime,
+                end_datetime=room_request.end_datetime,
+                status=room_request.status,
+            )
+            for room_request in room_requests
+        ]
+
     if current_user.dormitory_id is None:
         raise ResidentDormitoryError(
             "User has no dormitory assigned; cannot list room availability"

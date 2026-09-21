@@ -4,17 +4,39 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.core.dependencies import get_current_user
+from app.core.dependencies import get_current_user, require_permission
 from app.db.database import get_db
 from app.models.user import User
-from app.schemas.infrastructure import CommunityRoomResponse, LaundryRoomResponse
-from app.schemas.laundry import LaundryMachineResponse
+from app.schemas.infrastructure import (
+    CommunityRoomCreate,
+    CommunityRoomResponse,
+    CommunityRoomUpdate,
+    LaundryRoomCreate,
+    LaundryRoomResponse,
+    LaundryRoomUpdate,
+)
+from app.schemas.laundry import (
+    LaundryMachineResponse,
+    LaundryRoomCreateMachine,
+    LaundryRoomUpdateMachine,
+)
 from app.services.infrastructure_service import (
+    CommunityRoomNotFoundError,
+    LaundryMachineNotFoundError,
     LaundryRoomNotFoundError,
+    create_community_room,
+    create_laundry_machine,
+    create_laundry_room,
+    delete_community_room,
+    delete_laundry_machine,
+    delete_laundry_room,
     get_laundry_machine,
     list_community_rooms,
     list_laundry_machines_in_laundry_room,
     list_laundry_rooms,
+    update_community_room,
+    update_laundry_machine,
+    update_laundry_room,
 )
 from app.services.laundry_booking_service import MachineNotFoundError
 from app.services.request_service import ResidentDormitoryError
@@ -33,6 +55,40 @@ def list_all_rooms(
         return list_community_rooms(db, current_user)
     except ResidentDormitoryError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
+    
+    
+@router.post("/community_rooms", response_model=CommunityRoomResponse)
+def create_room_community(
+    payload: CommunityRoomCreate,
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(require_permission("manage_infrastructure"))],
+):
+    return create_community_room(db, payload)
+
+
+@router.put("/community_rooms/{room_id}", response_model=CommunityRoomResponse)
+def update_room_community(
+    room_id: int,
+    payload: CommunityRoomUpdate,
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(require_permission("manage_infrastructure"))],
+):
+    try:
+        return update_community_room(db, room_id, payload)
+    except CommunityRoomNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    
+    
+@router.delete("/community_rooms/{room_id}")
+def delete_room_community(
+    room_id: int,
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(require_permission("manage_infrastructure"))],
+):
+    try:
+        delete_community_room(db, room_id)
+    except CommunityRoomNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
 @router.get("/laundry_rooms", response_model=list[LaundryRoomResponse])
@@ -44,6 +100,41 @@ def list_all_laundry_rooms(
         return list_laundry_rooms(db, current_user)
     except ResidentDormitoryError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@router.post("/laundry_rooms", response_model=LaundryRoomResponse)
+def create_room_laundry(
+    payload: LaundryRoomCreate,
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(require_permission("manage_infrastructure"))],
+):
+    return create_laundry_room(db, payload)
+
+
+@router.put("/laundry_rooms/{room_id}", response_model=LaundryRoomResponse)
+def update_room_laundry(
+    room_id: int,
+    payload: LaundryRoomUpdate,
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(require_permission("manage_infrastructure"))],
+):
+    try:
+        return update_laundry_room(db, room_id, payload)
+    except LaundryRoomNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+@router.delete("/laundry_rooms/{room_id}")
+def delete_room_laundry(
+    room_id: int,
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(require_permission("manage_infrastructure"))],
+):
+    try:
+        delete_laundry_room(db, room_id)
+    except LaundryRoomNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
 
 
 @router.get("/laundry_rooms/{laundry_room_id}/laundry_machines",
@@ -74,3 +165,39 @@ def get_one_laundry_machine(
         raise HTTPException(status_code=404, detail=str(exc)) from exc
     except ResidentDormitoryError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
+    
+    
+@router.post("/laundry_machines", response_model=LaundryMachineResponse)
+def create_machine(
+        payload: LaundryRoomCreateMachine,
+        db: Annotated[Session, Depends(get_db)],
+        current_user: Annotated[User,
+        Depends(require_permission("manage_infrastructure"))],
+):
+    return create_laundry_machine(db, payload)
+
+@router.delete("/laundry_machines/{machine_id}")
+def delete_machine(
+        machine_id: int,
+        db: Annotated[Session, Depends(get_db)],
+        current_user: Annotated[User,
+        Depends(require_permission("manage_infrastructure"))],
+):
+    try:
+        delete_laundry_machine(db, machine_id)
+    except LaundryMachineNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    
+    
+@router.put("/laundry_machines/{machine_id}", response_model=LaundryMachineResponse)
+def update_machine(
+        machine_id: int,
+        payload: LaundryRoomUpdateMachine,
+        db: Annotated[Session, Depends(get_db)],
+        current_user: Annotated[User,
+        Depends(require_permission("manage_infrastructure"))],
+): 
+    try:
+        return update_laundry_machine(db, machine_id, payload)
+    except LaundryMachineNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc

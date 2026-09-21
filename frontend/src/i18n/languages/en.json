@@ -48,6 +48,7 @@
   },
   "laundry": {
     "title": "Washroom",
+    "machines": "Machines",
     "washingmachines": "washingmaschines",
     "washingmachine": "washingmaschine",
     "selectLaundryRoom": "Select washroom",
@@ -102,6 +103,37 @@
     "title": "Ticket Overview (Repair and Room Booking Requests)",
     "titleShort": "Ticket Overview",
     "notAuthorized": "You are not authorized to use this page."
+  },
+  "userList": {
+    "title": "User List",
+    "editUser": "Edit user",
+    "personNumber": "Person number",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "flatNumber": "Flat number",
+    "dormitory": "Dormitory",
+    "noDormitory": "No dormitory",
+    "contractEnd": "Contract end",
+    "roles": "Roles"
+  },
+  "infrastructure": {
+    "createRoom": "Create room",
+    "editRoom": "Edit room",
+    "name": "Name",
+    "description": "Description",
+    "status": "Status",
+    "type": "Type",
+    "createMachine": "Create machine",
+    "editMachine": "Edit machine"
+  },
+  "dormitory": {
+    "createDorm": "Create dormitory",
+    "name": "Name",
+    "address": "Address",
+    "city": "City",
+    "zipCode": "Zip code",
+    "editDorm": "Edit dormitory"
   },
   "request": {
     "start": "Begin",

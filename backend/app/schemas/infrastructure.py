@@ -8,9 +8,29 @@ class CommunityRoomResponse(BaseModel):
     name: str
     description: str | None
     dormitory_id: int
+    
+    
+class CommunityRoomCreate(BaseModel):
+    name: str
+    description: str | None
+    dormitory_id: int
+
+
+class CommunityRoomUpdate(BaseModel):
+    name: str | None = None
+    description: str | None = None
 
 
 class LaundryRoomResponse(BaseModel):
     id: int
     name: str
     dormitory_id: int
+
+
+class LaundryRoomCreate(BaseModel):
+    name: str
+    dormitory_id: int
+
+
+class LaundryRoomUpdate(BaseModel):
+    name: str | None = None

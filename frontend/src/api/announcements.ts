@@ -38,14 +38,14 @@ async function handleResponse<T>(res: Response): Promise<T> {
 }
 
 export async function getAnnouncements(): Promise<Announcement[]> {
-  const res = await fetch(`${BASE_URL}/announcements`, {
+  const res = await apiFetch(`${BASE_URL}/announcements`, {
     headers: authHeaders(),
   })
   return handleResponse(res)
 }
 
 export async function getAnnouncement(id: number): Promise<Announcement> {
-  const res = await fetch(`${BASE_URL}/announcements/${id}`, {
+  const res = await apiFetch(`${BASE_URL}/announcements/${id}`, {
     headers: authHeaders(),
   })
   return handleResponse(res)
@@ -55,7 +55,7 @@ export async function updateAnnouncement(
   id: number,
   data: Partial<AnnouncementInput>
 ): Promise<Announcement> {
-  const res = await fetch(`${BASE_URL}/announcements/${id}`, {
+  const res = await apiFetch(`${BASE_URL}/announcements/${id}`, {
     method: 'PUT',
     headers: authHeaders(),
     body: JSON.stringify(data),

@@ -1,15 +1,31 @@
-import { AppBar, Toolbar, Button, Stack, Typography } from '@mui/material'
+import {
+  AppBar,
+  Toolbar,
+  Button,
+  Stack,
+  Typography,
+  Select,
+  MenuItem,
+  FormControl,
+  IconButton,
+} from '@mui/material'
 import { Link } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../contexts/AuthContext'
 import { useLogout } from '../hooks/useLogout.ts'
 import { useHasRole } from '../hooks/useHasRole.ts'
-import { STAFF_ROLES } from '../constants/roles.ts'
+import { ADMIN_ROLES, STAFF_ROLES } from '../constants/roles.ts'
+import { useDormitoryFilter } from '../contexts/DormitoryFilterContext'
+import { useDormitories } from '../hooks/useDormitories'
+import AddIcon from '@mui/icons-material/Add'
+import EditIcon from '@mui/icons-material/Edit'
 
 export function Header() {
   const { t } = useTranslation()
   const { user, loading } = useAuth()
   const { logout } = useLogout()
+  const { dormitoryFilter, setDormitoryFilter } = useDormitoryFilter()
+  const { dormitories } = useDormitories()
 
   const links = [
     { to: '/', label: 'Start' },
@@ -20,6 +36,7 @@ export function Header() {
   ]
 
   const canViewTickets = useHasRole(STAFF_ROLES) && !loading
+  const isAdmin = useHasRole(ADMIN_ROLES) && !loading
 
   return (
     <AppBar position="static" color="default">
@@ -30,12 +47,47 @@ export function Header() {
               {link.label}
             </Button>
           ))}
+          {/* Ticket Overview */}
           {canViewTickets && (
             <Button component={Link} to="/admin/tickets">
               {t('adminTicketOverview.titleShort')}
             </Button>
           )}
+          {/* Dorm selection */}
+          {canViewTickets && (
+            <FormControl>
+              <Select
+                value={dormitoryFilter}
+                onChange={(e) => setDormitoryFilter(e.target.value)}
+              >
+                {dormitories.map((d) => (
+                  <MenuItem key={d.id} value={String(d.id)}>
+                    {d.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          )}
+          {/* Dorm edit */}
+          {isAdmin && dormitoryFilter && (
+            <IconButton component={Link} to={`/dormitory/${dormitoryFilter}`}>
+              <EditIcon />
+            </IconButton>
+          )}
+
+          {/* Dorm create */}
+          {isAdmin && (
+            <IconButton component={Link} to={'/dormitory/neu'}>
+              <AddIcon />
+            </IconButton>
+          )}
+          {isAdmin && (
+            <Button component={Link} to="/admin/users">
+              {t('userList.title')}
+            </Button>
+          )}
         </Stack>
+        {/* Username + Logout */}
         <Stack>
           {user ? (
             <>
