@@ -15,12 +15,17 @@ import {
 } from '@mui/material'
 import { useCreateRoomBooking } from '../../hooks/useCreateRoomBooking'
 import { useCommunityRooms } from '../../hooks/useCommunityRooms'
+import { Loading } from '../../components/Loading'
 
 export function RoomBookingCreatePage() {
   const navigate = useNavigate()
   const { t } = useTranslation()
 
-  const { communityRooms } = useCommunityRooms()
+  const {
+    communityRooms,
+    loading: roomsLoading,
+    error: roomsError,
+  } = useCommunityRooms()
   const { id } = useParams<{ id: string }>()
   const communityRoomId = id ? Number(id) : null
   const selectedRoom = communityRooms.find(
@@ -51,6 +56,9 @@ export function RoomBookingCreatePage() {
     }
   }
 
+  if (roomsLoading) return <Loading />
+  if (roomsError) return <Typography color="error">{roomsError}</Typography>
+
   return (
     <Paper variant="outlined" sx={{ p: 4 }}>
       <Stack spacing={2}>
@@ -68,6 +76,7 @@ export function RoomBookingCreatePage() {
           onChange={(e) => setStartDate(e.target.value)}
           slotProps={{ inputLabel: { shrink: true } }}
           fullWidth
+          disabled={loading}
         />
 
         {/* endDate */}
@@ -78,6 +87,7 @@ export function RoomBookingCreatePage() {
           onChange={(e) => setEndDate(e.target.value)}
           slotProps={{ inputLabel: { shrink: true } }}
           fullWidth
+          disabled={loading}
         />
 
         {/* key exchange */}
@@ -92,8 +102,18 @@ export function RoomBookingCreatePage() {
               setRegularKeyExchangePossible(e.target.value === 'true')
             }
           >
-            <FormControlLabel value="true" control={<Radio />} label="ja" />
-            <FormControlLabel value="false" control={<Radio />} label="nein" />
+            <FormControlLabel
+              value="true"
+              control={<Radio />}
+              label="ja"
+              disabled={loading}
+            />
+            <FormControlLabel
+              value="false"
+              control={<Radio />}
+              label="nein"
+              disabled={loading}
+            />
           </RadioGroup>
         </FormControl>
 
@@ -105,6 +125,7 @@ export function RoomBookingCreatePage() {
             onChange={(e) => setAlternativeKeyExchangeDate(e.target.value)}
             slotProps={{ inputLabel: { shrink: true } }}
             fullWidth
+            disabled={loading}
           />
         )}
 
@@ -119,7 +140,7 @@ export function RoomBookingCreatePage() {
               (!regularKeyExchangePossible && !alternativeKeyExchangeDate)
             }
           >
-            {t('common.create')}
+            {loading ? t('common.creating') : t('common.create')}
           </Button>
           <Button
             onClick={() => navigate('/gemeinschaftsraum')}

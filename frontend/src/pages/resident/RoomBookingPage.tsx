@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import {
   Button,
-  CircularProgress,
   MenuItem,
   Stack,
   TextField,
@@ -21,6 +20,7 @@ import { useCommunityRooms } from '../../hooks/useCommunityRooms'
 import { useRoomBookings } from '../../hooks/useRoomBookings'
 import { useState } from 'react'
 import { Link } from 'react-router'
+import { Loading } from '../../components/Loading'
 
 type RoomBookingEvent = {
   id: string
@@ -57,8 +57,16 @@ function renderEventContent(eventInfo) {
 
 export function RoomBookingPage() {
   const { t } = useTranslation()
-  const { communityRooms, loading, error } = useCommunityRooms()
-  const { roomBookings } = useRoomBookings()
+  const {
+    communityRooms,
+    loading: roomsLoading,
+    error: roomsError,
+  } = useCommunityRooms()
+  const {
+    roomBookings,
+    loading: bookingsLoading,
+    error: bookingsError,
+  } = useRoomBookings()
   const [roomId, setRoomId] = useState<number | null>(null)
 
   {
@@ -66,12 +74,9 @@ export function RoomBookingPage() {
   }
   const roomBookingEvents: RoomBookingEvent[] = roomId
     ? roomBookings
-        .filter(
-          (booking) =>
-            booking.community_room_id === roomId &&
-            /* Todo: discuss universal naming of stati  */
-            (booking.status === 'accepted' || booking.status === 'Bestätigt')
-        )
+        .filter((booking) => booking.community_room_id === roomId)
+        /* Todo: implement standardized stati */
+        /* && (booking.status === 'accepted' || booking.status === 'Bestätigt')) */
         .map((booking) => ({
           id: String(booking.id),
           title: t('roomBooking.occupied'),
@@ -80,11 +85,12 @@ export function RoomBookingPage() {
         }))
     : []
 
+  if (roomsLoading) return <Loading />
+  if (roomsError) return <Typography color="error">{roomsError}</Typography>
+
   return (
     <Stack spacing={10}>
       <Typography variant="h1">{t('roomBooking.title')}</Typography>
-      {error && <Typography color="error">{error}</Typography>}
-
       {/* select community room */}
       <TextField
         select
@@ -100,17 +106,23 @@ export function RoomBookingPage() {
           </MenuItem>
         ))}
       </TextField>
-      {loading && <CircularProgress />}
-      {/* Todo: only display button, when communityroom is selected*/}
-      <Button
-        component={Link}
-        variant="contained"
-        to={`/gemeinschaftsraum/anfrage/${roomId}`}
-        sx={{ width: '50%', alignSelf: 'center' }}
-      >
-        +
-      </Button>
-      <Calendar events={roomBookingEvents} />
+      {roomId !== null &&
+        (bookingsLoading ? (
+          <Loading />
+        ) : (
+          <Stack>
+            <Button
+              component={Link}
+              variant="contained"
+              to={`/gemeinschaftsraum/anfrage/${roomId}`}
+              sx={{ width: '50%', alignSelf: 'center' }}
+            >
+              +
+            </Button>
+            <Calendar events={roomBookingEvents} />
+          </Stack>
+        ))}
+      {bookingsError && <Typography color="error">{bookingsError}</Typography>}
     </Stack>
   )
 }
