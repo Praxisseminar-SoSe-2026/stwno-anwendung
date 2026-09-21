@@ -34,7 +34,8 @@
     "back": "Zurück",
     "loading": "Lädt...",
     "creating": "wird erstellt..",
-    "saving": "wird gespeichert..."
+    "saving": "wird gespeichert...",
+    "deleting": "wird gelöscht..."
   },
   "faq": {
     "title": "Häufig gestellte Fragen",

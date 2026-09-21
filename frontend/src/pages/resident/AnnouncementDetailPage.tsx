@@ -7,7 +7,6 @@ import {
   Paper,
   Button,
   TextField,
-  CircularProgress,
   Chip,
   Checkbox,
   FormControlLabel,
@@ -24,6 +23,7 @@ import { useImageUpload } from '../../hooks/useImageUpload.ts'
 import UploadIcon from '@mui/icons-material/Upload'
 import { useHasRole } from '../../hooks/useHasRole.ts'
 import { EDITOR_ROLES } from '../../constants/roles.ts'
+import { Loading } from '../../components/Loading'
 
 const GLOBAL_VALUE = 'global'
 
@@ -107,7 +107,7 @@ export function AnnouncementDetailPage() {
     }
   }
 
-  if (loading) return <CircularProgress />
+  if (loading) return <Loading />
   if (error) return <Typography color="error">{error}</Typography>
   if (!announcement) return null
 
@@ -122,12 +122,14 @@ export function AnnouncementDetailPage() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               fullWidth
+              disabled={actionLoading}
             />
             <FormControlLabel
               control={
                 <Checkbox
                   checked={important}
                   onChange={(e) => setImportant(e.target.checked)}
+                  disabled={actionLoading}
                 />
               }
               label={t('bulletinBoard.important')}
@@ -138,6 +140,7 @@ export function AnnouncementDetailPage() {
               onChange={(e) => setText(e.target.value)}
               multiline
               minRows={4}
+              disabled={actionLoading}
               fullWidth
             />
 
@@ -150,6 +153,7 @@ export function AnnouncementDetailPage() {
                 value={scope}
                 label={t('bulletinBoard.scope')}
                 onChange={(e) => setScope(e.target.value)}
+                disabled={actionLoading}
               >
                 <MenuItem value={GLOBAL_VALUE}>
                   {t('bulletinBoard.scopeGlobal')}
@@ -167,7 +171,7 @@ export function AnnouncementDetailPage() {
                 component="label"
                 variant="outlined"
                 startIcon={<UploadIcon />}
-                disabled={imageUpload.uploading}
+                disabled={imageUpload.uploading || actionLoading}
               >
                 {!imageUpload.uploading && t('bulletinBoard.uploadImage')}
                 <input
@@ -218,7 +222,7 @@ export function AnnouncementDetailPage() {
                 onClick={handleSave}
                 disabled={actionLoading}
               >
-                {t('common.save')}
+                {actionLoading ? t('common.saving') : t('common.save')}
               </Button>
               <Button
                 onClick={() => setEditing(false)}
@@ -254,7 +258,11 @@ export function AnnouncementDetailPage() {
 
             {canEdit && (
               <Stack direction="row" spacing={2}>
-                <Button variant="contained" onClick={startEditing}>
+                <Button
+                  variant="contained"
+                  onClick={startEditing}
+                  disabled={actionLoading}
+                >
                   {t('common.edit')}
                 </Button>
                 <Button
@@ -263,7 +271,7 @@ export function AnnouncementDetailPage() {
                   onClick={handleDelete}
                   disabled={actionLoading}
                 >
-                  {t('common.delete')}
+                  {actionLoading ? t('common.deleting') : t('common.delete')}
                 </Button>
               </Stack>
             )}
