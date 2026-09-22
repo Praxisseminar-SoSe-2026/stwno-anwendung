@@ -61,8 +61,18 @@ export function AdminCreateAnnouncementPage() {
   }
 
   return (
-    <Paper variant="outlined" sx={{ p: 4 }}>
-      <Stack spacing={2}>
+    <Paper
+      variant="outlined"
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: '50%',
+        alignSelf: 'center',
+        p: 4,
+        gap: 2,
+      }}
+    >
+      <Stack spacing={3}>
         <Typography variant="h4">
           {t('bulletinBoard.createAnnouncement')}
         </Typography>

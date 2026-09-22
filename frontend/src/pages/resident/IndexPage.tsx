@@ -8,6 +8,7 @@ import {
   CardContent,
   Chip,
   Button,
+  Divider,
 } from '@mui/material'
 import { useAnnouncements } from '../../hooks/useAnnouncements'
 import { useHasRole } from '../../hooks/useHasRole.ts'
@@ -23,7 +24,7 @@ export function IndexPage() {
   if (error) return <Typography color="error">{error}</Typography>
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={3} style={{ width: '50%', alignSelf: 'center' }}>
       <Stack
         direction="row"
         sx={{ justifyContent: 'space-between', alignItems: 'center' }}
@@ -35,7 +36,7 @@ export function IndexPage() {
           </Button>
         )}
       </Stack>
-
+      <Divider />
       {announcements.length === 0 && (
         <Typography>{t('bulletinBoard.empty')}</Typography>
       )}

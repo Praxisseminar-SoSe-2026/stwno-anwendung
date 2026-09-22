@@ -15,6 +15,7 @@ import { useCreateFaq } from '../../hooks/useCreateFaq'
 import { useFaqCategories } from '../../hooks/useFaqCategories'
 import { useHasRole } from '../../hooks/useHasRole.ts'
 import { STAFF_ROLES } from '../../constants/roles.ts'
+import { BackButton } from '../../components/BackButton.tsx'
 
 export function AdminFaqCreatePage() {
   const navigate = useNavigate()
@@ -51,8 +52,19 @@ export function AdminFaqCreatePage() {
   }
 
   return (
-    <Paper variant="outlined" sx={{ p: 4 }}>
-      <Stack spacing={2}>
+    <Paper
+      variant="outlined"
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: '50%',
+        alignSelf: 'center',
+        p: 4,
+        gap: 2,
+      }}
+    >
+      <Stack spacing={3} style={{ alignItems: 'start' }}>
+        <BackButton />
         {/* question */}
         <TextField
           label={t('faq.questionLabel')}
@@ -97,23 +109,16 @@ export function AdminFaqCreatePage() {
           fullWidth
         />
 
-        <Stack direction="row" spacing={2}>
-          <Button
-            variant="contained"
-            onClick={handleSubmit}
-            disabled={
-              loading ||
-              categoryId === null ||
-              !question.trim() ||
-              !answer.trim()
-            }
-          >
-            {loading ? t('common.creating') : t('common.create')}
-          </Button>
-          <Button onClick={() => navigate('/faq')} disabled={loading}>
-            {t('common.cancel')}
-          </Button>
-        </Stack>
+        <Button
+          variant="contained"
+          onClick={handleSubmit}
+          fullWidth
+          disabled={
+            loading || categoryId === null || !question.trim() || !answer.trim()
+          }
+        >
+          {loading ? t('common.creating') : t('common.create')}
+        </Button>
 
         {error && <Typography color="error">{error}</Typography>}
       </Stack>

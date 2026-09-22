@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { Stack, Typography, Paper, Button, TextField } from '@mui/material'
 import { createLaundryRoom } from '../../api/infrastructure'
-import { useDormitoryFilter } from '../../contexts/DormitoryFilterContext.tsx'
+import { useDormitoryFilter } from '../../contexts/DormitoryFilterContext'
+import { BackButton } from '../../components/BackButton'
 
 export function AdminCreateLaundryRoomPage() {
   const { t } = useTranslation()
@@ -30,8 +31,19 @@ export function AdminCreateLaundryRoomPage() {
   }
 
   return (
-    <Paper>
-      <Stack spacing={2}>
+    <Paper
+      variant="outlined"
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: '50%',
+        alignSelf: 'center',
+        p: 4,
+        gap: 2,
+      }}
+    >
+      <Stack spacing={3} style={{ alignItems: 'start' }}>
+        <BackButton />
         <Typography>{t('infrastructure.createRoom')}</Typography>
 
         {/* Name */}
@@ -46,6 +58,7 @@ export function AdminCreateLaundryRoomPage() {
           variant="contained"
           onClick={handleSubmit}
           disabled={saving || !name}
+          fullWidth
         >
           {t('common.create')}
         </Button>

@@ -132,6 +132,7 @@ export function RepairRequest() {
         display: 'flex',
         flexDirection: 'column',
         width: '50%',
+        alignSelf: 'center',
         p: 4,
         gap: 2,
       }}

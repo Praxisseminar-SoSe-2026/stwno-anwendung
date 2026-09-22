@@ -8,6 +8,7 @@ import {
   deleteDormitory,
   type Dormitory,
 } from '../../api/dormitories'
+import { BackButton } from '../../components/BackButton.tsx'
 
 export function AdminDormitoryDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -66,8 +67,19 @@ export function AdminDormitoryDetailPage() {
   }
 
   return (
-    <Paper>
-      <Stack spacing={2}>
+    <Paper
+      variant="outlined"
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: '50%',
+        alignSelf: 'center',
+        p: 4,
+        gap: 2,
+      }}
+    >
+      <Stack spacing={3} style={{ alignItems: 'start' }}>
+        <BackButton />
         <Typography variant="h4">{t('dormitory.editDorm')}</Typography>
 
         {/* Name */}

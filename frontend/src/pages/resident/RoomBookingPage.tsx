@@ -29,6 +29,8 @@ import { useHasRole } from '../../hooks/useHasRole.ts'
 import { STAFF_ROLES, EDITOR_ROLES } from '../../constants/roles.ts'
 import { useDormitoryFilter } from '../../contexts/DormitoryFilterContext.tsx'
 
+import { Divider } from '@mui/material'
+
 type RoomBookingEvent = {
   id: string
   title: string
@@ -114,8 +116,9 @@ export function RoomBookingPage() {
   if (roomsError) return <Typography color="error">{roomsError}</Typography>
 
   return (
-    <Stack spacing={1}>
+    <Stack spacing={3} style={{ width: '50%', alignSelf: 'center' }}>
       <Typography variant="h1">{t('roomBooking.title')}</Typography>
+      <Divider />
       {/* select community room */}
       <Stack direction="row">
         <TextField
@@ -124,7 +127,7 @@ export function RoomBookingPage() {
           value={roomId ?? ''}
           onChange={(e) => setRoomId(Number(e.target.value))}
           disabled={visibleRooms.length === 0}
-          fullWidth
+          style={{ width: '50%', alignSelf: 'center' }}
         >
           {visibleRooms.map((room) => (
             <MenuItem key={room.id} value={room.id}>
@@ -155,14 +158,14 @@ export function RoomBookingPage() {
         (bookingsLoading ? (
           <Loading />
         ) : (
-          <Stack>
+          <Stack spacing={2} style={{ width: '75%' }}>
             <Button
               component={Link}
               variant="contained"
               to={`/gemeinschaftsraum/anfrage/${roomId}`}
-              sx={{ width: '50%', alignSelf: 'center' }}
+              sx={{ width: 'auto', alignSelf: 'center' }}
             >
-              +
+              {t('roomBooking.createCommunityRoomBooking')}
             </Button>
             <Calendar events={roomBookingEvents} />
           </Stack>

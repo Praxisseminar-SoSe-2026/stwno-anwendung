@@ -8,6 +8,7 @@ import {
   CardContent,
   Chip,
   Grid,
+  Divider,
 } from '@mui/material'
 import { useRequests } from '../../hooks/useRequests'
 import { useAuth } from '../../contexts/AuthContext'
@@ -59,10 +60,11 @@ export function AdminTicketOverviewPage() {
   if (error) return <Typography color="error">{error}</Typography>
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={3} style={{ width: '50%', alignSelf: 'center' }}>
       <Typography variant="h1">
         {t('adminTicketOverview.titleShort')}
       </Typography>
+      <Divider />
 
       <Grid container spacing={2}>
         {STATUS_COLUMNS.map((column) => {

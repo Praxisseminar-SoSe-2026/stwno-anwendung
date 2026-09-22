@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router'
+import { useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import {
@@ -37,6 +37,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import CancelIcon from '@mui/icons-material/Cancel'
 import type { SvgIconComponent } from '@mui/icons-material'
 import EventAvailableIcon from '@mui/icons-material/EventAvailable'
+import { BackButton } from '../../components/BackButton'
 
 const REQUEST_STATUSES: RequestStatus[] = ['open', 'in_progress', 'closed', 'denied']
 
@@ -70,7 +71,6 @@ export function AdminTicketDetailPage() {
   const { t } = useTranslation()
 
   const { loading: authLoading } = useAuth()
-  const navigate = useNavigate()
 
   const { request, loading, error, setRequest } = useRequest(Number(id))
   const {
@@ -122,8 +122,16 @@ export function AdminTicketDetailPage() {
   )
 
   return (
-    <Paper variant="outlined" sx={{ p: 4 }}>
-      <Button onClick={() => navigate(-1)}>{t('common.back')}</Button>
+    <Paper
+      variant="outlined"
+      sx={{
+        width: '50%',
+        alignSelf: 'center',
+        p: 4,
+        gap: 2,
+      }}
+    >
+      <BackButton />
       <Stack spacing={2}>
         <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
           <Typography>

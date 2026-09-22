@@ -16,6 +16,7 @@ import { useDeleteFaq } from '../../hooks/useDeleteFaq'
 import { useUpdateFaq } from '../../hooks/useUpdateFaq'
 import { useFaqCategories } from '../../hooks/useFaqCategories'
 import { Loading } from '../../components/Loading'
+import { BackButton } from '../../components/BackButton'
 
 export function FaqDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -85,8 +86,16 @@ export function FaqDetailPage() {
   if (!faq) return null
 
   return (
-    <Paper variant="outlined" sx={{ p: 4 }}>
-      <Button onClick={() => navigate(-1)}>{t('common.back')}</Button>
+    <Paper
+      variant="outlined"
+      sx={{
+        width: '50%',
+        alignSelf: 'center',
+        p: 4,
+        gap: 2,
+      }}
+    >
+      <BackButton />
       <Stack spacing={2}>
         {editing ? (
           <>

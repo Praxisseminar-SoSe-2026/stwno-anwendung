@@ -15,6 +15,7 @@ import {
   deleteCommunityRoom,
   type CommunityRoom,
 } from '../../api/infrastructure'
+import { BackButton } from '../../components/BackButton'
 
 export function AdminCommunityRoomDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -72,8 +73,17 @@ export function AdminCommunityRoomDetailPage() {
   if (loading) return <CircularProgress />
 
   return (
-    <Paper>
-      <Stack spacing={2}>
+    <Paper
+      variant="outlined"
+      sx={{
+        width: '50%',
+        alignSelf: 'center',
+        p: 4,
+        gap: 2,
+      }}
+    >
+      <Stack spacing={3} style={{ alignItems: 'start' }}>
+        <BackButton />
         <Typography variant="h4">{t('infrastructure.editRoom')}</Typography>
 
         {/* Name */}
