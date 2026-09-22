@@ -8,6 +8,7 @@ import {
   MenuItem,
   FormControl,
   IconButton,
+  Divider,
 } from '@mui/material'
 import { Link } from 'react-router'
 import { useTranslation } from 'react-i18next'
@@ -38,69 +39,90 @@ export function Header() {
   const canViewTickets = useHasRole(STAFF_ROLES) && !loading
   const isAdmin = useHasRole(ADMIN_ROLES) && !loading
 
+  const userSection = user ? (
+    <>
+      <Typography noWrap>
+        {user.first_name} {user.last_name}
+      </Typography>
+      <Button onClick={logout}>Logout</Button>
+    </>
+  ) : (
+    <Button component={Link} to="/login">
+      {t('login.titleShort')}
+    </Button>
+  )
+
+  const generalItems = [...links]
+
+  const adminItems = [
+    ...(canViewTickets
+      ? [{ to: '/admin/tickets', label: t('adminTicketOverview.titleShort') }]
+      : []),
+    ...(isAdmin ? [{ to: '/admin/users', label: t('userList.title') }] : []),
+  ]
+
+  const dormitorySelect = canViewTickets && (
+    <FormControl size="small">
+      <Select
+        value={dormitoryFilter}
+        onChange={(e) => setDormitoryFilter(e.target.value)}
+      >
+        {dormitories.map((d) => (
+          <MenuItem key={d.id} value={String(d.id)}>
+            {d.name}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  )
+
   return (
     <AppBar position="static" color="default">
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Stack direction="row" spacing={3}>
-          {links.map((link) => (
-            <Button key={link.to} component={Link} to={link.to}>
-              {link.label}
+        <Stack direction="row" spacing={3} alignItems="center">
+          {generalItems.map((item) => (
+            <Button key={item.to} component={Link} to={item.to}>
+              {item.label}
             </Button>
           ))}
-          {/* Ticket Overview */}
-          {canViewTickets && (
-            <Button component={Link} to="/admin/tickets">
-              {t('adminTicketOverview.titleShort')}
-            </Button>
-          )}
-          {/* Dorm selection */}
-          {canViewTickets && (
-            <FormControl>
-              <Select
-                value={dormitoryFilter}
-                onChange={(e) => setDormitoryFilter(e.target.value)}
-              >
-                {dormitories.map((d) => (
-                  <MenuItem key={d.id} value={String(d.id)}>
-                    {d.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          )}
-          {/* Dorm edit */}
-          {isAdmin && dormitoryFilter && (
-            <IconButton component={Link} to={`/dormitory/${dormitoryFilter}`}>
-              <EditIcon />
-            </IconButton>
+
+          {adminItems.length > 0 && (
+            <Divider orientation="vertical" flexItem sx={{ my: 1 }} />
           )}
 
-          {/* Dorm create */}
-          {isAdmin && (
-            <IconButton component={Link} to={'/dormitory/neu'}>
-              <AddIcon />
-            </IconButton>
-          )}
-          {isAdmin && (
-            <Button component={Link} to="/admin/users">
-              {t('userList.title')}
+          {adminItems.map((item) => (
+            <Button key={item.to} component={Link} to={item.to}>
+              {item.label}
             </Button>
+          ))}
+
+          {/* Dorm selection */}
+          {canViewTickets && (
+            <>
+              <Divider orientation="vertical" flexItem sx={{ my: 1 }} />
+              {dormitorySelect}
+              {isAdmin && dormitoryFilter && (
+                <IconButton
+                  component={Link}
+                  to={`/dormitory/${dormitoryFilter}`}
+                >
+                  {/* Dorm edit */}
+                  <EditIcon />
+                </IconButton>
+              )}
+              {/* Dorm create */}
+              {isAdmin && (
+                <IconButton component={Link} to={'/dormitory/neu'}>
+                  <AddIcon />
+                </IconButton>
+              )}
+            </>
           )}
         </Stack>
+
         {/* Username + Logout */}
-        <Stack>
-          {user ? (
-            <>
-              <Typography>
-                {user.first_name} {user.last_name}
-              </Typography>
-              <Button onClick={logout}>Logout</Button>
-            </>
-          ) : (
-            <Button key={'/login'} component={Link} to={'/login'}>
-              {t('login.titleShort')}
-            </Button>
-          )}
+        <Stack direction="row" spacing={1} alignItems="center">
+          {userSection}
         </Stack>
       </Toolbar>
     </AppBar>
