@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { useEffect, useMemo, useState } from 'react'
 import {
   Button,
   MenuItem,
@@ -6,7 +7,11 @@ import {
   TextField,
   Typography,
   useTheme,
+  IconButton,
 } from '@mui/material'
+import { Link } from 'react-router'
+import AddIcon from '@mui/icons-material/Add'
+import EditIcon from '@mui/icons-material/Edit'
 
 import FullCalendar from '@fullcalendar/react'
 import themePlugin from '@fullcalendar/react/themes/monarch'
@@ -18,9 +23,11 @@ import '@fullcalendar/react/themes/monarch/palettes/purple.css'
 
 import { useCommunityRooms } from '../../hooks/useCommunityRooms'
 import { useRoomBookings } from '../../hooks/useRoomBookings'
-import { useState } from 'react'
-import { Link } from 'react-router'
+
 import { Loading } from '../../components/Loading'
+import { useHasRole } from '../../hooks/useHasRole.ts'
+import { STAFF_ROLES, EDITOR_ROLES } from '../../constants/roles.ts'
+import { useDormitoryFilter } from '../../contexts/DormitoryFilterContext.tsx'
 
 type RoomBookingEvent = {
   id: string
@@ -29,7 +36,6 @@ type RoomBookingEvent = {
   end: string
 }
 
-// calendar setup, made with docs [https://fullcalendar.io/docs/react]
 export default function Calendar({ events }: { events: RoomBookingEvent[] }) {
   return (
     <FullCalendar
@@ -57,6 +63,7 @@ function renderEventContent(eventInfo) {
 
 export function RoomBookingPage() {
   const { t } = useTranslation()
+
   const {
     communityRooms,
     loading: roomsLoading,
@@ -67,16 +74,26 @@ export function RoomBookingPage() {
     loading: bookingsLoading,
     error: bookingsError,
   } = useRoomBookings()
+
+  const { dormitoryFilter } = useDormitoryFilter()
+  const isStaff = useHasRole(STAFF_ROLES)
+  const canEdit = useHasRole(EDITOR_ROLES)
   const [roomId, setRoomId] = useState<number | null>(null)
 
-  {
-    /* filter roomBookings for accepted requests for selected room */
-  }
+  const visibleRooms = useMemo(() => {
+    if (!isStaff) return communityRooms
+    return communityRooms.filter(
+      (room) => room.dormitory_id === Number(dormitoryFilter)
+    )
+  }, [communityRooms, isStaff, dormitoryFilter])
+
   const roomBookingEvents: RoomBookingEvent[] = roomId
     ? roomBookings
-        .filter((booking) => booking.community_room_id === roomId)
-        /* Todo: implement standardized stati */
-        /* && (booking.status === 'accepted' || booking.status === 'Bestätigt')) */
+        .filter(
+          (booking) =>
+            booking.community_room_id === roomId &&
+            (booking.status === 'in_progress' || booking.status === 'closed')
+        )
         .map((booking) => ({
           id: String(booking.id),
           title: t('roomBooking.occupied'),
@@ -85,27 +102,57 @@ export function RoomBookingPage() {
         }))
     : []
 
+
   if (roomsLoading) return <Loading />
   if (roomsError) return <Typography color="error">{roomsError}</Typography>
 
+  const selectedRoom = visibleRooms.find((room) => room.id === roomId) ?? null
+
+  /* reset roomId if dorm is changed*/
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setRoomId(null)
+  }, [dormitoryFilter])
+
+
   return (
-    <Stack spacing={10}>
+    <Stack spacing={1}>
       <Typography variant="h1">{t('roomBooking.title')}</Typography>
       {/* select community room */}
-      <TextField
-        select
-        label={t('roomBooking.selectCommunityRoom')}
-        value={roomId ?? ''}
-        onChange={(e) => setRoomId(Number(e.target.value))}
-        disabled={communityRooms.length === 0}
-        fullWidth
-      >
-        {communityRooms.map((room) => (
-          <MenuItem key={room.id} value={room.id}>
-            {room.name}
-          </MenuItem>
-        ))}
-      </TextField>
+      <Stack direction="row">
+        <TextField
+          select
+          label={t('roomBooking.selectCommunityRoom')}
+          value={roomId ?? ''}
+          onChange={(e) => setRoomId(Number(e.target.value))}
+          disabled={visibleRooms.length === 0}
+          fullWidth
+        >
+          {visibleRooms.map((room) => (
+            <MenuItem key={room.id} value={room.id}>
+              {room.name}
+            </MenuItem>
+          ))}
+        </TextField>
+
+        {canEdit && (
+          <IconButton component={Link} to="/gemeinschaftsraum/neu">
+            <AddIcon />
+          </IconButton>
+        )}
+        {canEdit && roomId && (
+          <IconButton component={Link} to={`/gemeinschaftsraum/${roomId}`}>
+            <EditIcon />
+          </IconButton>
+        )}
+      </Stack>
+      {selectedRoom?.description && (
+        <Typography>
+          {t('infrastructure.description')}
+          {': '} {selectedRoom.description}
+        </Typography>
+      )}
+
       {roomId !== null &&
         (bookingsLoading ? (
           <Loading />

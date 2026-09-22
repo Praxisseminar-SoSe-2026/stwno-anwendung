@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import ForeignKey
+from sqlalchemy import DateTime, ForeignKey
 from sqlalchemy import true as sql_true
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -20,8 +20,8 @@ class RoomRequest(Request):
 
     id: Mapped[int] = mapped_column(ForeignKey("requests.id"), primary_key=True)
     community_room_id: Mapped[int] = mapped_column(ForeignKey("community_rooms.id"))
-    start_datetime: Mapped[datetime]
-    end_datetime: Mapped[datetime]
+    start_datetime: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    end_datetime: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     regular_key_exchange_possible: Mapped[bool] = mapped_column(
         default=True, server_default=sql_true()
     )
@@ -29,7 +29,9 @@ class RoomRequest(Request):
     decided_by_id: Mapped[int | None] = mapped_column(
         ForeignKey("users.id"), default=None
     )
-    decided_at: Mapped[datetime | None] = mapped_column(default=None)
+    decided_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), default=None
+    )
 
     community_room: Mapped[CommunityRoom] = relationship(back_populates="room_requests")
     decided_by: Mapped[User | None] = relationship(

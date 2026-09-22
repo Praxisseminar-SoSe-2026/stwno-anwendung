@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import ForeignKey, Text
+from sqlalchemy import DateTime, ForeignKey, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.database import Base
@@ -25,7 +25,9 @@ class FaqEntry(Base):
     created_by_id: Mapped[int | None] = mapped_column(
         ForeignKey("users.id"), default=None
     )
-    updated_at: Mapped[datetime | None] = mapped_column(default=None)
+    updated_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), default=None
+    )
 
     category: Mapped[FaqCategory | None] = relationship(
         back_populates="questions_entries"

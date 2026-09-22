@@ -1,9 +1,11 @@
-from datetime import UTC, date, datetime, time, timedelta
+from datetime import UTC, datetime, time, timedelta
 
 from sqlalchemy.orm import Session
 
 from app.core.permission import get_user_role
+from app.core.time import now_utc
 from app.models.access_time_slot import AccessTimeSlot
+from app.models.access_time_slot_history import AccessTimeSlotHistory
 from app.models.access_time_slot_proposal import AccessTimeSlotProposal
 from app.models.community_room import CommunityRoom
 from app.models.dormitory_facility_manager import DormitoryFacilityManager
@@ -130,7 +132,9 @@ def list_requests(db: Session, current_user: User) -> list[Request]:
             .all()
         )
         combined = [*repairs, *rooms]
-        combined.sort(key=lambda r: r.created_at or datetime.min, reverse=True)
+        combined.sort(
+            key=lambda r: r.created_at or datetime.min.replace(tzinfo=UTC), reverse=True
+        )
         return combined
 
     # Default: residents only see their own requests
@@ -172,7 +176,7 @@ def get_request(db: Session, request_id: int, current_user: User) -> Request:
 
 
 def _validate_time_slot_proposal(start_time: datetime) -> None:
-    if start_time <= datetime.now(UTC):
+    if start_time <= now_utc():
         raise InvalidTimeSlotProposalError("Proposed time slots must be in the future")
     if start_time.weekday() > 4:
         raise InvalidTimeSlotProposalError(
@@ -247,7 +251,7 @@ def create_room_request(
 
     if (
         not payload.regular_key_exchange_possible
-        and payload.alternative_key_exchange_date < date.today()
+        and payload.alternative_key_exchange_date < now_utc().today()
     ):
         raise DateInPastError("Date can not be in the past")
 
@@ -268,7 +272,7 @@ def create_room_request(
     if first_booked_day > last_booked_day:
         raise RoomBookingTimeConflictError("Start date must be before end date")
 
-    if first_booked_day < date.today():
+    if first_booked_day < now_utc().today():
         raise DateInPastError("Date can not be in the past")
 
     # check if booking is on weekend to book whole weekend, made with tutorial [https://www.geeksforgeeks.org/python/weekday-function-of-datetime-date-class-in-python/]
@@ -290,11 +294,18 @@ def create_room_request(
             "Key exchange can not happen after first day of booking"
         )
 
-    first_booked_day_datetime = datetime.combine(first_booked_day, datetime.min.time())
-    last_booked_day_datetime = datetime.combine(last_booked_day, datetime.max.time())
+    first_booked_day_datetime = datetime.combine(
+        first_booked_day, datetime.min.time().replace(tzinfo=UTC)
+    )
+    last_booked_day_datetime = datetime.combine(
+        last_booked_day, datetime.max.time().replace(tzinfo=UTC)
+    )
 
     alternative_key_exchange_datetime = (
-        datetime.combine(payload.alternative_key_exchange_date, datetime.min.time())
+        datetime.combine(
+            payload.alternative_key_exchange_date,
+            datetime.min.time().replace(tzinfo=UTC),
+        )
         if payload.alternative_key_exchange_date is not None
         else None
     )
@@ -344,7 +355,7 @@ def edit_room_request(
 
     room_request.status = payload.status
     room_request.decided_by_id = current_user.id
-    room_request.decided_at = datetime.now()
+    room_request.decided_at = now_utc()
 
     db.commit()
     db.refresh(room_request)
@@ -354,6 +365,51 @@ def edit_room_request(
 # Todo: staff should be able to look at these kind of information
 #  (independent of having a dormitory assigned)
 def list_room_bookings(db: Session, current_user: User) -> list[RoomBookings]:
+    roles = set(get_user_role(db, current_user.id))
+
+    if roles & STAFF_ROLES:
+        room_requests = (
+            db.query(RoomRequest)
+            .join(CommunityRoom, RoomRequest.community_room_id == CommunityRoom.id)
+            .all()
+        )
+
+        # TODO: move this redundancy in separate function
+        return [
+            RoomBookings(
+                id=room_request.id,
+                community_room_id=room_request.community_room_id,
+                dormitory_id=room_request.community_room.dormitory_id,
+                start_datetime=room_request.start_datetime,
+                end_datetime=room_request.end_datetime,
+                status=room_request.status,
+            )
+            for room_request in room_requests
+        ]
+
+    if "hausmeister" in roles:
+        dormitory_ids = managed_dormitory_ids(db, current_user.id)
+        if not dormitory_ids:
+            return []
+        room_requests = (
+            db.query(RoomRequest)
+            .join(CommunityRoom, RoomRequest.community_room_id == CommunityRoom.id)
+            .filter(CommunityRoom.dormitory_id.in_(dormitory_ids))
+            .all()
+        )
+
+        return [
+            RoomBookings(
+                id=room_request.id,
+                community_room_id=room_request.community_room_id,
+                dormitory_id=room_request.community_room.dormitory_id,
+                start_datetime=room_request.start_datetime,
+                end_datetime=room_request.end_datetime,
+                status=room_request.status,
+            )
+            for room_request in room_requests
+        ]
+
     if current_user.dormitory_id is None:
         raise ResidentDormitoryError(
             "User has no dormitory assigned; cannot list room availability"
@@ -442,6 +498,15 @@ def set_access_time_slot(
     else:
         repair_request.access_time_slot.start_time = proposal.start_time
         repair_request.access_time_slot.end_time = proposal.end_time
+
+    db.add(
+        AccessTimeSlotHistory(
+            repair_request_id=repair_request.id,
+            start_time=proposal.start_time,
+            end_time=proposal.end_time,
+            changed_by_id=current_user.id,
+        )
+    )
 
     db.commit()
     db.refresh(repair_request)

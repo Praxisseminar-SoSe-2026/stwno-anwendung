@@ -4,7 +4,9 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from app.core.dependencies import require_permission
 from app.db.database import get_db
+from app.models.user import User
 from app.schemas.faq import (
     FaqCategoryResponse,
     FaqEntryCreateRequest,
@@ -53,7 +55,8 @@ def list_faq_questions(db: Annotated[Session, Depends(get_db)]):
 @router.post("", response_model=FaqEntryResponse)
 def create(
     payload: FaqEntryCreateRequest,
-    db: Annotated[Session, Depends(get_db)],
+    db: Annotated[Session, Depends(get_db)],  #
+    current_user: Annotated[User, Depends(require_permission("manage_faq"))],
 ):
     try:
         # Todo: enable current user logging
@@ -67,6 +70,7 @@ def update(
     faq_id: int,
     payload: FaqEntryUpdateRequest,
     db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(require_permission("manage_faq"))],
 ):
     try:
         return update_faq_entry(db, faq_id, payload)
@@ -80,6 +84,7 @@ def update(
 def delete(
     faq_id: int,
     db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(require_permission("manage_faq"))],
 ):
     try:
         delete_faq_entry(db, faq_id)

@@ -3,13 +3,15 @@ from __future__ import annotations
 from datetime import date, datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import ForeignKey, func
+from sqlalchemy import DateTime, ForeignKey
 from sqlalchemy import false as sql_false
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from app.core.time import now_utc
 from app.db.database import Base
 
 if TYPE_CHECKING:
+    from app.models.access_time_slot_history import AccessTimeSlotHistory
     from app.models.announcement import Announcement
     from app.models.consent import Consent
     from app.models.dormitory import Dormitory
@@ -44,7 +46,9 @@ class User(Base):
     dormitory_id: Mapped[int | None] = mapped_column(
         ForeignKey("dormitories.id"), default=None
     )
-    created_at: Mapped[datetime | None] = mapped_column(server_default=func.now())
+    created_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), default=now_utc
+    )
 
     dormitory: Mapped[Dormitory | None] = relationship(back_populates="residents")
     user_roles: Mapped[list[UserRole]] = relationship(back_populates="user")
@@ -66,6 +70,9 @@ class User(Base):
     )
     created_faq_entries: Mapped[list[FaqEntry]] = relationship(
         back_populates="created_by"
+    )
+    changed_access_time_slot_histories: Mapped[list[AccessTimeSlotHistory]] = (
+        relationship(back_populates="changed_by")
     )
     authored_announcements: Mapped[list[Announcement]] = relationship(
         back_populates="author"

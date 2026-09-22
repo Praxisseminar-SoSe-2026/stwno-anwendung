@@ -15,6 +15,14 @@ export type AccessTimeSlot = {
   end_time: string
 }
 
+export type AccessTimeSlotHistoryEntry = {
+  id: number
+  start_time: string
+  end_time: string
+  changed_by: ResidentInfo
+  changed_at: string | null
+}
+
 export type Comment = {
   id: number
   author: ResidentInfo
@@ -24,7 +32,7 @@ export type Comment = {
 
 export type StatusHistoryEntry = {
   id: number
-  status: string
+  status: RequestStatus
   changed_by: ResidentInfo
   changed_at: string | null
 }
@@ -53,6 +61,7 @@ export type TicketRequest = {
   proposed_date_note: string | null
   proposed_time_slots: AccessTimeSlotProposal[]
   access_time_slot: AccessTimeSlot | null
+  access_time_slot_history: AccessTimeSlotHistoryEntry[]
   comments: Comment[]
   status_history: StatusHistoryEntry[]
   community_room_id: number | null

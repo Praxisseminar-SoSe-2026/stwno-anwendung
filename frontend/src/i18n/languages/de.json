@@ -59,6 +59,7 @@
   },
   "laundry": {
     "title": "Waschküche",
+    "machines": "Machines",
     "washingmachines": "Waschmaschinen",
     "washingmachine": "Waschmaschine",
     "selectLaundryRoom": "Waschraum auswählen",
@@ -115,6 +116,37 @@
     "titleShort": "Ticket Übersicht",
     "notAuthorized": "Du hast keinen Zugriff auf diese Seite."
   },
+  "userList": {
+    "title": "Nutzer:innen Liste",
+    "editUser": "Nutzer:in bearbeiten",
+    "personNumber": "Personennummer",
+    "firstName": "Vorname",
+    "lastName": "Nachname",
+    "email": "E-Mail",
+    "flatNumber": "Wohnungsnummer",
+    "dormitory": "Wohnheim",
+    "noDormitory": "Kein Wohnheim",
+    "contractEnd": "Vertragsende",
+    "roles": "Rollen"
+  },
+  "infrastructure": {
+    "createRoom": "Raum erstellen",
+    "editRoom": "Raum bearbeiten",
+    "name": "Name",
+    "description": "Beschreibung",
+    "status": "Status",
+    "type": "Art",
+    "createMachine": "Maschine erstellen",
+    "editMachine": "Machine bearbeiten"
+  },
+  "dormitory": {
+    "createDorm": "Wohnheim erstellen",
+    "name": "Name",
+    "address": "Adress",
+    "city": "Stadt",
+    "zipCode": "PLZ",
+    "editDorm": "Wohnheim bearbeiten"
+  },
   "request": {
     "start": "Beginn",
     "end": "Ende",
@@ -139,10 +171,12 @@
     "statusChanged": "Status geändert zu \"{{status}}\"",
     "commentPlaceholder": "Kommentar schreiben …",
     "addComment": "Kommentieren",
+    "commented": "hat kommentiert",
     "changeStatus": "Status ändern",
     "chooseSlot": "Termin auswählen",
     "setEntryTime": "Termin festlegen",
-    "actionError": "Aktion fehlgeschlagen."
+    "actionError": "Aktion fehlgeschlagen.",
+    "entryTimeSet": "hat den Zutrittstermin auf {{time}} festgelegt"
   },
   "login": {
     "title": "Bei STWNO-Anwendung anmelden",

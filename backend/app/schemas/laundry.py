@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict
 
-from app.core.status import LaundryStatus
+from app.core.status import LaundryStatus, LaundryType
 
 
 class LaundryBookingCreate(BaseModel):
@@ -32,3 +32,17 @@ class LaundryMachineResponse(BaseModel):
     occupied_until: datetime | None = None
     current_booking_id: int | None = None
     is_own_booking: bool = False
+
+
+class LaundryRoomCreateMachine(BaseModel):
+    laundry_room_id: int
+    type: LaundryType
+    status: LaundryStatus
+    label: str | None = None
+
+
+class LaundryRoomUpdateMachine(BaseModel):
+    id: int | None = None
+    laundry_room_id: int | None = None
+    type: LaundryType | None = None
+    status: LaundryStatus | None = None

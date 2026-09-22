@@ -67,12 +67,14 @@ export function AdminCreateAnnouncementPage() {
           {t('bulletinBoard.createAnnouncement')}
         </Typography>
 
+        {/* Title */}
         <TextField
           label={t('bulletinBoard.titleLabel')}
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           fullWidth
         />
+        {/* Important flag */}
         <FormControlLabel
           control={
             <Checkbox
@@ -82,6 +84,7 @@ export function AdminCreateAnnouncementPage() {
           }
           label={t('bulletinBoard.important')}
         />
+        {/* Description text */}
         <TextField
           label={t('bulletinBoard.textLabel')}
           value={text}
