@@ -18,7 +18,7 @@ import {
 } from '@mui/material'
 import PrintIcon from '@mui/icons-material/Print'
 import { useRequest } from '../../hooks/useRequest'
-import { useRepairRequestActions } from '../../hooks/useRepairRequestActions'
+import { useRequestActions } from '../../hooks/useRequestActions.ts'
 import { useAuth } from '../../contexts/AuthContext'
 import type {
   Comment,
@@ -38,12 +38,7 @@ import CancelIcon from '@mui/icons-material/Cancel'
 import type { SvgIconComponent } from '@mui/icons-material'
 import EventAvailableIcon from '@mui/icons-material/EventAvailable'
 
-const REPAIR_STATUSES: RequestStatus[] = [
-  'open',
-  'in_progress',
-  'closed',
-  'denied',
-]
+const REQUEST_STATUSES: RequestStatus[] = ['open', 'in_progress', 'closed', 'denied']
 
 const STATUS_TIMELINE_ICONS: Record<
   RequestStatus,
@@ -84,7 +79,7 @@ export function AdminTicketDetailPage() {
     updateStatus,
     setEntryTime,
     addComment,
-  } = useRepairRequestActions(Number(id), setRequest)
+  } = useRequestActions(Number(id), request?.type ?? 'repair', setRequest)
 
   const [selectedProposalId, setSelectedProposalId] = useState<number | null>(
     null
@@ -301,7 +296,7 @@ export function AdminTicketDetailPage() {
           )}
         </Stack>
 
-        {request.type === 'repair' && request.can_edit && (
+        {request.can_edit && (
           <>
             <Divider />
             {/* ---- Edit Status ---- */}
@@ -317,7 +312,7 @@ export function AdminTicketDetailPage() {
               onChange={(e) => updateStatus(e.target.value as RequestStatus)}
               sx={{ maxWidth: 260 }}
             >
-              {REPAIR_STATUSES.map((status) => (
+              {REQUEST_STATUSES.map((status) => (
                 <MenuItem key={status} value={status}>
                   {t(`request.status.${status}`)}
                 </MenuItem>

@@ -114,7 +114,8 @@
   "adminTicketOverview": {
     "title": "Ticket Übersicht (Reparatur- und Raumbuchungsanfragen)",
     "titleShort": "Ticket Übersicht",
-    "notAuthorized": "Du hast keinen Zugriff auf diese Seite."
+    "notAuthorized": "Du hast keinen Zugriff auf diese Seite.",
+    "empty": "keine Tickets"
   },
   "userList": {
     "title": "Nutzer:innen Liste",
