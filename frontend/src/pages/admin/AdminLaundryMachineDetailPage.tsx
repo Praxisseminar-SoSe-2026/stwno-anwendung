@@ -20,6 +20,7 @@ import {
   type LaundryMachineType,
   type LaundryStatus,
 } from '../../api/infrastructure'
+import { BackButton } from '../../components/BackButton.tsx'
 
 export function AdminLaundryMachineDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -91,7 +92,8 @@ export function AdminLaundryMachineDetailPage() {
         gap: 2,
       }}
     >
-      <Stack spacing={3}>
+      <Stack spacing={3} style={{ alignItems: 'start' }}>
+        <BackButton />
         <Typography>{t('infrastructure.editMachine')}</Typography>
         <Typography>{machine.label}</Typography>
 
@@ -111,7 +113,7 @@ export function AdminLaundryMachineDetailPage() {
         </FormControl>
 
         {/* Usage status */}
-        <FormControl>
+        <FormControl fullWidth>
           <InputLabel>{t('infrastructure.status')}</InputLabel>
           <Select
             value={status}

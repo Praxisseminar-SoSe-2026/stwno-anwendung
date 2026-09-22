@@ -16,6 +16,7 @@ import {
   type LaundryMachineType,
   type LaundryStatus,
 } from '../../api/infrastructure'
+import { BackButton } from '../../components/BackButton.tsx'
 
 export function AdminCreateLaundryMachinePage() {
   const { roomId } = useParams<{ roomId: string }>()
@@ -56,7 +57,8 @@ export function AdminCreateLaundryMachinePage() {
         gap: 2,
       }}
     >
-      <Stack spacing={3}>
+      <Stack spacing={3} style={{ alignItems: 'start' }}>
+        <BackButton />
         <Typography>{t('infrastructure.createMachine')}</Typography>
 
         {/* Device type */}
@@ -88,7 +90,12 @@ export function AdminCreateLaundryMachinePage() {
           </Select>
         </FormControl>
 
-        <Button variant="contained" onClick={handleSubmit} disabled={saving}>
+        <Button
+          variant="contained"
+          onClick={handleSubmit}
+          disabled={saving}
+          fullWidth
+        >
           {t('common.create')}
         </Button>
 

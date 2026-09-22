@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { Stack, Typography, Paper, Button, TextField } from '@mui/material'
 import { createCommunityRoom } from '../../api/infrastructure'
-import { useDormitoryFilter } from '../../contexts/DormitoryFilterContext.tsx'
+import { useDormitoryFilter } from '../../contexts/DormitoryFilterContext'
+import { BackButton } from '../../components/BackButton'
 
 export function AdminCreateCommunityRoomPage() {
   const { t } = useTranslation()
@@ -43,9 +44,9 @@ export function AdminCreateCommunityRoomPage() {
         gap: 2,
       }}
     >
-      <Stack spacing={3}>
+      <Stack spacing={3} style={{ alignItems: 'start' }}>
+        <BackButton />
         <Typography>{t('infrastructure.createRoom')}</Typography>
-
         {/* Name */}
         <TextField
           label={t('infrastructure.name')}

@@ -16,6 +16,7 @@ import { useDeleteFaq } from '../../hooks/useDeleteFaq'
 import { useUpdateFaq } from '../../hooks/useUpdateFaq'
 import { useFaqCategories } from '../../hooks/useFaqCategories'
 import { Loading } from '../../components/Loading'
+import { BackButton } from '../../components/BackButton'
 
 export function FaqDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -94,7 +95,7 @@ export function FaqDetailPage() {
         gap: 2,
       }}
     >
-      <Button onClick={() => navigate(-1)}>{t('common.back')}</Button>
+      <BackButton />
       <Stack spacing={2}>
         {editing ? (
           <>

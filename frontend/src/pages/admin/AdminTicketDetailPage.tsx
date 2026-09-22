@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router'
+import { useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import {
@@ -37,6 +37,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import CancelIcon from '@mui/icons-material/Cancel'
 import type { SvgIconComponent } from '@mui/icons-material'
 import EventAvailableIcon from '@mui/icons-material/EventAvailable'
+import { BackButton } from '../../components/BackButton'
 
 const REPAIR_STATUSES: RequestStatus[] = [
   'open',
@@ -75,7 +76,6 @@ export function AdminTicketDetailPage() {
   const { t } = useTranslation()
 
   const { loading: authLoading } = useAuth()
-  const navigate = useNavigate()
 
   const { request, loading, error, setRequest } = useRequest(Number(id))
   const {
@@ -136,7 +136,7 @@ export function AdminTicketDetailPage() {
         gap: 2,
       }}
     >
-      <Button onClick={() => navigate(-1)}>{t('common.back')}</Button>
+      <BackButton />
       <Stack spacing={2}>
         <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
           <Typography>

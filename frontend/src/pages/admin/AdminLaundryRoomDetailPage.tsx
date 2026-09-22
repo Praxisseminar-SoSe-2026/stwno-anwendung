@@ -9,6 +9,7 @@ import {
   type LaundryRoom,
 } from '../../api/infrastructure'
 import { Loading } from '../../components/Loading'
+import { BackButton } from '../../components/BackButton'
 
 export function AdminLaundryRoomDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -70,7 +71,8 @@ export function AdminLaundryRoomDetailPage() {
         gap: 2,
       }}
     >
-      <Stack spacing={3} style={{ width: '50%', alignSelf: 'center' }}>
+      <Stack spacing={3} style={{ width: '50%', alignItems: 'start' }}>
+        <BackButton />
         <Typography>{t('infrastructure.editRoom')}</Typography>
 
         {/* Name */}

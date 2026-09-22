@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { createDormitory } from '../../api/dormitories.ts'
 import { Button, Paper, Stack, TextField, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import { BackButton } from '../../components/BackButton'
 
 export function AdminCreateDormitoryPage() {
   const { t } = useTranslation()
@@ -42,7 +43,8 @@ export function AdminCreateDormitoryPage() {
         gap: 2,
       }}
     >
-      <Stack spacing={3}>
+      <Stack spacing={3} style={{ alignItems: 'start' }}>
+        <BackButton />
         <Typography>{t('dormitory.createDorm')}</Typography>
 
         {/* Name */}
@@ -78,6 +80,7 @@ export function AdminCreateDormitoryPage() {
           variant="contained"
           onClick={handleSubmit}
           disabled={saving || !name}
+          fullWidth
         >
           {t('common.create')}
         </Button>
