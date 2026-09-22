@@ -22,6 +22,7 @@ from app.models.request_comment import RequestComment
 from app.models.role import Role
 from app.models.role_permission import RolePermission
 from app.models.room_request import RoomRequest
+from app.models.room_request_status_history import RoomRequestStatusHistory
 from app.models.user import User
 from app.models.user_role import UserRole
 
@@ -40,6 +41,7 @@ __all__ = [
     "AccessTimeSlotHistory",
     "AccessTimeSlotProposal",
     "RepairRequestStatusHistory",
+    "RoomRequestStatusHistory",
     "RequestComment",
     "CommunityRoom",
     "ItemType",

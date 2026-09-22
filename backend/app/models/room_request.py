@@ -11,6 +11,7 @@ from app.models.request import Request
 
 if TYPE_CHECKING:
     from app.models.community_room import CommunityRoom
+    from app.models.room_request_status_history import RoomRequestStatusHistory
     from app.models.user import User
 
 
@@ -31,6 +32,9 @@ class RoomRequest(Request):
     )
     decided_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True), default=None
+    )
+    status_history: Mapped[list[RoomRequestStatusHistory]] = relationship(
+        back_populates="room_request"
     )
 
     community_room: Mapped[CommunityRoom] = relationship(back_populates="room_requests")

@@ -74,6 +74,8 @@ class RequestResponse(BaseModel):
     created_at: datetime | None
     resident: ResidentInfo
     can_edit: bool = False
+    comments: list[CommentResponse] = []
+    status_history: list[StatusHistoryResponse] = []
 
     # repair-specific
     location: str | None = None
@@ -83,8 +85,6 @@ class RequestResponse(BaseModel):
     proposed_date_note: str | None = None
     proposed_time_slots: list[AccessTimeSlotProposalResponse] = []
     access_time_slot: AccessTimeSlotResponse | None = None
-    comments: list[CommentResponse] = []
-    status_history: list[StatusHistoryResponse] = []
     access_time_slot_history: list[AccessTimeSlotHistoryResponse] = []
 
     # room-specific
@@ -106,6 +106,17 @@ class RequestResponse(BaseModel):
                 last_name=user.last_name,
                 flat_number=user.flat_number,
             )
+
+        def _status_history(entries) -> list[StatusHistoryResponse]:
+            return [
+                StatusHistoryResponse(
+                    id=entry.id,
+                    status=entry.status,
+                    changed_by=_resident_info(entry.changed_by),
+                    changed_at=entry.changed_at,
+                )
+                for entry in entries
+            ]
 
         data = {
             "id": request.id,
@@ -159,15 +170,7 @@ class RequestResponse(BaseModel):
                     )
                     for entry in request.access_time_slot_history
                 ],
-                status_history=[
-                    StatusHistoryResponse(
-                        id=entry.id,
-                        status=entry.status,
-                        changed_by=_resident_info(entry.changed_by),
-                        changed_at=entry.changed_at,
-                    )
-                    for entry in request.status_history
-                ],
+                status_history=_status_history(request.status_history),
             )
         elif isinstance(request, RoomRequest):
             data.update(
@@ -176,6 +179,7 @@ class RequestResponse(BaseModel):
                 end_datetime=request.end_datetime,
                 regular_key_exchange_possible=request.regular_key_exchange_possible,
                 alternative_key_exchange_date=request.alternative_key_exchange_date,
+                status_history=_status_history(request.status_history),
             )
 
         return cls(**data)

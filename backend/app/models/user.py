@@ -24,6 +24,7 @@ if TYPE_CHECKING:
     from app.models.request import Request
     from app.models.request_comment import RequestComment
     from app.models.room_request import RoomRequest
+    from app.models.room_request_status_history import RoomRequestStatusHistory
     from app.models.user_role import UserRole
 
 
@@ -58,6 +59,9 @@ class User(Base):
     requests: Mapped[list[Request]] = relationship(back_populates="resident")
     changed_status_histories: Mapped[list[RepairRequestStatusHistory]] = relationship(
         back_populates="changed_by"
+    )
+    changed_room_status_histories: Mapped[list[RoomRequestStatusHistory]] = (
+        relationship(back_populates="changed_by")
     )
     authored_comments: Mapped[list[RequestComment]] = relationship(
         back_populates="author"

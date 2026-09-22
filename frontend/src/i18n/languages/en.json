@@ -114,7 +114,8 @@
   "adminTicketOverview": {
     "title": "Ticket Overview (Repair and Room Booking Requests)",
     "titleShort": "Ticket Overview",
-    "notAuthorized": "You are not authorized to use this page."
+    "notAuthorized": "You are not authorized to use this page.",
+    "empty": "no tickets"
   },
   "userList": {
     "title": "User List",
@@ -153,8 +154,7 @@
     "location": "Location",
     "type": {
       "repair": "repair request",
-      "room": "community room booking request",
-      "commented": "hat kommentiert"
+      "room": "community room booking request"
     },
     "exportPdf": "Create PDF",
     "status": {

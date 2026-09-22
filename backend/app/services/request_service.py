@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 
 from app.core.permission import get_user_role
 from app.core.time import now_utc
+from app.models import RoomRequestStatusHistory
 from app.models.access_time_slot import AccessTimeSlot
 from app.models.access_time_slot_history import AccessTimeSlotHistory
 from app.models.access_time_slot_proposal import AccessTimeSlotProposal
@@ -101,9 +102,25 @@ def can_edit_repair_request(
     return False
 
 
+def can_edit_room_request(db: Session, user: User, room_request: RoomRequest) -> bool:
+    roles = set(get_user_role(db, user.id))
+
+    if roles & STAFF_ROLES:
+        return True
+
+    if "hausmeister" in roles:
+        dormitory_id = room_request.community_room.dormitory_id
+        return dormitory_id in managed_dormitory_ids(db, user.id)
+
+    return False
+
+
 def can_edit_request(db: Session, user: User, request: Request) -> bool:
     if isinstance(request, RepairRequest):
         return can_edit_repair_request(db, user, request)
+
+    if isinstance(request, RoomRequest):
+        return can_edit_room_request(db, user, request)
 
     roles = set(get_user_role(db, user.id))
     return bool(roles & STAFF_ROLES)
@@ -344,18 +361,24 @@ def create_room_request(
 def edit_room_request(
     db: Session, request_id: int, current_user: User, payload: RequestStatusUpdate
 ) -> RoomRequest:
-    roles = set(get_user_role(db, current_user.id))
-
-    if not (roles & STAFF_ROLES):
-        raise RequestAccessDeniedError("Not authorized to edit this request")
-
     room_request = db.get(RoomRequest, request_id)
     if room_request is None:
         raise RequestNotFoundError(f"Request {request_id} not found")
 
+    if not can_edit_room_request(db, current_user, room_request):
+        raise RequestAccessDeniedError("Not authorized to edit this request")
+
     room_request.status = payload.status
     room_request.decided_by_id = current_user.id
     room_request.decided_at = now_utc()
+
+    db.add(
+        RoomRequestStatusHistory(
+            room_request_id=room_request.id,
+            status=payload.status,
+            changed_by_id=current_user.id,
+        )
+    )
 
     db.commit()
     db.refresh(room_request)
@@ -513,27 +536,27 @@ def set_access_time_slot(
     return repair_request
 
 
-def add_repair_comment(
+def add_comment(
     db: Session,
     request_id: int,
     current_user: User,
     payload: CommentCreate,
-) -> RepairRequest:
-    repair_request = db.get(RepairRequest, request_id)
-    if repair_request is None:
+) -> Request:
+    request = db.get(Request, request_id)
+    if request is None:
         raise RequestNotFoundError(f"Request {request_id} not found")
 
-    if not can_edit_repair_request(db, current_user, repair_request):
+    if not can_edit_request(db, current_user, request):
         raise RequestAccessDeniedError("Not authorized to comment on this request")
 
     db.add(
         RequestComment(
-            request_id=repair_request.id,
+            request_id=request.id,
             author_id=current_user.id,
             text=payload.text,
         )
     )
 
     db.commit()
-    db.refresh(repair_request)
-    return repair_request
+    db.refresh(request)
+    return request

@@ -158,12 +158,12 @@ export async function createRoomBooking(
 
 export async function updateRoomBookingStatus(
   id: number,
-  data: RequestStatus
+  status: RequestStatus
 ): Promise<TicketRequest> {
   const res = await apiFetch(`${BASE_URL}/requests/room_booking/${id}`, {
     method: 'PATCH',
     headers: authHeaders(),
-    body: JSON.stringify(data),
+    body: JSON.stringify({ status }),
   })
   return handleResponse(res)
 }
@@ -192,11 +192,8 @@ export async function setRepairEntryTime(
   return handleResponse(res)
 }
 
-export async function addRepairComment(
-  id: number,
-  text: string
-): Promise<TicketRequest> {
-  const res = await apiFetch(`${BASE_URL}/requests/repair/${id}/comments`, {
+export async function addComment(id: number, text: string): Promise<TicketRequest> {
+  const res = await apiFetch(`${BASE_URL}/requests/${id}/comments`, {
     method: 'POST',
     headers: jsonAuthHeaders(),
     body: JSON.stringify({ text }),

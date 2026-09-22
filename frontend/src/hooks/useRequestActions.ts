@@ -1,15 +1,18 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  addRepairComment,
+  addComment as addRequestComment,
   setRepairEntryTime,
   updateRepairStatus,
-  type RepairStatus,
+  updateRoomBookingStatus,
+  type RequestStatus,
+  type RequestType,
   type TicketRequest,
 } from '../api/requests'
 
-export function useRepairRequestActions(
+export function useRequestActions(
   id: number,
+  type: RequestType,
   onSuccess: (request: TicketRequest) => void
 ) {
   const [submitting, setSubmitting] = useState(false)
@@ -32,10 +35,14 @@ export function useRepairRequestActions(
   return {
     submitting,
     error,
-    updateStatus: (status: RepairStatus) =>
-      run(() => updateRepairStatus(id, status)),
+    updateStatus: (status: RequestStatus) =>
+      run(() =>
+        type === 'repair'
+          ? updateRepairStatus(id, status)
+          : updateRoomBookingStatus(id, status)
+      ),
     setEntryTime: (timeSlotProposalId: number) =>
       run(() => setRepairEntryTime(id, timeSlotProposalId)),
-    addComment: (text: string) => run(() => addRepairComment(id, text)),
+    addComment: (text: string) => run(() => addRequestComment(id, text)),
   }
 }
