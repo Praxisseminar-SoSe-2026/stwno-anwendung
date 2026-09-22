@@ -102,10 +102,6 @@ export function RoomBookingPage() {
         }))
     : []
 
-
-  if (roomsLoading) return <Loading />
-  if (roomsError) return <Typography color="error">{roomsError}</Typography>
-
   const selectedRoom = visibleRooms.find((room) => room.id === roomId) ?? null
 
   /* reset roomId if dorm is changed*/
@@ -114,6 +110,8 @@ export function RoomBookingPage() {
     setRoomId(null)
   }, [dormitoryFilter])
 
+  if (roomsLoading) return <Loading />
+  if (roomsError) return <Typography color="error">{roomsError}</Typography>
 
   return (
     <Stack spacing={1}>

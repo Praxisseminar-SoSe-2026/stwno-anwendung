@@ -21,7 +21,6 @@ import { EDITOR_ROLES, STAFF_ROLES } from '../../constants/roles.ts'
 import AddIcon from '@mui/icons-material/Add'
 import EditIcon from '@mui/icons-material/Edit'
 
-
 const statusColor: Record<LaundryStatus, 'success' | 'warning' | 'error'> = {
   occupied: 'warning',
   free: 'success',
@@ -65,15 +64,14 @@ export function LaundryMachinesPage() {
     error: submitEndLaundryBookingError,
   } = useEndLaundryBooking()
 
-
-  if (roomsLoading) return <Loading />
-  if (roomsError) return <Typography color="error">{roomsError}</Typography>
-
   /* reset roomId if dorm is changed*/
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setRoomId(null)
   }, [dormitoryFilter])
+
+  if (roomsLoading) return <Loading />
+  if (roomsError) return <Typography color="error">{roomsError}</Typography>
 
   return (
     <Stack spacing={1}>
@@ -126,7 +124,6 @@ export function LaundryMachinesPage() {
       {/* waschingmachines */}
       {roomId !== null && !machinesLoading && (
         <>
-
           <Stack spacing={3}>
             <Typography variant="h2">{t('laundry.washingmachines')}</Typography>
             <Stack direction="row" spacing={3}>
@@ -181,7 +178,7 @@ export function LaundryMachinesPage() {
                             }
                           }}
 
-                        disabled={submitEndLaundryBookingLoading}
+                          disabled={submitEndLaundryBookingLoading}
                         >
                           {submitEndLaundryBookingLoading
                             ? t('common.ending')
@@ -192,7 +189,7 @@ export function LaundryMachinesPage() {
                       <Typography color="error">
                         {submitEndLaundryBookingError}
                       </Typography>
-                     )}     
+                    )}
                     {canEdit && (
                       <IconButton
                         component={Link}
@@ -278,7 +275,6 @@ export function LaundryMachinesPage() {
               ))}
             </Stack>
           </Stack>
-
         </>
       )}
     </Stack>

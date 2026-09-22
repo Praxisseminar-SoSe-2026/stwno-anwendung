@@ -38,7 +38,6 @@ import CancelIcon from '@mui/icons-material/Cancel'
 import type { SvgIconComponent } from '@mui/icons-material'
 import EventAvailableIcon from '@mui/icons-material/EventAvailable'
 
-
 const REPAIR_STATUSES: RequestStatus[] = [
   'open',
   'in_progress',
