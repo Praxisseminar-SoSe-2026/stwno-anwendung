@@ -13,6 +13,7 @@ import {
   MenuItem,
   ToggleButtonGroup,
   ToggleButton,
+  Divider,
 } from '@mui/material'
 import { useUsers } from '../../hooks/useUsers.ts'
 import { useDormitories } from '../../hooks/useDormitories.ts'
@@ -77,9 +78,20 @@ export function AdminUserListDetailPage() {
   if (!user) return <Typography>{t('userList.notFound')}</Typography>
 
   return (
-    <Paper>
-      <Stack spacing={2}>
+    <Paper
+      variant="outlined"
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: '50%',
+        alignSelf: 'center',
+        p: 4,
+        gap: 2,
+      }}
+    >
+      <Stack spacing={3}>
         <Typography variant="h1">{t('userList.editUser')}</Typography>
+        <Divider sx={{ width: '75%' }} />
         {/* Person number */}
         <Typography>
           {t('userList.personNumber')}: {user.person_number}

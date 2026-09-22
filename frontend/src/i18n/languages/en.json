@@ -100,6 +100,7 @@
   "roomBooking": {
     "title": "Community Room Booking",
     "selectCommunityRoom": "Select Community Room",
+    "createCommunityRoomBooking": "Book Community Room",
     "occupied": "occupied",
     "bookCommunityRoom": "Book {{communityRoomName}}",
     "startDate": "from",

@@ -3,6 +3,7 @@ import {
   Card,
   CardContent,
   Chip,
+  Divider,
   IconButton,
   Stack,
   Typography,
@@ -16,8 +17,9 @@ export function AdminUserListPage() {
   const { users } = useUsers()
 
   return (
-    <Stack spacing={1}>
+    <Stack spacing={3} style={{ width: '50%', alignSelf: 'center' }}>
       <Typography variant="h1">{t('userList.title')}</Typography>
+      <Divider />
       {users.map((user) => (
         <Card key={user.id} variant="outlined">
           <CardContent
@@ -27,7 +29,7 @@ export function AdminUserListPage() {
               alignItems: 'center',
             }}
           >
-            <Stack direction="row" spacing={1} alignItems="center">
+            <Stack direction="row" spacing={1} style={{ alignItems: 'center' }}>
               <Typography>
                 {user.first_name} {user.last_name}
               </Typography>

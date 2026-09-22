@@ -60,7 +60,7 @@ export function RoomBookingCreatePage() {
   if (roomsError) return <Typography color="error">{roomsError}</Typography>
 
   return (
-    <Paper variant="outlined" sx={{ p: 4 }}>
+    <Paper variant="outlined" sx={{ p: 4, width: '50%', alignSelf: 'center' }}>
       <Stack spacing={2}>
         {/* community room */}
         <Typography>

@@ -1,20 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
-import {
-  Stack,
-  Typography,
-  Paper,
-  Button,
-  TextField,
-  CircularProgress,
-} from '@mui/material'
+import { Stack, Typography, Paper, Button, TextField } from '@mui/material'
 import {
   getLaundryRooms,
   updateLaundryRoom,
   deleteLaundryRoom,
   type LaundryRoom,
 } from '../../api/infrastructure'
+import { Loading } from '../../components/Loading'
 
 export function AdminLaundryRoomDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -64,11 +58,19 @@ export function AdminLaundryRoomDetailPage() {
     }
   }
 
-  if (loading) return <CircularProgress />
+  if (loading) return <Loading />
 
   return (
-    <Paper>
-      <Stack spacing={2}>
+    <Paper
+      variant="outlined"
+      sx={{
+        width: '50%',
+        alignSelf: 'center',
+        p: 4,
+        gap: 2,
+      }}
+    >
+      <Stack spacing={3} style={{ width: '50%', alignSelf: 'center' }}>
         <Typography>{t('infrastructure.editRoom')}</Typography>
 
         {/* Name */}

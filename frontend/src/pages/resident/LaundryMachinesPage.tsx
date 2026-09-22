@@ -8,6 +8,7 @@ import {
   MenuItem,
   Button,
   IconButton,
+  Divider,
 } from '@mui/material'
 import { useLaundryMachines } from '../../hooks/useLaundryMachines'
 import type { LaundryStatus } from '../../api/infrastructure'
@@ -74,9 +75,9 @@ export function LaundryMachinesPage() {
   if (roomsError) return <Typography color="error">{roomsError}</Typography>
 
   return (
-    <Stack spacing={1}>
+    <Stack spacing={3} style={{ width: '50%', alignSelf: 'center' }}>
       <Typography variant="h1">{t('laundry.title')}</Typography>
-
+      <Divider />
       {machinesError && <Typography color="error">{machinesError}</Typography>}
       <Stack direction="row">
         {/* select laundry room */}
@@ -86,7 +87,7 @@ export function LaundryMachinesPage() {
           value={roomId ?? ''}
           onChange={(e) => setRoomId(Number(e.target.value))}
           disabled={visibleRooms.length === 0}
-          fullWidth
+          style={{ width: '50%' }}
         >
           {visibleRooms.map((room) => (
             <MenuItem key={room.id} value={room.id}>
@@ -109,26 +110,29 @@ export function LaundryMachinesPage() {
         )}
       </Stack>
       {machinesLoading && <Loading />}
-
-      <Stack direction="row" spacing={3}>
-        <Typography variant="h1">{t('laundry.machines')}</Typography>
-        {canEdit && roomId && (
-          <IconButton
-            component={Link}
-            to={`/waschmaschinen/waschraum/${roomId}/maschine/neu`}
-          >
-            <AddIcon />
-          </IconButton>
-        )}
-      </Stack>
       {/* waschingmachines */}
       {roomId !== null && !machinesLoading && (
         <>
+          <Stack direction="row" spacing={3}>
+            <Typography variant="h1">{t('laundry.machines')}</Typography>
+            {canEdit && roomId && (
+              <IconButton
+                component={Link}
+                to={`/waschmaschinen/waschraum/${roomId}/maschine/neu`}
+              >
+                <AddIcon />
+              </IconButton>
+            )}
+          </Stack>
           <Stack spacing={3}>
             <Typography variant="h2">{t('laundry.washingmachines')}</Typography>
             <Stack direction="row" spacing={3}>
               {washingmaschines.map((machine) => (
-                <Paper key={machine.id} sx={{ p: 3, alignItems: 'center' }}>
+                <Paper
+                  key={machine.id}
+                  variant="outlined"
+                  sx={{ p: 3, alignItems: 'center' }}
+                >
                   <Stack sx={{ alignItems: 'center' }}>
                     <Typography color="primary">"{machine.label}"</Typography>
                     <Typography color="primary">
@@ -209,7 +213,11 @@ export function LaundryMachinesPage() {
             <Typography variant="h2">{t('laundry.dryers')}</Typography>
             <Stack direction="row" spacing={3}>
               {dryers.map((machine) => (
-                <Paper key={machine.id} sx={{ p: 3, alignItems: 'center' }}>
+                <Paper
+                  key={machine.id}
+                  variant="outlined"
+                  sx={{ p: 3, alignItems: 'center' }}
+                >
                   <Stack sx={{ alignItems: 'center' }}>
                     <Typography color="primary">"{machine.label}"</Typography>
                     <Typography color="primary">

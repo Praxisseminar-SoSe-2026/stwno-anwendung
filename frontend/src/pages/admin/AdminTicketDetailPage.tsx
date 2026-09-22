@@ -127,7 +127,15 @@ export function AdminTicketDetailPage() {
   )
 
   return (
-    <Paper variant="outlined" sx={{ p: 4 }}>
+    <Paper
+      variant="outlined"
+      sx={{
+        width: '50%',
+        alignSelf: 'center',
+        p: 4,
+        gap: 2,
+      }}
+    >
       <Button onClick={() => navigate(-1)}>{t('common.back')}</Button>
       <Stack spacing={2}>
         <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>

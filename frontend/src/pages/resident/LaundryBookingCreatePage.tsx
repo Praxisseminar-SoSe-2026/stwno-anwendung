@@ -49,7 +49,17 @@ export function LaundryBookingCreatePage() {
   if (machineError) return <Typography color="error">{machineError}</Typography>
 
   return (
-    <Paper variant="outlined" sx={{ p: 4 }}>
+    <Paper
+      variant="outlined"
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: '50%',
+        alignSelf: 'center',
+        p: 4,
+        gap: 2,
+      }}
+    >
       <Stack spacing={2}>
         <Typography>
           {t('laundry.communicateLaundryMachineUsage', {
@@ -73,7 +83,7 @@ export function LaundryBookingCreatePage() {
               ),
             },
           }}
-          fullWidth
+          sx={{ width: '50%' }}
           disabled={loading}
         />
 

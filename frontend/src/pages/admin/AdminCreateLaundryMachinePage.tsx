@@ -45,8 +45,18 @@ export function AdminCreateLaundryMachinePage() {
   }
 
   return (
-    <Paper>
-      <Stack spacing={2}>
+    <Paper
+      variant="outlined"
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: '50%',
+        alignSelf: 'center',
+        p: 4,
+        gap: 2,
+      }}
+    >
+      <Stack spacing={3}>
         <Typography>{t('infrastructure.createMachine')}</Typography>
 
         {/* Device type */}

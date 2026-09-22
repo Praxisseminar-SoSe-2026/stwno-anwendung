@@ -8,6 +8,7 @@ import {
   TextField,
   InputAdornment,
   Button,
+  Divider,
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import SearchIcon from '@mui/icons-material/Search'
@@ -52,8 +53,10 @@ export function FaqPage() {
   if (error) return <Typography color="error">{error}</Typography>
 
   return (
-    <Stack spacing={10}>
+    <Stack spacing={3} style={{ width: '50%', alignSelf: 'center' }}>
       <Typography variant="h1">{t('faq.title')}</Typography>
+      <Divider />
+      {/* Searchbar */}
       <Stack direction="row" spacing={2}>
         <TextField
           value={searchTerm}
@@ -70,7 +73,7 @@ export function FaqPage() {
           }}
           sx={{
             backgroundColor: 'background.paper',
-            maxWidth: '30%',
+            width: '50%',
             borderRadius: 1,
           }}
         />
@@ -81,45 +84,47 @@ export function FaqPage() {
         )}
       </Stack>
 
-      {/* creates element for every category and their associated questions */}
-      {Object.entries(groupedFaqs).map(([category, categoryFaqs]) => (
-        <Stack key={category} spacing={1}>
-          <Typography variant="h2">
-            {t(`faq.category.${category.toLowerCase()}`)}
-          </Typography>
-          <Stack spacing={1}>
-            {categoryFaqs.map((faq) => (
-              <Accordion key={faq.id} sx={{ maxWidth: '50%' }}>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                  <Stack
-                    direction="row"
-                    spacing={2}
-                    sx={{ alignItems: 'center', width: '100%', pr: 1 }}
-                  >
-                    <Typography color={'primary'} sx={{ flexGrow: 1 }}>
-                      {faq.question}
-                    </Typography>
-                    <Link
-                      to={`/faq/${faq.id}`}
-                      onClick={(e) => e.stopPropagation()}
+      <Stack spacing={5}>
+        {/* creates element for every category and their associated questions */}
+        {Object.entries(groupedFaqs).map(([category, categoryFaqs]) => (
+          <Stack key={category} spacing={3}>
+            <Typography variant="h2">
+              {t(`faq.category.${category.toLowerCase()}`)}
+            </Typography>
+            <Stack spacing={2}>
+              {categoryFaqs.map((faq) => (
+                <Accordion key={faq.id} sx={{ width: '100%' }}>
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <Stack
+                      direction="row"
+                      spacing={2}
+                      sx={{ alignItems: 'center', width: '100%', pr: 1 }}
                     >
-                      {canEdit && (
-                        <Button component="span">{t('common.edit')}</Button>
-                      )}
-                    </Link>
-                  </Stack>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Typography>{faq.answer}</Typography>
-                </AccordionDetails>
-              </Accordion>
-            ))}
+                      <Typography color={'primary'} sx={{ flexGrow: 1 }}>
+                        {faq.question}
+                      </Typography>
+                      <Link
+                        to={`/faq/${faq.id}`}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {canEdit && (
+                          <Button component="span">{t('common.edit')}</Button>
+                        )}
+                      </Link>
+                    </Stack>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography>{faq.answer}</Typography>
+                  </AccordionDetails>
+                </Accordion>
+              ))}
+            </Stack>
           </Stack>
-        </Stack>
-      ))}
-      {filteredFaqs.length === 0 && (
-        <Typography color="error">{t('faq.noSearchResults')}</Typography>
-      )}
+        ))}
+        {filteredFaqs.length === 0 && (
+          <Typography color="error">{t('faq.noSearchResults')}</Typography>
+        )}
+      </Stack>
     </Stack>
   )
 }
