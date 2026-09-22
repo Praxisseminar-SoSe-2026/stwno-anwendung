@@ -7,7 +7,6 @@ import {
   Paper,
   Button,
   TextField,
-  CircularProgress,
   Chip,
   Checkbox,
   FormControlLabel,
@@ -17,12 +16,14 @@ import {
   Select,
 } from '@mui/material'
 import { useAnnouncement } from '../../hooks/useAnnouncement'
-import { updateAnnouncement, deleteAnnouncement } from '../../api/announcements'
+import { useDeleteAnnouncement } from '../../hooks/useDeleteAnnouncement'
+import { useUpdateAnnouncement } from '../../hooks/useUpdateAnnouncement'
 import { useDormitories } from '../../hooks/useDormitories'
 import { useImageUpload } from '../../hooks/useImageUpload.ts'
 import UploadIcon from '@mui/icons-material/Upload'
 import { useHasRole } from '../../hooks/useHasRole.ts'
 import { EDITOR_ROLES } from '../../constants/roles.ts'
+import { Loading } from '../../components/Loading'
 
 const GLOBAL_VALUE = 'global'
 
@@ -35,16 +36,28 @@ export function AnnouncementDetailPage() {
     Number(id)
   )
 
+  const {
+    submitDeleteAnnouncement,
+    loading: deleteLoading,
+    error: deleteError,
+  } = useDeleteAnnouncement()
+  const {
+    submitUpdateAnnouncement,
+    loading: updateLoading,
+    error: updateError,
+  } = useUpdateAnnouncement()
+
   const { dormitories } = useDormitories()
 
   const [editing, setEditing] = useState(false)
   const [title, setTitle] = useState('')
   const [important, setImportant] = useState(false)
   const [text, setText] = useState('')
-  const [saving, setSaving] = useState(false)
   const [imageRemoved, setImageRemoved] = useState(false)
-  const [actionError, setActionError] = useState<string | null>(null)
   const [scope, setScope] = useState<string>(GLOBAL_VALUE)
+
+  const actionLoading = updateLoading || deleteLoading
+  const actionError = updateError || deleteError
 
   const canEdit = useHasRole(EDITOR_ROLES)
 
@@ -70,41 +83,31 @@ export function AnnouncementDetailPage() {
 
   const handleSave = async () => {
     if (!announcement) return
-    setSaving(true)
-    setActionError(null)
-    try {
-      const updated = await updateAnnouncement(announcement.id, {
-        title,
-        important,
-        text,
-        image_url: imageRemoved
-          ? null
-          : (imageUpload.imageUrl ?? announcement.image_url),
-        dormitory_id: scope === GLOBAL_VALUE ? null : Number(scope),
-      })
-      setAnnouncement(updated)
+
+    const result = await submitUpdateAnnouncement(announcement.id, {
+      title,
+      important,
+      text,
+      image_url: imageRemoved
+        ? null
+        : (imageUpload.imageUrl ?? announcement.image_url),
+      dormitory_id: scope === GLOBAL_VALUE ? null : Number(scope),
+    })
+    if (result) {
+      setAnnouncement(result)
       setEditing(false)
-    } catch (err) {
-      setActionError(err instanceof Error ? err.message : 'Update failed')
-    } finally {
-      setSaving(false)
     }
   }
 
   const handleDelete = async () => {
     if (!announcement) return
-    setSaving(true)
-    setActionError(null)
-    try {
-      await deleteAnnouncement(announcement.id)
-      navigate('/aushang')
-    } catch (err) {
-      setActionError(err instanceof Error ? err.message : 'Delete failed')
-      setSaving(false)
+    const result = await submitDeleteAnnouncement(announcement.id)
+    if (result) {
+      navigate('/')
     }
   }
 
-  if (loading) return <CircularProgress />
+  if (loading) return <Loading />
   if (error) return <Typography color="error">{error}</Typography>
   if (!announcement) return null
 
@@ -119,12 +122,14 @@ export function AnnouncementDetailPage() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               fullWidth
+              disabled={actionLoading}
             />
             <FormControlLabel
               control={
                 <Checkbox
                   checked={important}
                   onChange={(e) => setImportant(e.target.checked)}
+                  disabled={actionLoading}
                 />
               }
               label={t('bulletinBoard.important')}
@@ -135,6 +140,7 @@ export function AnnouncementDetailPage() {
               onChange={(e) => setText(e.target.value)}
               multiline
               minRows={4}
+              disabled={actionLoading}
               fullWidth
             />
 
@@ -147,6 +153,7 @@ export function AnnouncementDetailPage() {
                 value={scope}
                 label={t('bulletinBoard.scope')}
                 onChange={(e) => setScope(e.target.value)}
+                disabled={actionLoading}
               >
                 <MenuItem value={GLOBAL_VALUE}>
                   {t('bulletinBoard.scopeGlobal')}
@@ -164,7 +171,7 @@ export function AnnouncementDetailPage() {
                 component="label"
                 variant="outlined"
                 startIcon={<UploadIcon />}
-                disabled={imageUpload.uploading}
+                disabled={imageUpload.uploading || actionLoading}
               >
                 {!imageUpload.uploading && t('bulletinBoard.uploadImage')}
                 <input
@@ -213,11 +220,14 @@ export function AnnouncementDetailPage() {
               <Button
                 variant="contained"
                 onClick={handleSave}
-                disabled={saving}
+                disabled={actionLoading}
               >
-                {t('common.save')}
+                {actionLoading ? t('common.saving') : t('common.save')}
               </Button>
-              <Button onClick={() => setEditing(false)} disabled={saving}>
+              <Button
+                onClick={() => setEditing(false)}
+                disabled={actionLoading}
+              >
                 {t('common.cancel')}
               </Button>
             </Stack>
@@ -248,16 +258,20 @@ export function AnnouncementDetailPage() {
 
             {canEdit && (
               <Stack direction="row" spacing={2}>
-                <Button variant="contained" onClick={startEditing}>
+                <Button
+                  variant="contained"
+                  onClick={startEditing}
+                  disabled={actionLoading}
+                >
                   {t('common.edit')}
                 </Button>
                 <Button
                   variant="contained"
                   color="error"
                   onClick={handleDelete}
-                  disabled={saving}
+                  disabled={actionLoading}
                 >
-                  {t('common.delete')}
+                  {actionLoading ? t('common.deleting') : t('common.delete')}
                 </Button>
               </Stack>
             )}

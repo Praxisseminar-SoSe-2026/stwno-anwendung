@@ -2,7 +2,6 @@ import { useTranslation } from 'react-i18next'
 import { useEffect, useMemo, useState } from 'react'
 import {
   Button,
-  CircularProgress,
   MenuItem,
   Stack,
   TextField,
@@ -24,6 +23,8 @@ import '@fullcalendar/react/themes/monarch/palettes/purple.css'
 
 import { useCommunityRooms } from '../../hooks/useCommunityRooms'
 import { useRoomBookings } from '../../hooks/useRoomBookings'
+
+import { Loading } from '../../components/Loading'
 import { useHasRole } from '../../hooks/useHasRole.ts'
 import { STAFF_ROLES, EDITOR_ROLES } from '../../constants/roles.ts'
 import { useDormitoryFilter } from '../../contexts/DormitoryFilterContext.tsx'
@@ -62,8 +63,18 @@ function renderEventContent(eventInfo) {
 
 export function RoomBookingPage() {
   const { t } = useTranslation()
-  const { communityRooms, loading, error } = useCommunityRooms()
-  const { roomBookings } = useRoomBookings()
+
+  const {
+    communityRooms,
+    loading: roomsLoading,
+    error: roomsError,
+  } = useCommunityRooms()
+  const {
+    roomBookings,
+    loading: bookingsLoading,
+    error: bookingsError,
+  } = useRoomBookings()
+
   const { dormitoryFilter } = useDormitoryFilter()
   const isStaff = useHasRole(STAFF_ROLES)
   const canEdit = useHasRole(EDITOR_ROLES)
@@ -91,6 +102,10 @@ export function RoomBookingPage() {
         }))
     : []
 
+
+  if (roomsLoading) return <Loading />
+  if (roomsError) return <Typography color="error">{roomsError}</Typography>
+
   const selectedRoom = visibleRooms.find((room) => room.id === roomId) ?? null
 
   /* reset roomId if dorm is changed*/
@@ -99,11 +114,10 @@ export function RoomBookingPage() {
     setRoomId(null)
   }, [dormitoryFilter])
 
+
   return (
     <Stack spacing={1}>
       <Typography variant="h1">{t('roomBooking.title')}</Typography>
-      {error && <Typography color="error">{error}</Typography>}
-
       {/* select community room */}
       <Stack direction="row">
         <TextField
@@ -139,17 +153,23 @@ export function RoomBookingPage() {
         </Typography>
       )}
 
-      {loading && <CircularProgress />}
-      {/* Todo: only display button, when communityroom is selected*/}
-      <Button
-        component={Link}
-        variant="contained"
-        to={`/gemeinschaftsraum/anfrage/${roomId}`}
-        sx={{ width: '50%', alignSelf: 'center' }}
-      >
-        +
-      </Button>
-      <Calendar events={roomBookingEvents} />
+      {roomId !== null &&
+        (bookingsLoading ? (
+          <Loading />
+        ) : (
+          <Stack>
+            <Button
+              component={Link}
+              variant="contained"
+              to={`/gemeinschaftsraum/anfrage/${roomId}`}
+              sx={{ width: '50%', alignSelf: 'center' }}
+            >
+              +
+            </Button>
+            <Calendar events={roomBookingEvents} />
+          </Stack>
+        ))}
+      {bookingsError && <Typography color="error">{bookingsError}</Typography>}
     </Stack>
   )
 }

@@ -130,6 +130,17 @@ def list_all(
     ]
 
 
+@router.get("/room_booking", response_model=list[RoomBookings])
+def list_all_room_booking_requests(
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_user)],
+):
+    try:
+        return list_room_bookings(db, current_user)
+    except ResidentDormitoryError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
 @router.post("/room_booking", response_model=RequestResponse)
 def create_room_booking_request(
     payload: RoomRequestCreate,

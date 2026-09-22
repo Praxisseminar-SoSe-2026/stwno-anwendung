@@ -17,6 +17,7 @@ import { useState } from 'react'
 import { Link } from 'react-router'
 import { useHasRole } from '../../hooks/useHasRole.ts'
 import { EDITOR_ROLES } from '../../constants/roles.ts'
+import { Loading } from '../../components/Loading'
 
 // creates list of all categories with their associated questions
 function groupByCategory(faqs: Faq[]): Record<string, Faq[]> {
@@ -30,7 +31,7 @@ function groupByCategory(faqs: Faq[]): Record<string, Faq[]> {
 
 export function FaqPage() {
   const { t } = useTranslation()
-  const faqs = useFaqs()
+  const { faqs, loading, error } = useFaqs()
 
   const [searchTerm, setSearchTerm] = useState('')
 
@@ -46,6 +47,9 @@ export function FaqPage() {
   const canEdit = useHasRole(EDITOR_ROLES)
 
   const groupedFaqs = groupByCategory(filteredFaqs)
+
+  if (loading) return <Loading />
+  if (error) return <Typography color="error">{error}</Typography>
 
   return (
     <Stack spacing={10}>

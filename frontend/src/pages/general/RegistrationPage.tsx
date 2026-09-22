@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router'
 import { useTranslation } from 'react-i18next'
 
 export function RegistrationPage() {
-  const { submitRegistration, error } = useRegistration()
+  const { submitRegistration, submitting, error } = useRegistration()
   const navigate = useNavigate()
   const [personNumber, setPersonNumber] = useState('')
   const { t } = useTranslation()
@@ -47,7 +47,9 @@ export function RegistrationPage() {
             required
           />
         </FormControl>
-        <Button type="submit">{t('registration.next_button')}</Button>
+        <Button type="submit" disabled={submitting}>
+          {submitting ? t('common.loading') : t('registration.next_button')}
+        </Button>
         {error && <Typography color="error">{error}</Typography>}
       </Box>
     </Paper>

@@ -16,6 +16,9 @@
     "textLabel": "Text",
     "newAnnouncement": "+",
     "createAnnouncement": "New announcement",
+    "createAnnouncementError": "New announcement could not be created.",
+    "deleteAnnouncementError": "Announcement could not be deleted.",
+    "updateAnnouncementError": "Announcement could not be updated.",
     "scope": "Visibility of the announcement",
     "scopeGlobal": "All dormitories",
     "uploadImage": "Upload a new image",
@@ -28,7 +31,12 @@
     "delete": "Delete",
     "create": "Create",
     "minutes": "minutes",
-    "back": "Go back"
+    "back": "Go back",
+    "loading": "loading...",
+    "creating": "creating..",
+    "saving": "saving...",
+    "deleting": "deleting...",
+    "ending": "ending..."
   },
   "faq": {
     "title": "Frequently Asked Questions",
@@ -44,7 +52,10 @@
     },
     "questionLabel": "Question",
     "answerLabel": "Answer",
-    "categoryLabel": "Category"
+    "categoryLabel": "Category",
+    "createFaqError": "New question could not be created.",
+    "updateFaqError": "Question could not be edited.",
+    "deleteFaqError": "Question could not be deleted."
   },
   "laundry": {
     "title": "Washroom",
@@ -94,7 +105,8 @@
     "startDate": "from",
     "endDate": "till",
     "regularKeyExchangePossibleQuestion": "Can you pick up the key at the facility management office between 9 a.m. and 11 a.m. on the day before the booking?",
-    "alternativeKeyExchangeDate": "Alternative day for key exchange"
+    "alternativeKeyExchangeDate": "Alternative day for key exchange",
+    "createBookingError": "Booking request could not be created."
   },
   "adminIndex": {
     "title": "Hello Boss!"

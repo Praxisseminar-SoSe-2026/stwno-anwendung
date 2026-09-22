@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import {
@@ -8,12 +8,11 @@ import {
   Button,
   TextField,
   MenuItem,
+  InputAdornment,
+  CircularProgress,
 } from '@mui/material'
-import {
-  createFaq,
-  getFaqCategories,
-  type FaqCategory,
-} from '../../api/faqs.ts'
+import { useCreateFaq } from '../../hooks/useCreateFaq'
+import { useFaqCategories } from '../../hooks/useFaqCategories'
 import { useHasRole } from '../../hooks/useHasRole.ts'
 import { STAFF_ROLES } from '../../constants/roles.ts'
 
@@ -23,15 +22,14 @@ export function AdminFaqCreatePage() {
 
   const [question, setQuestion] = useState('')
   const [answer, setAnswer] = useState('')
-  const [saving, setSaving] = useState(false)
-  const [actionError, setActionError] = useState<string | null>(null)
 
   const [categoryId, setCategoryId] = useState<number | null>(null)
-  const [categories, setCategories] = useState<FaqCategory[]>([])
-
-  useEffect(() => {
-    getFaqCategories().then(setCategories)
-  }, [])
+  const {
+    faqCategories,
+    loading: categoriesLoading,
+    error: categoriesError,
+  } = useFaqCategories()
+  const { submitFaq, loading, error } = useCreateFaq()
 
   const canView = useHasRole(STAFF_ROLES)
 
@@ -39,21 +37,16 @@ export function AdminFaqCreatePage() {
     return <Typography>{t('adminTicketOverview.notAuthorized')}</Typography>
   }
 
-  const handleSave = async () => {
+  const handleSubmit = async () => {
     if (categoryId === null || !question.trim() || !answer.trim()) return
-    setSaving(true)
-    setActionError(null)
-    try {
-      const created = await createFaq({
-        question,
-        answer,
-        category_id: categoryId,
-      })
-      navigate(`/faq/${created.id}`)
-    } catch (err) {
-      setActionError(err instanceof Error ? err.message : 'Create failed')
-    } finally {
-      setSaving(false)
+
+    const result = await submitFaq({
+      question,
+      answer,
+      category_id: categoryId,
+    })
+    if (result) {
+      navigate(`/faq/${result.id}`)
     }
   }
 
@@ -73,14 +66,27 @@ export function AdminFaqCreatePage() {
           label={t('faq.categoryLabel')}
           value={categoryId ?? ''}
           onChange={(e) => setCategoryId(Number(e.target.value))}
+          disabled={categoriesLoading}
+          slotProps={{
+            input: {
+              endAdornment: categoriesLoading && (
+                <InputAdornment position="end">
+                  <CircularProgress />
+                </InputAdornment>
+              ),
+            },
+          }}
           fullWidth
         >
-          {categories.map((cat) => (
+          {faqCategories.map((cat) => (
             <MenuItem key={cat.id} value={cat.id}>
               {t(`faq.category.${cat.name.toLowerCase()}`)}
             </MenuItem>
           ))}
         </TextField>
+        {categoriesError && (
+          <Typography color="error">{categoriesError}</Typography>
+        )}
         {/* answer */}
         <TextField
           label={t('faq.answerLabel')}
@@ -94,22 +100,22 @@ export function AdminFaqCreatePage() {
         <Stack direction="row" spacing={2}>
           <Button
             variant="contained"
-            onClick={handleSave}
+            onClick={handleSubmit}
             disabled={
-              saving ||
+              loading ||
               categoryId === null ||
               !question.trim() ||
               !answer.trim()
             }
           >
-            {t('common.create')}
+            {loading ? t('common.creating') : t('common.create')}
           </Button>
-          <Button onClick={() => navigate('/faq')} disabled={saving}>
+          <Button onClick={() => navigate('/faq')} disabled={loading}>
             {t('common.cancel')}
           </Button>
         </Stack>
 
-        {actionError && <Typography color="error">{actionError}</Typography>}
+        {error && <Typography color="error">{error}</Typography>}
       </Stack>
     </Paper>
   )

@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next'
 export function SetPasswordPage() {
   const location = useLocation()
   const navigate = useNavigate()
-  const { submitSetPassword, error } = useSetPassword()
+  const { submitSetPassword, loading, error } = useSetPassword()
   const { t } = useTranslation()
 
   const emailFromRegistrationPage =
@@ -60,9 +60,12 @@ export function SetPasswordPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            disabled={loading}
           />
         </FormControl>
-        <Button type="submit">{t('registration.create_account')}</Button>
+        <Button type="submit" disabled={loading}>
+          {loading ? t('common.creating') : t('registration.create_account')}
+        </Button>
         {error && <Typography color="error">{error}</Typography>}
       </Box>
     </Paper>

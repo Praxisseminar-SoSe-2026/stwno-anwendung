@@ -16,6 +16,9 @@
     "textLabel": "Text",
     "newAnnouncement": "+",
     "createAnnouncement": "Neue Ankündigung",
+    "createAnnouncementError": "Neue Ankündigung konnte nicht erstellt werden.",
+    "deleteAnnouncementError": "Ankündigung konnte nicht gelöscht werden.",
+    "updateAnnouncementError": "Ankündigung konnte nicht aktualisiert werden.",
     "scope": "Sichtbarkeit der Ankündigung",
     "scopeGlobal": "Für alle Wohnheime",
     "uploadImage": "Neues Bild hochladen",
@@ -28,7 +31,12 @@
     "delete": "Löschen",
     "create": "Erstellen",
     "minutes": "Minuten",
-    "back": "Zurück"
+    "back": "Zurück",
+    "loading": "Lädt...",
+    "creating": "wird erstellt..",
+    "saving": "wird gespeichert...",
+    "deleting": "wird gelöscht...",
+    "ending": "wird beendet..."
   },
   "faq": {
     "title": "Häufig gestellte Fragen",
@@ -44,7 +52,10 @@
     },
     "questionLabel": "Frage",
     "answerLabel": "Antwort",
-    "categoryLabel": "Kategorie"
+    "categoryLabel": "Kategorie",
+    "createFaqError": "Neue Frage konnte nicht erstellt werden.",
+    "updateFaqError": "Frage konnte nicht bearbeitet werden.",
+    "deleteFaqError": "Frage konnte nicht gelöscht werden."
   },
   "laundry": {
     "title": "Waschküche",
@@ -94,7 +105,8 @@
     "startDate": "von",
     "endDate": "bis",
     "regularKeyExchangePossibleQuestion": "Können Sie den Schlüssel am Vorbuchungstag zwischen 9 und 11 Uhr im Büro der Hausmeister:in abholen?",
-    "alternativeKeyExchangeDate": "alternativer Tag zum Schlüsselaustausch"
+    "alternativeKeyExchangeDate": "alternativer Tag zum Schlüsselaustausch",
+    "createBookingError": "Buchungsanfrage konnte nicht erstellt werden."
   },
   "adminIndex": {
     "title": "Hallo Chef!"

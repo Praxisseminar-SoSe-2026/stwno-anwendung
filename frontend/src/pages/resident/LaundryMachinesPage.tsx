@@ -6,7 +6,6 @@ import {
   Paper,
   TextField,
   MenuItem,
-  CircularProgress,
   Button,
   IconButton,
 } from '@mui/material'
@@ -15,11 +14,13 @@ import type { LaundryStatus } from '../../api/infrastructure'
 import { useLaundryRooms } from '../../hooks/useLaundryRooms'
 import { useEffect, useMemo, useState } from 'react'
 import { useEndLaundryBooking } from '../../hooks/useEndLaundryBooking'
+import { Loading } from '../../components/Loading'
 import { useDormitoryFilter } from '../../contexts/DormitoryFilterContext.tsx'
 import { useHasRole } from '../../hooks/useHasRole.ts'
 import { EDITOR_ROLES, STAFF_ROLES } from '../../constants/roles.ts'
 import AddIcon from '@mui/icons-material/Add'
 import EditIcon from '@mui/icons-material/Edit'
+
 
 const statusColor: Record<LaundryStatus, 'success' | 'warning' | 'error'> = {
   occupied: 'warning',
@@ -29,13 +30,22 @@ const statusColor: Record<LaundryStatus, 'success' | 'warning' | 'error'> = {
 
 export function LaundryMachinesPage() {
   const { t } = useTranslation()
-  const { laundryRooms, loading, error } = useLaundryRooms()
+
+  const {
+    laundryRooms,
+    loading: roomsLoading,
+    error: roomsError,
+  } = useLaundryRooms()
   const { dormitoryFilter } = useDormitoryFilter()
   const isStaff = useHasRole(STAFF_ROLES)
   const canEdit = useHasRole(EDITOR_ROLES)
   const [roomId, setRoomId] = useState<number | null>(null)
-  const { machines: machinesData, updateLaundryMachines } =
-    useLaundryMachines(roomId)
+  const {
+    machines: machinesData,
+    loading: machinesLoading,
+    error: machinesError,
+    updateLaundryMachines,
+  } = useLaundryMachines(roomId)
 
   /*useMemo to safe selected dorm value*/
   const visibleRooms = useMemo(() => {
@@ -49,7 +59,15 @@ export function LaundryMachinesPage() {
     (m) => m.type === 'Washingmachine'
   )
   const dryers = machinesData.filter((m) => m.type === 'Dryer')
-  const { submitEndLaundryBooking } = useEndLaundryBooking()
+  const {
+    submitEndLaundryBooking,
+    loading: submitEndLaundryBookingLoading,
+    error: submitEndLaundryBookingError,
+  } = useEndLaundryBooking()
+
+
+  if (roomsLoading) return <Loading />
+  if (roomsError) return <Typography color="error">{roomsError}</Typography>
 
   /* reset roomId if dorm is changed*/
   useEffect(() => {
@@ -60,7 +78,8 @@ export function LaundryMachinesPage() {
   return (
     <Stack spacing={1}>
       <Typography variant="h1">{t('laundry.title')}</Typography>
-      {error && <Typography color="error">{error}</Typography>}
+
+      {machinesError && <Typography color="error">{machinesError}</Typography>}
       <Stack direction="row">
         {/* select laundry room */}
         <TextField
@@ -91,7 +110,7 @@ export function LaundryMachinesPage() {
           </IconButton>
         )}
       </Stack>
-      {loading && <CircularProgress />}
+      {machinesLoading && <Loading />}
 
       <Stack direction="row" spacing={3}>
         <Typography variant="h1">{t('laundry.machines')}</Typography>
@@ -105,8 +124,9 @@ export function LaundryMachinesPage() {
         )}
       </Stack>
       {/* waschingmachines */}
-      {roomId && (
+      {roomId !== null && !machinesLoading && (
         <>
+
           <Stack spacing={3}>
             <Typography variant="h2">{t('laundry.washingmachines')}</Typography>
             <Stack direction="row" spacing={3}>
@@ -160,10 +180,19 @@ export function LaundryMachinesPage() {
                               updateLaundryMachines()
                             }
                           }}
+
+                        disabled={submitEndLaundryBookingLoading}
                         >
-                          {t(`laundry.endMachineUsage`)}
+                          {submitEndLaundryBookingLoading
+                            ? t('common.ending')
+                            : t(`laundry.endMachineUsage`)}
                         </Button>
                       )}
+                    {submitEndLaundryBookingError && (
+                      <Typography color="error">
+                        {submitEndLaundryBookingError}
+                      </Typography>
+                     )}     
                     {canEdit && (
                       <IconButton
                         component={Link}
@@ -249,6 +278,7 @@ export function LaundryMachinesPage() {
               ))}
             </Stack>
           </Stack>
+
         </>
       )}
     </Stack>
