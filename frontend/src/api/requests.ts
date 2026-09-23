@@ -192,7 +192,10 @@ export async function setRepairEntryTime(
   return handleResponse(res)
 }
 
-export async function addComment(id: number, text: string): Promise<TicketRequest> {
+export async function addComment(
+  id: number,
+  text: string
+): Promise<TicketRequest> {
   const res = await apiFetch(`${BASE_URL}/requests/${id}/comments`, {
     method: 'POST',
     headers: jsonAuthHeaders(),

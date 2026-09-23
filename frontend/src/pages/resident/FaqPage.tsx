@@ -53,11 +53,14 @@ export function FaqPage() {
   if (error) return <Typography color="error">{error}</Typography>
 
   return (
-    <Stack spacing={3} style={{ width: '50%', alignSelf: 'center' }}>
+    <Stack
+      spacing={3}
+      sx={{ width: { xs: '100%', md: '50%' }, alignSelf: 'center' }}
+    >
       <Typography variant="h1">{t('faq.title')}</Typography>
       <Divider />
       {/* Searchbar */}
-      <Stack direction="row" spacing={2}>
+      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
         <TextField
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -73,7 +76,7 @@ export function FaqPage() {
           }}
           sx={{
             backgroundColor: 'background.paper',
-            width: '50%',
+            width: { xs: '100%', sm: '50%' },
             borderRadius: 1,
           }}
         />

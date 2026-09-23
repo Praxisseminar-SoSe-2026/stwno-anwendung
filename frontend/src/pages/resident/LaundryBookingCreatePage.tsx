@@ -54,7 +54,7 @@ export function LaundryBookingCreatePage() {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        width: '50%',
+        width: { xs: '95%', md: '50%' },
         alignSelf: 'center',
         p: 4,
         gap: 2,
@@ -83,7 +83,7 @@ export function LaundryBookingCreatePage() {
               ),
             },
           }}
-          sx={{ width: '50%' }}
+          sx={{ width: { xs: '100%', sm: '50%' } }}
           disabled={loading}
         />
 

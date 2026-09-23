@@ -116,18 +116,21 @@ export function RoomBookingPage() {
   if (roomsError) return <Typography color="error">{roomsError}</Typography>
 
   return (
-    <Stack spacing={3} style={{ width: '50%', alignSelf: 'center' }}>
+    <Stack
+      spacing={3}
+      sx={{ width: { xs: '100%', md: '50%' }, alignSelf: 'center' }}
+    >
       <Typography variant="h1">{t('roomBooking.title')}</Typography>
       <Divider />
       {/* select community room */}
-      <Stack direction="row">
+      <Stack direction="row" spacing={1} alignItems="center">
         <TextField
           select
           label={t('roomBooking.selectCommunityRoom')}
           value={roomId ?? ''}
           onChange={(e) => setRoomId(Number(e.target.value))}
           disabled={visibleRooms.length === 0}
-          style={{ width: '50%', alignSelf: 'center' }}
+          sx={{ width: { xs: '70%', sm: '50%' } }}
         >
           {visibleRooms.map((room) => (
             <MenuItem key={room.id} value={room.id}>
@@ -158,7 +161,7 @@ export function RoomBookingPage() {
         (bookingsLoading ? (
           <Loading />
         ) : (
-          <Stack spacing={2} style={{ width: '75%' }}>
+          <Stack spacing={2} sx={{ width: 'auto' }}>
             <Button
               component={Link}
               variant="contained"

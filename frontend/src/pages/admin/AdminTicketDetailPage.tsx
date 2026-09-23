@@ -39,7 +39,12 @@ import type { SvgIconComponent } from '@mui/icons-material'
 import EventAvailableIcon from '@mui/icons-material/EventAvailable'
 import { BackButton } from '../../components/BackButton'
 
-const REQUEST_STATUSES: RequestStatus[] = ['open', 'in_progress', 'closed', 'denied']
+const REQUEST_STATUSES: RequestStatus[] = [
+  'open',
+  'in_progress',
+  'closed',
+  'denied',
+]
 
 const STATUS_TIMELINE_ICONS: Record<
   RequestStatus,

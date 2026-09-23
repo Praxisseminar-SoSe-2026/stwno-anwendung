@@ -115,7 +115,7 @@ export function AnnouncementDetailPage() {
     <Paper
       variant="outlined"
       sx={{
-        width: '50%',
+        width: { xs: '95%', md: '50%' },
         alignSelf: 'center',
         p: 4,
         gap: 2,
@@ -242,7 +242,11 @@ export function AnnouncementDetailPage() {
           </>
         ) : (
           <>
-            <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+            <Stack
+              direction="row"
+              spacing={1}
+              sx={{ alignItems: 'center', flexWrap: 'wrap' }}
+            >
               <Typography variant="h4">{announcement.title}</Typography>
               <Typography variant="h6" color="text.secondary">
                 {announcement.created_at &&
