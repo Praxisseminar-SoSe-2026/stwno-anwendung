@@ -17,7 +17,10 @@ export function AdminUserListPage() {
   const { users } = useUsers()
 
   return (
-    <Stack spacing={3} style={{ width: '50%', alignSelf: 'center' }}>
+    <Stack
+      spacing={3}
+      sx={{ width: { xs: '95%', md: '50%' }, alignSelf: 'center' }}
+    >
       <Typography variant="h1">{t('userList.title')}</Typography>
       <Divider />
       {users.map((user) => (

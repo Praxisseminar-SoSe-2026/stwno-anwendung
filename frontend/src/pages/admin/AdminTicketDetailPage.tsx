@@ -130,7 +130,7 @@ export function AdminTicketDetailPage() {
     <Paper
       variant="outlined"
       sx={{
-        width: '50%',
+        width: { xs: '95%', md: '50%' },
         alignSelf: 'center',
         p: 4,
         gap: 2,
@@ -138,7 +138,11 @@ export function AdminTicketDetailPage() {
     >
       <BackButton />
       <Stack spacing={2}>
-        <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{ alignItems: 'center', flexWrap: 'wrap' }}
+        >
           <Typography>
             {request.created_at &&
               new Date(request.created_at).toLocaleString()}
@@ -279,7 +283,7 @@ export function AdminTicketDetailPage() {
                   )}
                 </Stack>
                 <Box sx={{ pb: 2, minWidth: 0 }}>
-                  <Typography variant="caption" color="text.secondary">
+                  <Typography>
                     <strong>{authorName}</strong>{' '}
                     {item.kind === 'comment'
                       ? t('request.commented')
@@ -296,16 +300,16 @@ export function AdminTicketDetailPage() {
                     {item.at && new Date(item.at).toLocaleString()}
                   </Typography>
                   {item.kind === 'comment' && (
-                    <Typography variant="body2">{item.comment.text}</Typography>
+                    <Typography sx={{ fontStyle: 'italic' }}>
+                      {item.comment.text}
+                    </Typography>
                   )}
                 </Box>
               </Stack>
             )
           })}
           {timeline.length === 0 && (
-            <Typography variant="body2" color="text.secondary">
-              {t('request.noHistory')}
-            </Typography>
+            <Typography>{t('request.noHistory')}</Typography>
           )}
         </Stack>
 

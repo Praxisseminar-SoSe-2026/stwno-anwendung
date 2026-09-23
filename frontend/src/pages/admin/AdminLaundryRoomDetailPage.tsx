@@ -65,13 +65,13 @@ export function AdminLaundryRoomDetailPage() {
     <Paper
       variant="outlined"
       sx={{
-        width: '50%',
+        width: { xs: '95%', md: '50%' },
         alignSelf: 'center',
         p: 4,
         gap: 2,
       }}
     >
-      <Stack spacing={3} style={{ width: '50%', alignItems: 'start' }}>
+      <Stack spacing={3} style={{ alignItems: 'start' }}>
         <BackButton />
         <Typography>{t('infrastructure.editRoom')}</Typography>
 
@@ -80,7 +80,6 @@ export function AdminLaundryRoomDetailPage() {
           label={t('infrastructure.name')}
           value={name}
           onChange={(e) => setName(e.target.value)}
-          fullWidth
         />
 
         <Stack direction="row" spacing={2}>

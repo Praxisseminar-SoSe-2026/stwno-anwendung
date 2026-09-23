@@ -155,7 +155,7 @@
     "location": "Location",
     "type": {
       "repair": "repair request",
-      "room": "community room booking request"
+      "room": "room request"
     },
     "exportPdf": "Create PDF",
     "status": {
