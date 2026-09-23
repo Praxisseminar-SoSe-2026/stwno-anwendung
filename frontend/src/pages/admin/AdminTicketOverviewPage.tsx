@@ -119,7 +119,7 @@ export function AdminTicketOverviewPage() {
                   </Card>
                 ))}
                 {columnRequests.length === 0 && (
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography>
                     {t('adminTicketOverview.empty')}
                   </Typography>
                 )}
