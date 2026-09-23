@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import {
@@ -7,18 +7,16 @@ import {
   Paper,
   Button,
   TextField,
-  CircularProgress,
   MenuItem,
 } from '@mui/material'
 import { useFaq } from '../../hooks/useFaq'
-import {
-  updateFaq,
-  deleteFaq,
-  getFaqCategories,
-  type FaqCategory,
-} from '../../api/faqs'
-
-// Todo: Add Authentification
+import { useHasRole } from '../../hooks/useHasRole.ts'
+import { EDITOR_ROLES } from '../../constants/roles.ts'
+import { useDeleteFaq } from '../../hooks/useDeleteFaq'
+import { useUpdateFaq } from '../../hooks/useUpdateFaq'
+import { useFaqCategories } from '../../hooks/useFaqCategories'
+import { Loading } from '../../components/Loading'
+import { BackButton } from '../../components/BackButton'
 
 export function FaqDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -29,15 +27,30 @@ export function FaqDetailPage() {
   const [editing, setEditing] = useState(false)
   const [question, setQuestion] = useState('')
   const [answer, setAnswer] = useState('')
-  const [saving, setSaving] = useState(false)
-  const [actionError, setActionError] = useState<string | null>(null)
 
   const [categoryId, setCategoryId] = useState<number | null>(null)
-  const [categories, setCategories] = useState<FaqCategory[]>([])
 
-  useEffect(() => {
-    getFaqCategories().then(setCategories)
-  }, [])
+  const canEdit = useHasRole(EDITOR_ROLES)
+
+  const {
+    submitDeleteFaq,
+    loading: deleteLoading,
+    error: deleteError,
+  } = useDeleteFaq()
+  const {
+    submitUpdateFaq,
+    loading: updateLoading,
+    error: updateError,
+  } = useUpdateFaq()
+
+  const {
+    faqCategories,
+    loading: categoriesLoading,
+    error: categoriesError,
+  } = useFaqCategories()
+
+  const actionLoading = updateLoading || deleteLoading
+  const actionError = updateError || deleteError
 
   const startEditing = () => {
     if (!faq) return
@@ -49,42 +62,40 @@ export function FaqDetailPage() {
 
   const handleSave = async () => {
     if (!faq || categoryId === null) return
-    setSaving(true)
-    setActionError(null)
-    try {
-      const updated = await updateFaq(faq.id, {
-        question,
-        answer,
-        category_id: categoryId,
-      })
-      setFaq(updated)
+    const result = await submitUpdateFaq(faq.id, {
+      question,
+      answer,
+      category_id: categoryId,
+    })
+    if (result) {
+      setFaq(result)
       setEditing(false)
-    } catch (err) {
-      setActionError(err instanceof Error ? err.message : 'Update failed')
-    } finally {
-      setSaving(false)
     }
   }
 
   const handleDelete = async () => {
     if (!faq) return
-    setSaving(true)
-    setActionError(null)
-    try {
-      await deleteFaq(faq.id)
-      navigate('/faq')
-    } catch (err) {
-      setActionError(err instanceof Error ? err.message : 'Delete failed')
-      setSaving(false)
+    const result = await submitDeleteFaq(faq.id)
+    if (result) {
+      navigate('/')
     }
   }
 
-  if (loading) return <CircularProgress />
+  if (loading) return <Loading />
   if (error) return <Typography color="error">{error}</Typography>
   if (!faq) return null
 
   return (
-    <Paper variant="outlined" sx={{ p: 4 }}>
+    <Paper
+      variant="outlined"
+      sx={{
+        width: { xs: '95%', md: '50%' },
+        alignSelf: 'center',
+        p: 4,
+        gap: 2,
+      }}
+    >
+      <BackButton />
       <Stack spacing={2}>
         {editing ? (
           <>
@@ -94,6 +105,7 @@ export function FaqDetailPage() {
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
               fullWidth
+              disabled={actionLoading}
             />
             {/* category */}
             <TextField
@@ -102,13 +114,17 @@ export function FaqDetailPage() {
               value={categoryId ?? ''}
               onChange={(e) => setCategoryId(Number(e.target.value))}
               fullWidth
+              disabled={actionLoading || categoriesLoading}
             >
-              {categories.map((cat) => (
+              {faqCategories.map((cat) => (
                 <MenuItem key={cat.id} value={cat.id}>
                   {t(`faq.category.${cat.name.toLowerCase()}`)}
                 </MenuItem>
               ))}
             </TextField>
+            {categoriesError && (
+              <Typography color="error">{categoriesError}</Typography>
+            )}
             {/* answer */}
             <TextField
               label={t('faq.answerLabel')}
@@ -117,17 +133,21 @@ export function FaqDetailPage() {
               multiline
               minRows={4}
               fullWidth
+              disabled={actionLoading}
             />
 
             <Stack direction="row" spacing={2}>
               <Button
                 variant="contained"
                 onClick={handleSave}
-                disabled={saving || categoryId === null}
+                disabled={actionLoading || categoryId === null}
               >
-                {t('common.save')}
+                {actionLoading ? t('common.saving') : t('common.save')}
               </Button>
-              <Button onClick={() => setEditing(false)} disabled={saving}>
+              <Button
+                onClick={() => setEditing(false)}
+                disabled={actionLoading}
+              >
                 {t('common.cancel')}
               </Button>
             </Stack>
@@ -140,19 +160,21 @@ export function FaqDetailPage() {
             <Typography variant="body1" color="text.secondary">
               {faq.answer}
             </Typography>
-            <Stack direction="row" spacing={2}>
-              <Button variant="contained" onClick={startEditing}>
-                {t('common.edit')}
-              </Button>
-              <Button
-                variant="contained"
-                color="error"
-                onClick={handleDelete}
-                disabled={saving}
-              >
-                {t('common.delete')}
-              </Button>
-            </Stack>
+            {canEdit && (
+              <Stack direction="row" spacing={2}>
+                <Button variant="contained" onClick={startEditing}>
+                  {t('common.edit')}
+                </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleDelete}
+                  disabled={actionLoading}
+                >
+                  {actionLoading ? t('common.deleting') : t('common.delete')}
+                </Button>
+              </Stack>
+            )}
           </>
         )}
 

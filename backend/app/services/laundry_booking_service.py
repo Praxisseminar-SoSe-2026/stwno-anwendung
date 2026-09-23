@@ -1,8 +1,9 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from sqlalchemy.orm import Session
 
 from app.core.status import LaundryStatus
+from app.core.time import now_utc
 from app.models.laundry_booking import LaundryBooking
 from app.models.laundry_machine import LaundryMachine
 from app.models.user import User
@@ -34,7 +35,7 @@ class BookingAlreadyEndedError(Exception):
 def create_laundry_booking(
     db: Session, current_user: User, payload: LaundryBookingCreate
 ) -> LaundryBooking:
-    now = datetime.now()
+    now = now_utc()
     if current_user.dormitory_id is None:
         raise ResidentDormitoryError(
             "User has no dormitory assigned; cannot book a laundry machine"
@@ -84,7 +85,7 @@ def end_laundry_booking(
 ) -> LaundryBooking:
     booking = db.get(LaundryBooking, laundry_booking_id)
 
-    now = datetime.now()
+    now = now_utc()
 
     if booking is None:
         raise BookingNotFoundError(f"Booking with id {laundry_booking_id} not found")
@@ -110,16 +111,16 @@ def end_laundry_booking(
     return booking
 
 
-def reset_machine_status_if_expired_or_return_active_booking(db: Session,
-                                                             laundry_machine_id: int) \
-        -> LaundryBooking | None:
+def reset_machine_status_if_expired_or_return_active_booking(
+    db: Session, laundry_machine_id: int
+) -> LaundryBooking | None:
 
     active_booking = (
         db.query(LaundryBooking)
         .filter(
             LaundryBooking.laundry_machine_id == laundry_machine_id,
             LaundryBooking.cancelled_at.is_(None),
-            LaundryBooking.ends_at > datetime.now(),
+            LaundryBooking.ends_at > now_utc(),
         )
         .first()
     )

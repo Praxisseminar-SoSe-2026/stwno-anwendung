@@ -23,6 +23,7 @@ class Dormitory(Base):
     name: Mapped[str]
     address: Mapped[str | None] = mapped_column(default=None)
     city: Mapped[str | None] = mapped_column(default=None)
+    # TODO: maybe this should be a number/int?
     zip_code: Mapped[str | None] = mapped_column(default=None)
 
     residents: Mapped[list[User]] = relationship(back_populates="dormitory")

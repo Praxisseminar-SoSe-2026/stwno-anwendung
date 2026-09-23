@@ -16,6 +16,9 @@
     "textLabel": "Text",
     "newAnnouncement": "+",
     "createAnnouncement": "Neue Ankündigung",
+    "createAnnouncementError": "Neue Ankündigung konnte nicht erstellt werden.",
+    "deleteAnnouncementError": "Ankündigung konnte nicht gelöscht werden.",
+    "updateAnnouncementError": "Ankündigung konnte nicht aktualisiert werden.",
     "scope": "Sichtbarkeit der Ankündigung",
     "scopeGlobal": "Für alle Wohnheime",
     "uploadImage": "Neues Bild hochladen",
@@ -27,7 +30,13 @@
     "edit": "Bearbeiten",
     "delete": "Löschen",
     "create": "Erstellen",
-    "minutes": "Minuten"
+    "minutes": "Minuten",
+    "back": "Zurück",
+    "loading": "Lädt...",
+    "creating": "wird erstellt..",
+    "saving": "wird gespeichert...",
+    "deleting": "wird gelöscht...",
+    "ending": "wird beendet..."
   },
   "faq": {
     "title": "Häufig gestellte Fragen",
@@ -43,10 +52,14 @@
     },
     "questionLabel": "Frage",
     "answerLabel": "Antwort",
-    "categoryLabel": "Kategorie"
+    "categoryLabel": "Kategorie",
+    "createFaqError": "Neue Frage konnte nicht erstellt werden.",
+    "updateFaqError": "Frage konnte nicht bearbeitet werden.",
+    "deleteFaqError": "Frage konnte nicht gelöscht werden."
   },
   "laundry": {
     "title": "Waschküche",
+    "machines": "Machines",
     "washingmachines": "Waschmaschinen",
     "washingmachine": "Waschmaschine",
     "selectLaundryRoom": "Waschraum auswählen",
@@ -87,12 +100,14 @@
   "roomBooking": {
     "title": "Gemeinschaftsraumbuchung",
     "selectCommunityRoom": "Gemeinschaftsraum auswählen",
+    "createCommunityRoomBooking": "Gemeinschaftsraum buchen",
     "occupied": "Belegt",
     "bookCommunityRoom": "{{communityRoomName}} buchen",
     "startDate": "von",
     "endDate": "bis",
     "regularKeyExchangePossibleQuestion": "Können Sie den Schlüssel am Vorbuchungstag zwischen 9 und 11 Uhr im Büro der Hausmeister:in abholen?",
-    "alternativeKeyExchangeDate": "alternativer Tag zum Schlüsselaustausch"
+    "alternativeKeyExchangeDate": "alternativer Tag zum Schlüsselaustausch",
+    "createBookingError": "Buchungsanfrage konnte nicht erstellt werden."
   },
   "adminIndex": {
     "title": "Hallo Chef!"
@@ -100,7 +115,39 @@
   "adminTicketOverview": {
     "title": "Ticket Übersicht (Reparatur- und Raumbuchungsanfragen)",
     "titleShort": "Ticket Übersicht",
-    "notAuthorized": "Du hast keinen Zugriff auf diese Seite."
+    "notAuthorized": "Du hast keinen Zugriff auf diese Seite.",
+    "empty": "keine Tickets"
+  },
+  "userList": {
+    "title": "Nutzer:innen Liste",
+    "editUser": "Nutzer:in bearbeiten",
+    "personNumber": "Personennummer",
+    "firstName": "Vorname",
+    "lastName": "Nachname",
+    "email": "E-Mail",
+    "flatNumber": "Wohnungsnummer",
+    "dormitory": "Wohnheim",
+    "noDormitory": "Kein Wohnheim",
+    "contractEnd": "Vertragsende",
+    "roles": "Rollen"
+  },
+  "infrastructure": {
+    "createRoom": "Raum erstellen",
+    "editRoom": "Raum bearbeiten",
+    "name": "Name",
+    "description": "Beschreibung",
+    "status": "Status",
+    "type": "Art",
+    "createMachine": "Maschine erstellen",
+    "editMachine": "Machine bearbeiten"
+  },
+  "dormitory": {
+    "createDorm": "Wohnheim erstellen",
+    "name": "Name",
+    "address": "Adress",
+    "city": "Stadt",
+    "zipCode": "PLZ",
+    "editDorm": "Wohnheim bearbeiten"
   },
   "request": {
     "start": "Beginn",
@@ -126,10 +173,12 @@
     "statusChanged": "Status geändert zu \"{{status}}\"",
     "commentPlaceholder": "Kommentar schreiben …",
     "addComment": "Kommentieren",
+    "commented": "hat kommentiert",
     "changeStatus": "Status ändern",
     "chooseSlot": "Termin auswählen",
     "setEntryTime": "Termin festlegen",
-    "actionError": "Aktion fehlgeschlagen."
+    "actionError": "Aktion fehlgeschlagen.",
+    "entryTimeSet": "hat den Zutrittstermin auf {{time}} festgelegt"
   },
   "login": {
     "title": "Bei STWNO-Anwendung anmelden",
@@ -142,7 +191,8 @@
     "signIn": "Anmelden",
     "signOut": "Abmelden",
     "error": "Login fehlgeschlagen.",
-    "invalid": "Bitte einloggen."
+    "invalid": "Bitte einloggen.",
+    "sessionExpired": "Session abgelaufen."
   },
   "registration": {
     "register": "Neuen Account registrieren?",

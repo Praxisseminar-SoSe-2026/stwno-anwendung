@@ -1,6 +1,6 @@
 // based on template [https://mui.com/material-ui/getting-started/templates/sign-in/]
 import { useTranslation } from 'react-i18next'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { SubmitEventHandler } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { useLogin } from '../../hooks/useLogin.ts'
@@ -11,6 +11,7 @@ import {
   Button,
   FormControl,
   TextField,
+  Stack,
 } from '@mui/material'
 
 export function LoginPage() {
@@ -21,8 +22,17 @@ export function LoginPage() {
 
   const [passwordError, setPasswordError] = useState(false)
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('')
+  const [sessionExpired, setSessionExpired] = useState(false)
 
   const { submitLogin, loading, error } = useLogin()
+
+  useEffect(() => {
+    if (sessionStorage.getItem('session_expired')) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setSessionExpired(true)
+      sessionStorage.removeItem('session_expired')
+    }
+  }, [])
 
   const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault()
@@ -69,76 +79,90 @@ export function LoginPage() {
   }
 
   return (
-    <Paper
-      variant="outlined"
-      sx={{
+    <Stack
+      style={{
         display: 'flex',
-        flexDirection: 'column',
-        width: '30%',
-        p: 4,
-        gap: 2,
+        minHeight: '100vh',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
-      <Typography variant="h2">{t('login.title')}</Typography>
-
-      <Box
-        component="form"
-        onSubmit={handleSubmit}
-        noValidate
+      <Paper
+        variant="outlined"
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          width: '100%',
+          width: { xs: '90%', sm: '60%', md: '30%' },
+          alignSelf: 'center',
+          p: 4,
           gap: 2,
         }}
       >
-        {/* email input */}
-        <FormControl>
-          <TextField
-            error={emailError}
-            helperText={emailErrorMessage}
-            id="email"
-            type="email"
-            name="email"
-            placeholder={t('login.email')}
-            autoComplete="email"
-            required
-            color={emailError ? 'error' : 'primary'}
-          />
-        </FormControl>
+        <Typography variant="h2">{t('login.title')}</Typography>
 
-        {/* password input */}
-        <FormControl>
-          <TextField
-            error={passwordError}
-            helperText={passwordErrorMessage}
-            name="password"
-            placeholder={t('login.password')}
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            required
-            color={passwordError ? 'error' : 'primary'}
-          />
-        </FormControl>
+        {sessionExpired && (
+          <Typography color={'error'}>{t('login.sessionExpired')}</Typography>
+        )}
 
-        {/*new Account Registar Link*/}
-        <Typography>
-          <Link to="/registration">{t('registration.register')}</Link>
-        </Typography>
-
-        {/*login Button*/}
-        <Button
-          type="submit"
-          variant="contained"
-          onClick={validateInputs}
-          disabled={loading}
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          noValidate
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
+            gap: 2,
+          }}
         >
-          {loading ? t('login.signingIn') : t('login.signIn')}
-        </Button>
+          {/* email input */}
+          <FormControl>
+            <TextField
+              error={emailError}
+              helperText={emailErrorMessage}
+              id="email"
+              type="email"
+              name="email"
+              placeholder={t('login.email')}
+              autoComplete="email"
+              required
+              color={emailError ? 'error' : 'primary'}
+            />
+          </FormControl>
 
-        {error && <Typography color="error">{error}</Typography>}
-      </Box>
-    </Paper>
+          {/* password input */}
+          <FormControl>
+            <TextField
+              error={passwordError}
+              helperText={passwordErrorMessage}
+              name="password"
+              placeholder={t('login.password')}
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              required
+              color={passwordError ? 'error' : 'primary'}
+            />
+          </FormControl>
+
+          {/*new Account Registar Link*/}
+          <Typography>
+            <Link to="/registration">{t('registration.register')}</Link>
+          </Typography>
+
+          {/*login Button*/}
+          <Button
+            type="submit"
+            variant="contained"
+            onClick={validateInputs}
+            disabled={loading}
+          >
+            {loading ? t('login.signingIn') : t('login.signIn')}
+          </Button>
+
+          {error && <Typography color="error">{error}</Typography>}
+        </Box>
+      </Paper>
+    </Stack>
   )
 }

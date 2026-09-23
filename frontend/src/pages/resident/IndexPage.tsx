@@ -7,26 +7,34 @@ import {
   CardActionArea,
   CardContent,
   Chip,
-  CircularProgress,
   Button,
+  Divider,
 } from '@mui/material'
 import { useAnnouncements } from '../../hooks/useAnnouncements'
-import { useAuth } from '../../contexts/AuthContext'
-
-const EDITOR_ROLES = ['admin', 'hausmeister']
+import { useHasRole } from '../../hooks/useHasRole.ts'
+import { EDITOR_ROLES } from '../../constants/roles.ts'
+import { Loading } from '../../components/Loading.tsx'
 
 export function IndexPage() {
   const { t } = useTranslation()
   const { announcements, loading, error } = useAnnouncements()
-  const { hasRole, loading: authLoading } = useAuth()
-  const canCreate = !authLoading && EDITOR_ROLES.some((role) => hasRole(role))
+  const canCreate = useHasRole(EDITOR_ROLES)
 
-  if (loading) return <CircularProgress />
-  if (error) return <Typography color="error">{t('login.invalid')}</Typography>
+  if (loading) return <Loading />
+  if (error) return <Typography color="error">{error}</Typography>
 
   return (
-    <Stack spacing={2}>
-      <Stack direction="row" justifyContent="space-between" alignItems="center">
+    <Stack
+      spacing={3}
+      sx={{ width: { xs: '100%', md: '50%' }, alignSelf: 'center' }}
+    >
+      <Stack
+        direction={{ xs: 'column', sm: 'row' }}
+        sx={{
+          justifyContent: 'space-between',
+          alignItems: { xs: 'stretch', sm: 'center' },
+        }}
+      >
         <Typography variant="h1">{t('bulletinBoard.title')}</Typography>
         {canCreate && (
           <Button variant="contained" component={Link} to="/aushang/neu">
@@ -34,7 +42,7 @@ export function IndexPage() {
           </Button>
         )}
       </Stack>
-
+      <Divider />
       {announcements.length === 0 && (
         <Typography>{t('bulletinBoard.empty')}</Typography>
       )}

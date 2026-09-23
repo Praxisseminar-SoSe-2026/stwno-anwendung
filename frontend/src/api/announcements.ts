@@ -1,3 +1,5 @@
+import { apiFetch } from './apiFetch.ts'
+
 const BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 export type Announcement = {
@@ -36,14 +38,14 @@ async function handleResponse<T>(res: Response): Promise<T> {
 }
 
 export async function getAnnouncements(): Promise<Announcement[]> {
-  const res = await fetch(`${BASE_URL}/announcements`, {
+  const res = await apiFetch(`${BASE_URL}/announcements`, {
     headers: authHeaders(),
   })
   return handleResponse(res)
 }
 
 export async function getAnnouncement(id: number): Promise<Announcement> {
-  const res = await fetch(`${BASE_URL}/announcements/${id}`, {
+  const res = await apiFetch(`${BASE_URL}/announcements/${id}`, {
     headers: authHeaders(),
   })
   return handleResponse(res)
@@ -53,7 +55,7 @@ export async function updateAnnouncement(
   id: number,
   data: Partial<AnnouncementInput>
 ): Promise<Announcement> {
-  const res = await fetch(`${BASE_URL}/announcements/${id}`, {
+  const res = await apiFetch(`${BASE_URL}/announcements/${id}`, {
     method: 'PUT',
     headers: authHeaders(),
     body: JSON.stringify(data),
@@ -62,7 +64,7 @@ export async function updateAnnouncement(
 }
 
 export async function deleteAnnouncement(id: number): Promise<void> {
-  const res = await fetch(`${BASE_URL}/announcements/${id}`, {
+  const res = await apiFetch(`${BASE_URL}/announcements/${id}`, {
     method: 'DELETE',
     headers: authHeaders(),
   })
@@ -75,7 +77,7 @@ export async function deleteAnnouncement(id: number): Promise<void> {
 export async function createAnnouncement(
   data: AnnouncementInput
 ): Promise<Announcement> {
-  const res = await fetch(`${BASE_URL}/announcements`, {
+  const res = await apiFetch(`${BASE_URL}/announcements`, {
     method: 'POST',
     headers: authHeaders(),
     body: JSON.stringify(data),

@@ -18,11 +18,13 @@ import {
   CircularProgress,
   Box,
 } from '@mui/material'
-import { createAnnouncement } from '../../api/announcements'
+import { useCreateAnnouncement } from '../../hooks/useCreateAnnouncement'
 import { useDormitories } from '../../hooks/useDormitories'
 import { useImageUpload } from '../../hooks/useImageUpload.ts'
 import UploadIcon from '@mui/icons-material/Upload'
 import CloseIcon from '@mui/icons-material/Close'
+import { useHasRole } from '../../hooks/useHasRole.ts'
+import { STAFF_ROLES } from '../../constants/roles.ts'
 
 const GLOBAL_VALUE = 'global'
 
@@ -35,41 +37,54 @@ export function AdminCreateAnnouncementPage() {
   const [title, setTitle] = useState('')
   const [text, setText] = useState('')
   const [important, setImportant] = useState(false)
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
   const [scope, setScope] = useState<string>(GLOBAL_VALUE)
+  const { submitAnnouncement, loading, error } = useCreateAnnouncement()
+
+  const canView = useHasRole(STAFF_ROLES)
+
+  if (!canView) {
+    return <Typography>{t('adminTicketOverview.notAuthorized')}</Typography>
+  }
 
   const handleSubmit = async () => {
-    setSaving(true)
-    setError(null)
-    try {
-      const created = await createAnnouncement({
-        title,
-        text,
-        important,
-        image_url: imageUpload.imageUrl,
-        dormitory_id: scope === GLOBAL_VALUE ? null : Number(scope),
-      })
-      navigate(`/aushang/${created.id}`)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create')
-      setSaving(false)
+    const result = await submitAnnouncement({
+      title,
+      text,
+      important,
+      image_url: imageUpload.imageUrl,
+      dormitory_id: scope === GLOBAL_VALUE ? null : Number(scope),
+    })
+
+    if (result) {
+      navigate(`/aushang/${result.id}`)
     }
   }
 
   return (
-    <Paper variant="outlined" sx={{ p: 4 }}>
-      <Stack spacing={2}>
+    <Paper
+      variant="outlined"
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: { xs: '95%', md: '50%' },
+        alignSelf: 'center',
+        p: 4,
+        gap: 2,
+      }}
+    >
+      <Stack spacing={3}>
         <Typography variant="h4">
           {t('bulletinBoard.createAnnouncement')}
         </Typography>
 
+        {/* Title */}
         <TextField
           label={t('bulletinBoard.titleLabel')}
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           fullWidth
         />
+        {/* Important flag */}
         <FormControlLabel
           control={
             <Checkbox
@@ -79,6 +94,7 @@ export function AdminCreateAnnouncementPage() {
           }
           label={t('bulletinBoard.important')}
         />
+        {/* Description text */}
         <TextField
           label={t('bulletinBoard.textLabel')}
           value={text}
@@ -158,10 +174,11 @@ export function AdminCreateAnnouncementPage() {
         <Button
           variant="contained"
           onClick={handleSubmit}
-          disabled={saving || !title || !text}
+          disabled={loading || !title || !text}
         >
-          {t('common.create')}
+          {loading ? t('common.creating') : t('common.create')}
         </Button>
+        <Button onClick={() => navigate(-1)}>{t('common.cancel')}</Button>
 
         {error && <Typography color="error">{error}</Typography>}
       </Stack>

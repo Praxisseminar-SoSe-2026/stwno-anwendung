@@ -41,6 +41,14 @@ class AccessTimeSlotResponse(BaseModel):
     end_time: datetime
 
 
+class AccessTimeSlotHistoryResponse(BaseModel):
+    id: int
+    start_time: datetime
+    end_time: datetime
+    changed_by: ResidentInfo
+    changed_at: datetime | None
+
+
 class CommentCreate(BaseModel):
     text: str
 
@@ -59,7 +67,6 @@ class StatusHistoryResponse(BaseModel):
     changed_at: datetime | None
 
 
-
 class RequestResponse(BaseModel):
     id: int
     type: str
@@ -67,6 +74,8 @@ class RequestResponse(BaseModel):
     created_at: datetime | None
     resident: ResidentInfo
     can_edit: bool = False
+    comments: list[CommentResponse] = []
+    status_history: list[StatusHistoryResponse] = []
 
     # repair-specific
     location: str | None = None
@@ -76,8 +85,7 @@ class RequestResponse(BaseModel):
     proposed_date_note: str | None = None
     proposed_time_slots: list[AccessTimeSlotProposalResponse] = []
     access_time_slot: AccessTimeSlotResponse | None = None
-    comments: list[CommentResponse] = []
-    status_history: list[StatusHistoryResponse] = []
+    access_time_slot_history: list[AccessTimeSlotHistoryResponse] = []
 
     # room-specific
     community_room_id: int | None = None
@@ -98,6 +106,17 @@ class RequestResponse(BaseModel):
                 last_name=user.last_name,
                 flat_number=user.flat_number,
             )
+
+        def _status_history(entries) -> list[StatusHistoryResponse]:
+            return [
+                StatusHistoryResponse(
+                    id=entry.id,
+                    status=entry.status,
+                    changed_by=_resident_info(entry.changed_by),
+                    changed_at=entry.changed_at,
+                )
+                for entry in entries
+            ]
 
         data = {
             "id": request.id,
@@ -141,15 +160,17 @@ class RequestResponse(BaseModel):
                     if request.access_time_slot
                     else None
                 ),
-                status_history=[
-                    StatusHistoryResponse(
+                access_time_slot_history=[
+                    AccessTimeSlotHistoryResponse(
                         id=entry.id,
-                        status=entry.status,
+                        start_time=entry.start_time,
+                        end_time=entry.end_time,
                         changed_by=_resident_info(entry.changed_by),
                         changed_at=entry.changed_at,
                     )
-                    for entry in request.status_history
+                    for entry in request.access_time_slot_history
                 ],
+                status_history=_status_history(request.status_history),
             )
         elif isinstance(request, RoomRequest):
             data.update(
@@ -158,6 +179,7 @@ class RequestResponse(BaseModel):
                 end_datetime=request.end_datetime,
                 regular_key_exchange_possible=request.regular_key_exchange_possible,
                 alternative_key_exchange_date=request.alternative_key_exchange_date,
+                status_history=_status_history(request.status_history),
             )
 
         return cls(**data)
@@ -178,7 +200,6 @@ class RoomRequestCreate(BaseModel):
     end_date: date
     regular_key_exchange_possible: bool | None
     alternative_key_exchange_date: date | None
-
 
 
 class RequestStatusUpdate(BaseModel):

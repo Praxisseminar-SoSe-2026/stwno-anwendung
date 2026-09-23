@@ -3,10 +3,11 @@ from __future__ import annotations
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Enum, ForeignKey, func
+from sqlalchemy import DateTime, Enum, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.status import RequestStatus
+from app.core.time import now_utc
 from app.db.database import Base
 
 if TYPE_CHECKING:
@@ -24,7 +25,9 @@ class Request(Base):
     status: Mapped[RequestStatus] = mapped_column(
         Enum(RequestStatus), default=RequestStatus.OPEN, server_default="OPEN"
     )
-    created_at: Mapped[datetime | None] = mapped_column(server_default=func.now())
+    created_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), default=now_utc
+    )
 
     resident: Mapped[User] = relationship(back_populates="requests")
     comments: Mapped[list[RequestComment]] = relationship(back_populates="request")

@@ -16,6 +16,9 @@
     "textLabel": "Text",
     "newAnnouncement": "+",
     "createAnnouncement": "New announcement",
+    "createAnnouncementError": "New announcement could not be created.",
+    "deleteAnnouncementError": "Announcement could not be deleted.",
+    "updateAnnouncementError": "Announcement could not be updated.",
     "scope": "Visibility of the announcement",
     "scopeGlobal": "All dormitories",
     "uploadImage": "Upload a new image",
@@ -27,7 +30,13 @@
     "edit": "Edit",
     "delete": "Delete",
     "create": "Create",
-    "minutes": "minutes"
+    "minutes": "minutes",
+    "back": "Go back",
+    "loading": "loading...",
+    "creating": "creating..",
+    "saving": "saving...",
+    "deleting": "deleting...",
+    "ending": "ending..."
   },
   "faq": {
     "title": "Frequently Asked Questions",
@@ -43,10 +52,14 @@
     },
     "questionLabel": "Question",
     "answerLabel": "Answer",
-    "categoryLabel": "Category"
+    "categoryLabel": "Category",
+    "createFaqError": "New question could not be created.",
+    "updateFaqError": "Question could not be edited.",
+    "deleteFaqError": "Question could not be deleted."
   },
   "laundry": {
     "title": "Washroom",
+    "machines": "Machines",
     "washingmachines": "washingmaschines",
     "washingmachine": "washingmaschine",
     "selectLaundryRoom": "Select washroom",
@@ -87,12 +100,14 @@
   "roomBooking": {
     "title": "Community Room Booking",
     "selectCommunityRoom": "Select Community Room",
+    "createCommunityRoomBooking": "Book Community Room",
     "occupied": "occupied",
     "bookCommunityRoom": "Book {{communityRoomName}}",
     "startDate": "from",
     "endDate": "till",
     "regularKeyExchangePossibleQuestion": "Can you pick up the key at the facility management office between 9 a.m. and 11 a.m. on the day before the booking?",
-    "alternativeKeyExchangeDate": "Alternative day for key exchange"
+    "alternativeKeyExchangeDate": "Alternative day for key exchange",
+    "createBookingError": "Booking request could not be created."
   },
   "adminIndex": {
     "title": "Hello Boss!"
@@ -100,7 +115,39 @@
   "adminTicketOverview": {
     "title": "Ticket Overview (Repair and Room Booking Requests)",
     "titleShort": "Ticket Overview",
-    "notAuthorized": "You are not authorized to use this page."
+    "notAuthorized": "You are not authorized to use this page.",
+    "empty": "no tickets"
+  },
+  "userList": {
+    "title": "User List",
+    "editUser": "Edit user",
+    "personNumber": "Person number",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "flatNumber": "Flat number",
+    "dormitory": "Dormitory",
+    "noDormitory": "No dormitory",
+    "contractEnd": "Contract end",
+    "roles": "Roles"
+  },
+  "infrastructure": {
+    "createRoom": "Create room",
+    "editRoom": "Edit room",
+    "name": "Name",
+    "description": "Description",
+    "status": "Status",
+    "type": "Type",
+    "createMachine": "Create machine",
+    "editMachine": "Edit machine"
+  },
+  "dormitory": {
+    "createDorm": "Create dormitory",
+    "name": "Name",
+    "address": "Address",
+    "city": "City",
+    "zipCode": "Zip code",
+    "editDorm": "Edit dormitory"
   },
   "request": {
     "start": "Begin",
@@ -108,7 +155,7 @@
     "location": "Location",
     "type": {
       "repair": "repair request",
-      "room": "community room booking request"
+      "room": "room request"
     },
     "exportPdf": "Create PDF",
     "status": {
@@ -126,10 +173,12 @@
     "statusChanged": "Status changed to \"{{status}}\"",
     "commentPlaceholder": "Write a comment …",
     "addComment": "Comment",
+    "commented": "commented",
     "changeStatus": "Change status",
     "chooseSlot": "Choose a time slot",
     "setEntryTime": "Set entry time",
-    "actionError": "Action failed."
+    "actionError": "Action failed.",
+    "entryTimeSet": "set the entry time to {{time}}"
   },
   "login": {
     "title": "Log into STWNO-Anwendung",
@@ -142,7 +191,8 @@
     "signIn": "Log in",
     "signOut": "Log out",
     "error": "Login failed.",
-    "invalid": "Please login"
+    "invalid": "Please login",
+    "sessionExpired": "Session expired."
   },
   "registration": {
     "register": "Register new account?",

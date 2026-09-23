@@ -7,8 +7,8 @@ import {
   CardActionArea,
   CardContent,
   Chip,
-  CircularProgress,
   Grid,
+  Divider,
 } from '@mui/material'
 import { useRequests } from '../../hooks/useRequests'
 import { useAuth } from '../../contexts/AuthContext'
@@ -17,8 +17,9 @@ import type {
   RequestType,
   RequestStatus,
 } from '../../api/requests'
-
-const ALLOWED_ROLES = ['admin', 'mitarbeiter', 'hausmeister']
+import { useHasRole } from '../../hooks/useHasRole.ts'
+import { STAFF_ROLES } from '../../constants/roles.ts'
+import { Loading } from '../../components/Loading'
 
 const STATUS_COLUMNS: { key: string; matches: RequestStatus[] }[] = [
   { key: 'Offen', matches: ['open'] },
@@ -45,12 +46,13 @@ function ticketTitle(ticket: TicketRequest): string {
 
 export function AdminTicketOverviewPage() {
   const { t } = useTranslation()
-  const { hasRole, loading: authLoading } = useAuth()
+  const { loading: authLoading } = useAuth()
   const { requests, loading, error } = useRequests()
 
-  if (authLoading || loading) return <CircularProgress />
+  const canView = useHasRole(STAFF_ROLES)
 
-  const canView = ALLOWED_ROLES.some((role) => hasRole(role))
+  if (authLoading || loading) return <Loading />
+
   if (!canView) {
     return <Typography>{t('adminTicketOverview.notAuthorized')}</Typography>
   }
@@ -58,10 +60,14 @@ export function AdminTicketOverviewPage() {
   if (error) return <Typography color="error">{error}</Typography>
 
   return (
-    <Stack spacing={2}>
+    <Stack
+      spacing={3}
+      sx={{ width: { xs: '95%', md: '50%' }, alignSelf: 'center' }}
+    >
       <Typography variant="h1">
         {t('adminTicketOverview.titleShort')}
       </Typography>
+      <Divider />
 
       <Grid container spacing={2}>
         {STATUS_COLUMNS.map((column) => {
@@ -88,6 +94,7 @@ export function AdminTicketOverviewPage() {
                           sx={{
                             justifyContent: 'space-between',
                             alignItems: 'center',
+                            flexWrap: 'wrap',
                           }}
                         >
                           <Typography>
@@ -112,7 +119,7 @@ export function AdminTicketOverviewPage() {
                   </Card>
                 ))}
                 {columnRequests.length === 0 && (
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography>
                     {t('adminTicketOverview.empty')}
                   </Typography>
                 )}

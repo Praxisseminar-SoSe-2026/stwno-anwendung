@@ -6,7 +6,6 @@ import {
   Typography,
   Paper,
   Chip,
-  CircularProgress,
   Button,
   Box,
   Divider,
@@ -19,22 +18,43 @@ import {
 } from '@mui/material'
 import PrintIcon from '@mui/icons-material/Print'
 import { useRequest } from '../../hooks/useRequest'
-import { useRepairRequestActions } from '../../hooks/useRepairRequestActions'
+import { useRequestActions } from '../../hooks/useRequestActions.ts'
 import { useAuth } from '../../contexts/AuthContext'
 import type {
   Comment,
   StatusHistoryEntry,
   RequestStatus,
+  AccessTimeSlotHistoryEntry,
 } from '../../api/requests'
+import { useHasRole } from '../../hooks/useHasRole.ts'
+import { STAFF_ROLES } from '../../constants/roles.ts'
 
-const ALLOWED_ROLES = ['admin', 'mitarbeiter', 'hausmeister']
+import { Loading } from '../../components/Loading'
+import EditIcon from '@mui/icons-material/Edit'
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark'
+import EngineeringIcon from '@mui/icons-material/Engineering'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import CancelIcon from '@mui/icons-material/Cancel'
+import type { SvgIconComponent } from '@mui/icons-material'
+import EventAvailableIcon from '@mui/icons-material/EventAvailable'
+import { BackButton } from '../../components/BackButton'
 
-const REPAIR_STATUSES: RequestStatus[] = [
+const REQUEST_STATUSES: RequestStatus[] = [
   'open',
   'in_progress',
   'closed',
   'denied',
 ]
+
+const STATUS_TIMELINE_ICONS: Record<
+  RequestStatus,
+  { Icon: SvgIconComponent; color: string }
+> = {
+  open: { Icon: QuestionMarkIcon, color: 'info.main' },
+  in_progress: { Icon: EngineeringIcon, color: 'warning.main' },
+  closed: { Icon: CheckCircleIcon, color: 'success.main' },
+  denied: { Icon: CancelIcon, color: 'error.main' },
+}
 
 type TimelineEntry =
   | { key: string; at: string | null; kind: 'comment'; comment: Comment }
@@ -44,11 +64,19 @@ type TimelineEntry =
       kind: 'status'
       entry: StatusHistoryEntry
     }
+  | {
+      key: string
+      at: string | null
+      kind: 'entry_time'
+      entry: AccessTimeSlotHistoryEntry
+    }
 
 export function AdminTicketDetailPage() {
   const { id } = useParams<{ id: string }>()
   const { t } = useTranslation()
-  const { hasRole, loading: authLoading } = useAuth()
+
+  const { loading: authLoading } = useAuth()
+
   const { request, loading, error, setRequest } = useRequest(Number(id))
   const {
     submitting,
@@ -56,16 +84,17 @@ export function AdminTicketDetailPage() {
     updateStatus,
     setEntryTime,
     addComment,
-  } = useRepairRequestActions(Number(id), setRequest)
+  } = useRequestActions(Number(id), request?.type ?? 'repair', setRequest)
 
   const [selectedProposalId, setSelectedProposalId] = useState<number | null>(
     null
   )
   const [commentDraft, setCommentDraft] = useState('')
 
-  if (authLoading || loading) return <CircularProgress />
+  const canView = useHasRole(STAFF_ROLES)
 
-  const canView = ALLOWED_ROLES.some((role) => hasRole(role))
+  if (authLoading || loading) return <Loading />
+
   if (!canView) {
     return <Typography>{t('adminTicketOverview.notAuthorized')}</Typography>
   }
@@ -73,6 +102,7 @@ export function AdminTicketDetailPage() {
   if (error) return <Typography color="error">{error}</Typography>
   if (!request) return null
 
+  // create list of time line entries and sort them by time
   const timeline: TimelineEntry[] = [
     ...request.comments.map((comment) => ({
       key: `comment-${comment.id}`,
@@ -86,14 +116,33 @@ export function AdminTicketDetailPage() {
       kind: 'status' as const,
       entry,
     })),
+    ...request.access_time_slot_history.map((entry) => ({
+      key: `entry-time-${entry.id}`,
+      at: entry.changed_at,
+      kind: 'entry_time' as const,
+      entry,
+    })),
   ].sort(
     (a, b) => new Date(a.at ?? 0).getTime() - new Date(b.at ?? 0).getTime()
   )
 
   return (
-    <Paper variant="outlined" sx={{ p: 4 }}>
+    <Paper
+      variant="outlined"
+      sx={{
+        width: { xs: '95%', md: '50%' },
+        alignSelf: 'center',
+        p: 4,
+        gap: 2,
+      }}
+    >
+      <BackButton />
       <Stack spacing={2}>
-        <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{ alignItems: 'center', flexWrap: 'wrap' }}
+        >
           <Typography>
             {request.created_at &&
               new Date(request.created_at).toLocaleString()}
@@ -113,7 +162,7 @@ export function AdminTicketDetailPage() {
             {t('request.exportPdf')}
           </Button>
         </Stack>
-
+        {/* ---- Ticket Details ---- */}
         <Typography>
           <strong>{t('request.author')}:</strong> {request.resident.first_name}{' '}
           {request.resident.last_name}
@@ -125,7 +174,9 @@ export function AdminTicketDetailPage() {
             <Typography>
               <strong>{t('request.location')}:</strong> {request.location}
             </Typography>
-            <Typography whiteSpace="pre-wrap">{request.description}</Typography>
+            <Typography sx={{ whiteSpace: 'pre-wrap' }}>
+              {request.description}
+            </Typography>
 
             {request.image_url && (
               <Box
@@ -185,33 +236,87 @@ export function AdminTicketDetailPage() {
         )}
 
         <Divider />
+        {/* ---- Ticket History ---- */}
+        <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+          {t('request.history')}
+        </Typography>
+        <Stack spacing={0}>
+          {timeline.map((item, index) => {
+            const isLast = index === timeline.length - 1
+            const { Icon, color } =
+              item.kind === 'comment'
+                ? { Icon: EditIcon, color: 'grey.600' }
+                : item.kind === 'entry_time'
+                  ? { Icon: EventAvailableIcon, color: 'secondary.main' }
+                  : STATUS_TIMELINE_ICONS[item.entry.status]
+            const authorName =
+              item.kind === 'comment'
+                ? `${item.comment.author.first_name} ${item.comment.author.last_name}`
+                : `${item.entry.changed_by.first_name} ${item.entry.changed_by.last_name}`
 
-        <Typography variant="h4">{t('request.history')}</Typography>
-        <Stack spacing={1}>
-          {timeline.map((item) => (
-            <Typography key={item.key} variant="body2">
-              <strong>
-                {item.kind === 'comment'
-                  ? `${item.comment.author.first_name} ${item.comment.author.last_name}`
-                  : `${item.entry.changed_by.first_name} ${item.entry.changed_by.last_name}`}
-              </strong>{' '}
-              {item.at && new Date(item.at).toLocaleString()}
-              {' — '}
-              {item.kind === 'comment'
-                ? item.comment.text
-                : t('request.statusChanged', { status: item.entry.status })}
-            </Typography>
-          ))}
+            return (
+              <Stack key={item.key} direction="row" spacing={1.5}>
+                <Stack sx={{ alignItems: 'center', flexShrink: 0 }}>
+                  <Box
+                    sx={{
+                      width: 24,
+                      height: 24,
+                      borderRadius: '50%',
+                      bgcolor: color,
+                      color: 'common.white',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Icon sx={{ fontSize: 14 }} />
+                  </Box>
+                  {!isLast && (
+                    <Box
+                      sx={{
+                        width: '2px',
+                        flexGrow: 1,
+                        bgcolor: 'divider',
+                        my: 0.5,
+                      }}
+                    />
+                  )}
+                </Stack>
+                <Box sx={{ pb: 2, minWidth: 0 }}>
+                  <Typography>
+                    <strong>{authorName}</strong>{' '}
+                    {item.kind === 'comment'
+                      ? t('request.commented')
+                      : item.kind === 'entry_time'
+                        ? t('request.entryTimeSet', {
+                            time: new Date(
+                              item.entry.start_time
+                            ).toLocaleString(),
+                          })
+                        : t('request.statusChanged', {
+                            status: t(`request.status.${item.entry.status}`),
+                          })}
+                    {' · '}
+                    {item.at && new Date(item.at).toLocaleString()}
+                  </Typography>
+                  {item.kind === 'comment' && (
+                    <Typography sx={{ fontStyle: 'italic' }}>
+                      {item.comment.text}
+                    </Typography>
+                  )}
+                </Box>
+              </Stack>
+            )
+          })}
           {timeline.length === 0 && (
-            <Typography variant="body2" color="text.secondary">
-              {t('request.noHistory')}
-            </Typography>
+            <Typography>{t('request.noHistory')}</Typography>
           )}
         </Stack>
 
-        {request.type === 'repair' && request.can_edit && (
+        {request.can_edit && (
           <>
             <Divider />
+            {/* ---- Edit Status ---- */}
             <Typography variant="h4">{t('common.edit')}</Typography>
 
             {actionError && <Alert severity="error">{actionError}</Alert>}
@@ -224,9 +329,9 @@ export function AdminTicketDetailPage() {
               onChange={(e) => updateStatus(e.target.value as RequestStatus)}
               sx={{ maxWidth: 260 }}
             >
-              {REPAIR_STATUSES.map((status) => (
+              {REQUEST_STATUSES.map((status) => (
                 <MenuItem key={status} value={status}>
-                  {status}
+                  {t(`request.status.${status}`)}
                 </MenuItem>
               ))}
             </TextField>
@@ -244,7 +349,7 @@ export function AdminTicketDetailPage() {
                     <FormControlLabel
                       key={slot.id}
                       value={slot.id}
-                      control={<Radio />}
+                      control={<Radio disabled={submitting} />}
                       label={new Date(slot.start_time).toLocaleString()}
                     />
                   ))}
@@ -258,7 +363,8 @@ export function AdminTicketDetailPage() {
                   }
                   sx={{ alignSelf: 'flex-start' }}
                 >
-                  {t('request.setEntryTime')}
+                  {/*Todo: refactor hook to return different submitting states for choosing a time and commenting */}
+                  {submitting ? t('common.saving') : t('request.setEntryTime')}
                 </Button>
               </Stack>
             )}
@@ -270,6 +376,7 @@ export function AdminTicketDetailPage() {
                 label={t('request.commentPlaceholder')}
                 value={commentDraft}
                 onChange={(e) => setCommentDraft(e.target.value)}
+                disabled={submitting}
               />
               <Button
                 variant="contained"
@@ -280,7 +387,8 @@ export function AdminTicketDetailPage() {
                 }}
                 sx={{ alignSelf: 'flex-start' }}
               >
-                {t('request.addComment')}
+                {/*Todo: refactor hook to return different submitting states for choosing a time and commenting */}
+                {submitting ? t('common.saving') : t('request.addComment')}
               </Button>
             </Stack>
           </>

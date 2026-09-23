@@ -11,6 +11,7 @@ import {
 } from '@mui/material'
 import { useCreateLaundryBooking } from '../../hooks/useCreateLaundryBooking'
 import { useLaundryMachine } from '../../hooks/useLaundryMachine'
+import { Loading } from '../../components/Loading.tsx'
 
 // Todo: Add Authentification
 
@@ -19,16 +20,20 @@ export function LaundryBookingCreatePage() {
   const { t } = useTranslation()
 
   const { id } = useParams<{ id: string }>()
-  const laundryMachineId = id ? Number(id) : null
+  const laundryMachineId = Number(id)
 
-  const laundryMachine = useLaundryMachine(laundryMachineId).machine
+  const {
+    laundryMachine,
+    loading: machineLoading,
+    error: machineError,
+  } = useLaundryMachine(laundryMachineId)
 
   const [duration, setDuration] = useState('')
 
   const { submitLaundryBooking, loading, error } = useCreateLaundryBooking()
 
   const handleSave = async () => {
-    if (laundryMachineId === null || !duration) return
+    if (!duration) return
 
     const result = await submitLaundryBooking({
       laundry_machine_id: laundryMachineId,
@@ -40,8 +45,21 @@ export function LaundryBookingCreatePage() {
     }
   }
 
+  if (machineLoading) return <Loading />
+  if (machineError) return <Typography color="error">{machineError}</Typography>
+
   return (
-    <Paper variant="outlined" sx={{ p: 4 }}>
+    <Paper
+      variant="outlined"
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: { xs: '95%', md: '50%' },
+        alignSelf: 'center',
+        p: 4,
+        gap: 2,
+      }}
+    >
       <Stack spacing={2}>
         <Typography>
           {t('laundry.communicateLaundryMachineUsage', {
@@ -65,7 +83,8 @@ export function LaundryBookingCreatePage() {
               ),
             },
           }}
-          fullWidth
+          sx={{ width: { xs: '100%', sm: '50%' } }}
+          disabled={loading}
         />
 
         <Stack direction="row" spacing={2}>
@@ -74,7 +93,7 @@ export function LaundryBookingCreatePage() {
             onClick={handleSave}
             disabled={loading || !duration}
           >
-            {t('common.create')}
+            {loading ? t('common.creating') : t('common.create')}
           </Button>
           <Button
             onClick={() => navigate('/waschmaschinen')}

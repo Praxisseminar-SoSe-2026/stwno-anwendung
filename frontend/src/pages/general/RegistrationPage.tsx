@@ -6,13 +6,14 @@ import {
   Paper,
   TextField,
   Typography,
+  Stack,
 } from '@mui/material'
 import { useRegistration } from '../../hooks/useRegistration.ts'
 import { useNavigate } from 'react-router'
 import { useTranslation } from 'react-i18next'
 
 export function RegistrationPage() {
-  const { submitRegistration, error } = useRegistration()
+  const { submitRegistration, submitting, error } = useRegistration()
   const navigate = useNavigate()
   const [personNumber, setPersonNumber] = useState('')
   const { t } = useTranslation()
@@ -26,30 +27,45 @@ export function RegistrationPage() {
     }
   }
   return (
-    <Paper
-      variant="outlined"
-      sx={{
+    <Stack
+      style={{
         display: 'flex',
-        flexDirection: 'column',
-        width: '30%',
-        p: 4,
-        gap: 2,
+        minHeight: '100vh',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
-      <Box component="form" onSubmit={handleSubmit}>
-        <FormControl>
-          <TextField
-            id="personNumber"
-            name="personNumber"
-            placeholder={t('registration.person_number')}
-            value={personNumber}
-            onChange={(e) => setPersonNumber(e.target.value)}
-            required
-          />
-        </FormControl>
-        <Button type="submit">{t('registration.next_button')}</Button>
-        {error && <Typography color="error">{error}</Typography>}
-      </Box>
-    </Paper>
+      <Paper
+        variant="outlined"
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          width: { xs: '90%', sm: '60%', md: '30%' },
+          alignSelf: 'center',
+          p: 4,
+          gap: 2,
+        }}
+      >
+        <Box component="form" onSubmit={handleSubmit}>
+          <FormControl>
+            <TextField
+              id="personNumber"
+              name="personNumber"
+              placeholder={t('registration.person_number')}
+              value={personNumber}
+              onChange={(e) => setPersonNumber(e.target.value)}
+              style={{
+                width: '100%',
+              }}
+              required
+            />
+          </FormControl>
+          <Button type="submit" disabled={submitting}>
+            {submitting ? t('common.loading') : t('registration.next_button')}
+          </Button>
+          {error && <Typography color="error">{error}</Typography>}
+        </Box>
+      </Paper>
+    </Stack>
   )
 }

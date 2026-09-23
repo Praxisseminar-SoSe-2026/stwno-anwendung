@@ -12,6 +12,7 @@ from app.schemas.request import (
     RepairRequestCreate,
     RequestResponse,
     RequestStatusUpdate,
+    RoomBookings,
     RoomRequestCreate,
 )
 from app.services.request_service import (
@@ -26,13 +27,14 @@ from app.services.request_service import (
     RoomBookingTimeConflictError,
     RoomNotFoundError,
     TimeSlotProposalNotFoundError,
-    add_repair_comment,
+    add_comment,
     can_edit_request,
     create_repair_request,
     create_room_request,
     edit_room_request,
     get_request,
     list_requests,
+    list_room_bookings,
     set_access_time_slot,
     update_repair_status,
 )
@@ -97,22 +99,22 @@ def select_repair_entry_time(
     )
 
 
-@router.post("/repair/{request_id}/comments", response_model=RequestResponse)
-def add_repair_request_comment(
+@router.post("/{request_id}/comments", response_model=RequestResponse)
+def add_request_comment(
     request_id: int,
     payload: CommentCreate,
     db: Annotated[Session, Depends(get_db)],
     current_user: Annotated[User, Depends(get_current_user)],
 ):
     try:
-        repair_request = add_repair_comment(db, request_id, current_user, payload)
+        request = add_comment(db, request_id, current_user, payload)
     except RequestNotFoundError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
     except RequestAccessDeniedError as exc:
         raise HTTPException(status_code=403, detail=str(exc)) from exc
 
     return RequestResponse.from_request(
-        repair_request, can_edit=can_edit_request(db, current_user, repair_request)
+        request, can_edit=can_edit_request(db, current_user, request)
     )
 
 
@@ -126,6 +128,17 @@ def list_all(
         RequestResponse.from_request(r, can_edit=can_edit_request(db, current_user, r))
         for r in requests
     ]
+
+
+@router.get("/room_booking", response_model=list[RoomBookings])
+def list_all_room_booking_requests(
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_user)],
+):
+    try:
+        return list_room_bookings(db, current_user)
+    except ResidentDormitoryError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
 @router.post("/room_booking", response_model=RequestResponse)
@@ -150,6 +163,17 @@ def create_room_booking_request(
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
     return RequestResponse.from_request(room_request)
+
+
+@router.get("/room_booking", response_model=list[RoomBookings])
+def list_room_booking_availability(
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_user)],
+):
+    try:
+        return list_room_bookings(db, current_user)
+    except ResidentDormitoryError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
 @router.get("/{request_id}", response_model=RequestResponse)
@@ -184,4 +208,6 @@ def edit_room_booking_request(
     except RequestNotFoundError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
-    return RequestResponse.from_request(room_request)
+    return RequestResponse.from_request(
+        room_request, can_edit=can_edit_request(db, current_user, room_request)
+    )

@@ -1,3 +1,5 @@
+import { apiFetch } from './apiFetch.ts'
+
 const BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 export type RegistrationData = {
@@ -19,7 +21,7 @@ export type RegistrationResponse = {
 export async function register(
   data: RegistrationData
 ): Promise<RegistrationResponse> {
-  const res = await fetch(`${BASE_URL}/registration`, {
+  const res = await apiFetch(`${BASE_URL}/registration`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),

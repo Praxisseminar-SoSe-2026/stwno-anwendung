@@ -1,13 +1,17 @@
 import { useTranslation } from 'react-i18next'
+import { useEffect, useMemo, useState } from 'react'
 import {
   Button,
-  CircularProgress,
   MenuItem,
   Stack,
   TextField,
   Typography,
   useTheme,
+  IconButton,
 } from '@mui/material'
+import { Link } from 'react-router'
+import AddIcon from '@mui/icons-material/Add'
+import EditIcon from '@mui/icons-material/Edit'
 
 import FullCalendar from '@fullcalendar/react'
 import themePlugin from '@fullcalendar/react/themes/monarch'
@@ -19,8 +23,13 @@ import '@fullcalendar/react/themes/monarch/palettes/purple.css'
 
 import { useCommunityRooms } from '../../hooks/useCommunityRooms'
 import { useRoomBookings } from '../../hooks/useRoomBookings'
-import { useState } from 'react'
-import { Link } from 'react-router'
+
+import { Loading } from '../../components/Loading'
+import { useHasRole } from '../../hooks/useHasRole.ts'
+import { STAFF_ROLES, EDITOR_ROLES } from '../../constants/roles.ts'
+import { useDormitoryFilter } from '../../contexts/DormitoryFilterContext.tsx'
+
+import { Divider } from '@mui/material'
 
 type RoomBookingEvent = {
   id: string
@@ -29,7 +38,6 @@ type RoomBookingEvent = {
   end: string
 }
 
-// calendar setup, made with docs [https://fullcalendar.io/docs/react]
 export default function Calendar({ events }: { events: RoomBookingEvent[] }) {
   return (
     <FullCalendar
@@ -57,20 +65,36 @@ function renderEventContent(eventInfo) {
 
 export function RoomBookingPage() {
   const { t } = useTranslation()
-  const { communityRooms, loading, error } = useCommunityRooms()
-  const { roomBookings } = useRoomBookings()
+
+  const {
+    communityRooms,
+    loading: roomsLoading,
+    error: roomsError,
+  } = useCommunityRooms()
+  const {
+    roomBookings,
+    loading: bookingsLoading,
+    error: bookingsError,
+  } = useRoomBookings()
+
+  const { dormitoryFilter } = useDormitoryFilter()
+  const isStaff = useHasRole(STAFF_ROLES)
+  const canEdit = useHasRole(EDITOR_ROLES)
   const [roomId, setRoomId] = useState<number | null>(null)
 
-  {
-    /* filter roomBookings for accepted requests for selected room */
-  }
+  const visibleRooms = useMemo(() => {
+    if (!isStaff) return communityRooms
+    return communityRooms.filter(
+      (room) => room.dormitory_id === Number(dormitoryFilter)
+    )
+  }, [communityRooms, isStaff, dormitoryFilter])
+
   const roomBookingEvents: RoomBookingEvent[] = roomId
     ? roomBookings
         .filter(
           (booking) =>
             booking.community_room_id === roomId &&
-            /* Todo: discuss universal naming of stati  */
-            (booking.status === 'accepted' || booking.status === 'Bestätigt')
+            (booking.status === 'in_progress' || booking.status === 'closed')
         )
         .map((booking) => ({
           id: String(booking.id),
@@ -80,37 +104,76 @@ export function RoomBookingPage() {
         }))
     : []
 
-  return (
-    <Stack spacing={10}>
-      <Typography variant="h1">{t('roomBooking.title')}</Typography>
-      {error && <Typography color="error">{error}</Typography>}
+  const selectedRoom = visibleRooms.find((room) => room.id === roomId) ?? null
 
+  /* reset roomId if dorm is changed*/
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setRoomId(null)
+  }, [dormitoryFilter])
+
+  if (roomsLoading) return <Loading />
+  if (roomsError) return <Typography color="error">{roomsError}</Typography>
+
+  return (
+    <Stack
+      spacing={3}
+      sx={{ width: { xs: '100%', md: '50%' }, alignSelf: 'center' }}
+    >
+      <Typography variant="h1">{t('roomBooking.title')}</Typography>
+      <Divider />
       {/* select community room */}
-      <TextField
-        select
-        label={t('roomBooking.selectCommunityRoom')}
-        value={roomId ?? ''}
-        onChange={(e) => setRoomId(Number(e.target.value))}
-        disabled={communityRooms.length === 0}
-        fullWidth
-      >
-        {communityRooms.map((room) => (
-          <MenuItem key={room.id} value={room.id}>
-            {room.name}
-          </MenuItem>
+      <Stack direction="row" spacing={1} alignItems="center">
+        <TextField
+          select
+          label={t('roomBooking.selectCommunityRoom')}
+          value={roomId ?? ''}
+          onChange={(e) => setRoomId(Number(e.target.value))}
+          disabled={visibleRooms.length === 0}
+          sx={{ width: { xs: '70%', sm: '50%' } }}
+        >
+          {visibleRooms.map((room) => (
+            <MenuItem key={room.id} value={room.id}>
+              {room.name}
+            </MenuItem>
+          ))}
+        </TextField>
+
+        {canEdit && (
+          <IconButton component={Link} to="/gemeinschaftsraum/neu">
+            <AddIcon />
+          </IconButton>
+        )}
+        {canEdit && roomId && (
+          <IconButton component={Link} to={`/gemeinschaftsraum/${roomId}`}>
+            <EditIcon />
+          </IconButton>
+        )}
+      </Stack>
+      {selectedRoom?.description && (
+        <Typography>
+          {t('infrastructure.description')}
+          {': '} {selectedRoom.description}
+        </Typography>
+      )}
+
+      {roomId !== null &&
+        (bookingsLoading ? (
+          <Loading />
+        ) : (
+          <Stack spacing={2} sx={{ width: 'auto' }}>
+            <Button
+              component={Link}
+              variant="contained"
+              to={`/gemeinschaftsraum/anfrage/${roomId}`}
+              sx={{ width: 'auto', alignSelf: 'center' }}
+            >
+              {t('roomBooking.createCommunityRoomBooking')}
+            </Button>
+            <Calendar events={roomBookingEvents} />
+          </Stack>
         ))}
-      </TextField>
-      {loading && <CircularProgress />}
-      {/* Todo: only display button, when communityroom is selected*/}
-      <Button
-        component={Link}
-        variant="contained"
-        to={`/gemeinschaftsraum/anfrage/${roomId}`}
-        sx={{ width: '50%', alignSelf: 'center' }}
-      >
-        +
-      </Button>
-      <Calendar events={roomBookingEvents} />
+      {bookingsError && <Typography color="error">{bookingsError}</Typography>}
     </Stack>
   )
 }
