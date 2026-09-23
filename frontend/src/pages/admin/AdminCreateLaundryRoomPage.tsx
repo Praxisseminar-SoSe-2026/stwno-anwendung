@@ -36,7 +36,7 @@ export function AdminCreateLaundryRoomPage() {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        width: '50%',
+        width: { xs: '95%', md: '50%' },
         alignSelf: 'center',
         p: 4,
         gap: 2,

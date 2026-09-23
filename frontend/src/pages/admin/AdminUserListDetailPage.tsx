@@ -83,7 +83,7 @@ export function AdminUserListDetailPage() {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        width: '50%',
+        width: { xs: '95%', md: '50%' },
         alignSelf: 'center',
         p: 4,
         gap: 2,
@@ -161,6 +161,7 @@ export function AdminUserListDetailPage() {
           <ToggleButtonGroup
             value={roles}
             onChange={(_, newRoles) => setRoles(newRoles)}
+            sx={{ flexWrap: 'wrap', gap: 0.5 }}
           >
             {ALL_ROLES.map((role) => (
               <ToggleButton key={role} value={role}>

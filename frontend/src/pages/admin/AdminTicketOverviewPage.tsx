@@ -60,7 +60,10 @@ export function AdminTicketOverviewPage() {
   if (error) return <Typography color="error">{error}</Typography>
 
   return (
-    <Stack spacing={3} style={{ width: '50%', alignSelf: 'center' }}>
+    <Stack
+      spacing={3}
+      sx={{ width: { xs: '95%', md: '50%' }, alignSelf: 'center' }}
+    >
       <Typography variant="h1">
         {t('adminTicketOverview.titleShort')}
       </Typography>
@@ -91,6 +94,7 @@ export function AdminTicketOverviewPage() {
                           sx={{
                             justifyContent: 'space-between',
                             alignItems: 'center',
+                            flexWrap: 'wrap',
                           }}
                         >
                           <Typography>
@@ -115,7 +119,7 @@ export function AdminTicketOverviewPage() {
                   </Card>
                 ))}
                 {columnRequests.length === 0 && (
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography>
                     {t('adminTicketOverview.empty')}
                   </Typography>
                 )}

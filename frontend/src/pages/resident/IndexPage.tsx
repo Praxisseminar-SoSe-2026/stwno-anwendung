@@ -24,10 +24,16 @@ export function IndexPage() {
   if (error) return <Typography color="error">{error}</Typography>
 
   return (
-    <Stack spacing={3} style={{ width: '50%', alignSelf: 'center' }}>
+    <Stack
+      spacing={3}
+      sx={{ width: { xs: '100%', md: '50%' }, alignSelf: 'center' }}
+    >
       <Stack
-        direction="row"
-        sx={{ justifyContent: 'space-between', alignItems: 'center' }}
+        direction={{ xs: 'column', sm: 'row' }}
+        sx={{
+          justifyContent: 'space-between',
+          alignItems: { xs: 'stretch', sm: 'center' },
+        }}
       >
         <Typography variant="h1">{t('bulletinBoard.title')}</Typography>
         {canCreate && (

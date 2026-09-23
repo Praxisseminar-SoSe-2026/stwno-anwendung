@@ -40,7 +40,8 @@ export function RegistrationPage() {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          width: '30%',
+          width: { xs: '90%', sm: '60%', md: '30%' },
+          alignSelf: 'center',
           p: 4,
           gap: 2,
         }}

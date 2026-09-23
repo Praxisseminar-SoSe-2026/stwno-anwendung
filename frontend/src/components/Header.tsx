@@ -124,7 +124,7 @@ export function Header() {
   if (isMobile) {
     return (
       <>
-        <AppBar position="static" color="default">
+        <AppBar position="sticky" color="default">
           <Toolbar sx={{ justifyContent: 'space-between' }}>
             <IconButton onClick={() => setDrawerOpen(true)}>
               <MenuIcon />
@@ -190,7 +190,7 @@ export function Header() {
   // Desktop
 
   return (
-    <AppBar position="static" color="default">
+    <AppBar position="sticky" color="default">
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Stack direction="row" spacing={3} alignItems="center">
           {generalItems.map((item) => (
@@ -221,7 +221,7 @@ export function Header() {
 
         <Divider orientation="vertical" flexItem sx={{ my: 1 }} />
         {/* Username + Logout */}
-        <Stack direction="row" spacing={1} alignItems="center">
+        <Stack alignItems="center">
           {userSection}
         </Stack>
       </Toolbar>
