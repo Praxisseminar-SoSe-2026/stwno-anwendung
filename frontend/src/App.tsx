@@ -8,7 +8,7 @@ import { IndexPage } from './pages/resident/IndexPage'
 import { FaqPage } from './pages/resident/FaqPage'
 import { LaundryMachinesPage } from './pages/resident/LaundryMachinesPage'
 import { LaundryBookingCreatePage } from './pages/resident/LaundryBookingCreatePage'
-import { RepairRequest } from './pages/resident/RepairRequest.tsx'
+import { RepairRequestPage } from './pages/resident/RepairRequestPage.tsx'
 import { RoomBookingPage } from './pages/resident/RoomBookingPage'
 import { AnnouncementDetailPage } from './pages/resident/AnnouncementDetailPage'
 import { AdminTicketDetailPage } from './pages/admin/AdminTicketDetailPage.tsx'
@@ -56,7 +56,7 @@ function App() {
             path="/waschmaschinen/nutzen/:id"
             element={<LaundryBookingCreatePage />}
           />
-          <Route path="/reparaturanfrage" element={<RepairRequest />} />
+          <Route path="/reparaturanfrage" element={<RepairRequestPage />} />
           <Route path="/gemeinschaftsraum" element={<RoomBookingPage />} />
           <Route path="/aushang/:id" element={<AnnouncementDetailPage />} />
           <Route

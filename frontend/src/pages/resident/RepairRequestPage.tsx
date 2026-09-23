@@ -56,7 +56,7 @@ function isValidSlot(value: string): boolean {
   )
 }
 
-export function RepairRequest() {
+export function RepairRequestPage() {
   const { t } = useTranslation()
   const { user } = useAuth()
   const { submitRepairRequest, loading, error } = useCreateRepairRequest()
