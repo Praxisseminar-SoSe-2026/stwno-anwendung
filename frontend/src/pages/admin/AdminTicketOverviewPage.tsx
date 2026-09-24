@@ -119,9 +119,7 @@ export function AdminTicketOverviewPage() {
                   </Card>
                 ))}
                 {columnRequests.length === 0 && (
-                  <Typography>
-                    {t('adminTicketOverview.empty')}
-                  </Typography>
+                  <Typography>{t('adminTicketOverview.empty')}</Typography>
                 )}
               </Stack>
             </Grid>

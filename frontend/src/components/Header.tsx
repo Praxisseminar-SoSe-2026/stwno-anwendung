@@ -221,9 +221,7 @@ export function Header() {
 
         <Divider orientation="vertical" flexItem sx={{ my: 1 }} />
         {/* Username + Logout */}
-        <Stack alignItems="center">
-          {userSection}
-        </Stack>
+        <Stack alignItems="center">{userSection}</Stack>
       </Toolbar>
     </AppBar>
   )
