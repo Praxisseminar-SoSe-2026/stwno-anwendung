@@ -215,11 +215,11 @@ export function Header() {
               <Divider orientation="vertical" flexItem sx={{ my: 1 }} />
               {dormitorySelect}
               {dormitoryActions}
+              <Divider orientation="vertical" flexItem sx={{ my: 1 }} />
             </>
           )}
         </Stack>
 
-        <Divider orientation="vertical" flexItem sx={{ my: 1 }} />
         {/* Username + Logout */}
         <Stack alignItems="center">{userSection}</Stack>
       </Toolbar>
