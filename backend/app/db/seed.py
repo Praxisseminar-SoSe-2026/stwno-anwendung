@@ -45,7 +45,9 @@ def seed() -> None:
             name="hausmeister", description="Hausmeister / Facility Manager"
         )
         role_resident = Role(name="bewohner", description="Wohnheim-Bewohner")
-        db.add_all([role_worker, role_admin, role_facility_manager, role_resident])
+        role_tutor = Role(name="tutor", description="Tutor:in")
+        db.add_all([role_worker, role_admin, role_facility_manager, role_resident,
+                    role_tutor])
         db.flush()
 
         # ToDo: add missing permissions
@@ -96,6 +98,23 @@ def seed() -> None:
                 ),
                 RolePermission(
                     role_id=role_admin.id, permission_id=perm_edit_announcement.id
+                ),
+                RolePermission(
+                    role_id=role_facility_manager.id,
+                    permission_id=perm_post_announcement.id,
+                ),
+                RolePermission(
+                    role_id=role_facility_manager.id,
+                    permission_id=perm_edit_announcement.id,
+                ),
+                RolePermission(
+                    role_id=role_worker.id, permission_id=perm_post_announcement.id
+                ),
+                RolePermission(
+                    role_id=role_worker.id, permission_id=perm_edit_announcement.id
+                ),
+                RolePermission(
+                    role_id=role_tutor.id, permission_id=perm_post_announcement.id
                 ),
                 RolePermission(
                     role_id=role_admin.id, permission_id=perm_manage_users.id
@@ -163,6 +182,23 @@ def seed() -> None:
             person_number="A0004",
             dormitory_id=dorm.id,
         )
+        worker = User(
+            first_name="Zita",
+            last_name="Hölzl",
+            email="zita.hölzl@stud.uni-regensburg.de",
+            password_hash=hash_password("password"),
+            person_number="A0005",
+        )
+        tutor = User(
+            first_name="Sophia",
+            last_name="Beispiel",
+            email="sophia@mail.com",
+            password_hash=hash_password("password"),
+            person_number="A0006",
+            flat_number="1G",
+            contract_end=date.today() + timedelta(days=180),
+            dormitory_id=dorm.id,
+        )
         resident = User(
             first_name="Lena",
             last_name="Beispiel",
@@ -183,7 +219,8 @@ def seed() -> None:
             contract_end=date.today() + timedelta(days=180),
             dormitory_id=dorm2.id,
         )
-        db.add_all([admin, admin2, admin3, hausmeister, resident, resident2])
+        db.add_all([admin, admin2, admin3, hausmeister, worker, tutor, resident,
+                    resident2])
         db.flush()
 
         db.add_all(
@@ -192,6 +229,8 @@ def seed() -> None:
                 UserRole(user_id=admin2.id, role_id=role_admin.id),
                 UserRole(user_id=admin3.id, role_id=role_admin.id),
                 UserRole(user_id=hausmeister.id, role_id=role_facility_manager.id),
+                UserRole(user_id=worker.id, role_id=role_worker.id),
+                UserRole(user_id=tutor.id, role_id=role_tutor.id),
                 UserRole(user_id=resident.id, role_id=role_resident.id),
                 UserRole(user_id=resident2.id, role_id=role_resident.id),
                 DormitoryFacilityManager(dormitory_id=dorm.id, user_id=hausmeister.id),
