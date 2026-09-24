@@ -14,11 +14,21 @@ import { useAnnouncements } from '../../hooks/useAnnouncements'
 import { useHasRole } from '../../hooks/useHasRole.ts'
 import { EDITOR_ROLES } from '../../constants/roles.ts'
 import { Loading } from '../../components/Loading.tsx'
+import { useDormitories } from '../../hooks/useDormitories.ts'
 
 export function IndexPage() {
   const { t } = useTranslation()
   const { announcements, loading, error } = useAnnouncements()
   const canCreate = useHasRole(EDITOR_ROLES)
+  const { dormitories } = useDormitories()
+
+  function dormitoryLabel(dormitoryId: number | null): string {
+    if (dormitoryId === null) return t('bulletinBoard.scopeGlobal')
+    return (
+      dormitories.find((d) => d.id === dormitoryId)?.name ??
+      t('bulletinBoard.scopeGlobal')
+    )
+  }
 
   if (loading) return <Loading />
   if (error) return <Typography color="error">{error}</Typography>
@@ -51,7 +61,7 @@ export function IndexPage() {
         <Card key={a.id} variant="outlined">
           <CardActionArea component={Link} to={`/aushang/${a.id}`}>
             <CardContent>
-              <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+              <Stack direction="row" spacing={1} sx={{ alignItems: 'center', flexWrap: 'wrap'}}>
                 <Typography variant="h4">{a.title}</Typography>
                 <Typography variant="h6" color="text.secondary">
                   {a.created_at && new Date(a.created_at).toLocaleDateString()}
@@ -63,6 +73,11 @@ export function IndexPage() {
                     size="small"
                   />
                 )}
+                <Chip
+                  label={dormitoryLabel(a.dormitory_id)}
+                  color={a.dormitory_id === null ? 'default' : 'primary'}
+                  size="small"
+                />
               </Stack>
               <Typography variant="body1" color="text.secondary">
                 {a.text}
