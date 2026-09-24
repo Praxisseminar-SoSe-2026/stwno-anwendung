@@ -19,7 +19,7 @@ import { useEndLaundryBooking } from '../../hooks/useEndLaundryBooking'
 import { Loading } from '../../components/Loading'
 import { useDormitoryFilter } from '../../contexts/DormitoryFilterContext.tsx'
 import { useHasRole } from '../../hooks/useHasRole.ts'
-import { EDITOR_ROLES, STAFF_ROLES } from '../../constants/roles.ts'
+import { STAFF_ROLES } from '../../constants/roles.ts'
 import AddIcon from '@mui/icons-material/Add'
 import EditIcon from '@mui/icons-material/Edit'
 
@@ -39,7 +39,6 @@ export function LaundryMachinesPage() {
   } = useLaundryRooms()
   const { dormitoryFilter } = useDormitoryFilter()
   const isStaff = useHasRole(STAFF_ROLES)
-  const canEdit = useHasRole(EDITOR_ROLES)
   const [roomId, setRoomId] = useState<number | null>(null)
   const {
     machines: machinesData,
@@ -99,12 +98,12 @@ export function LaundryMachinesPage() {
             </MenuItem>
           ))}
         </TextField>
-        {canEdit && (
+        {isStaff && (
           <IconButton component={Link} to="/waschmaschinen/waschraum/neu">
             <AddIcon />
           </IconButton>
         )}
-        {canEdit && roomId && (
+        {isStaff && roomId && (
           <IconButton
             component={Link}
             to={`/waschmaschinen/waschraum/${roomId}`}
@@ -119,7 +118,7 @@ export function LaundryMachinesPage() {
         <>
           <Stack direction="row" spacing={3}>
             <Typography variant="h1">{t('laundry.machines')}</Typography>
-            {canEdit && roomId && (
+            {isStaff && roomId && (
               <IconButton
                 component={Link}
                 to={`/waschmaschinen/waschraum/${roomId}/maschine/neu`}
@@ -195,7 +194,7 @@ export function LaundryMachinesPage() {
                           {submitEndLaundryBookingError}
                         </Typography>
                       )}
-                      {canEdit && (
+                      {isStaff && (
                         <IconButton
                           component={Link}
                           to={`/waschmaschinen/waschraum/${roomId}/maschine/${machine.id}`}
@@ -269,7 +268,7 @@ export function LaundryMachinesPage() {
                             {t(`laundry.endMachineUsage`)}
                           </Button>
                         )}
-                      {canEdit && (
+                      {isStaff && (
                         <IconButton
                           component={Link}
                           to={`/waschmaschinen/waschraum/${roomId}/maschine/${machine.id}`}
