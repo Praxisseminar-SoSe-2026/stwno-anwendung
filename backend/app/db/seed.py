@@ -50,7 +50,6 @@ def seed() -> None:
                     role_tutor])
         db.flush()
 
-        # ToDo: add missing permissions
         perm_manage_requests = Permission(
             name="manage_requests", description="Anfragen bearbeiten"
         )
@@ -86,7 +85,6 @@ def seed() -> None:
         )
         db.flush()
 
-        # TODO: add announcement permissions for other roles
         db.add_all(
             [
                 RolePermission(
