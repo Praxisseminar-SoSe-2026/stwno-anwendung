@@ -17,6 +17,7 @@ import {
   IconButton,
   CircularProgress,
   Box,
+  Divider,
 } from '@mui/material'
 import { useCreateAnnouncement } from '../../hooks/useCreateAnnouncement'
 import { useDormitories } from '../../hooks/useDormitories'
@@ -76,7 +77,7 @@ export function AdminCreateAnnouncementPage() {
         <Typography variant="h4">
           {t('bulletinBoard.createAnnouncement')}
         </Typography>
-
+        <Divider sx={{ width: '100%' }} />
         {/* Title */}
         <TextField
           label={t('bulletinBoard.titleLabel')}

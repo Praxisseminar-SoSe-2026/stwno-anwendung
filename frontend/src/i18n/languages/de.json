@@ -22,7 +22,8 @@
     "scope": "Sichtbarkeit der Ankündigung",
     "scopeGlobal": "Für alle Wohnheime",
     "uploadImage": "Neues Bild hochladen",
-    "removeImage": "Bild entfernen"
+    "removeImage": "Bild entfernen",
+    "announcement": "Ankündigung"
   },
   "common": {
     "save": "Speichern",
@@ -55,7 +56,9 @@
     "categoryLabel": "Kategorie",
     "createFaqError": "Neue Frage konnte nicht erstellt werden.",
     "updateFaqError": "Frage konnte nicht bearbeitet werden.",
-    "deleteFaqError": "Frage konnte nicht gelöscht werden."
+    "deleteFaqError": "Frage konnte nicht gelöscht werden.",
+    "createNewQuestion": "Neue Frage erstellen",
+    "editQuestion": "Frage bearbeiten"
   },
   "laundry": {
     "title": "Waschküche",
@@ -116,7 +119,8 @@
     "title": "Ticket Übersicht (Reparatur- und Raumbuchungsanfragen)",
     "titleShort": "Ticket Übersicht",
     "notAuthorized": "Du hast keinen Zugriff auf diese Seite.",
-    "empty": "keine Tickets"
+    "empty": "keine Tickets",
+    "editTicket": "Ticket bearbeiten"
   },
   "userList": {
     "title": "Nutzer:innen Liste",

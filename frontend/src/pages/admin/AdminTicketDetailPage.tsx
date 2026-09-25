@@ -138,6 +138,12 @@ export function AdminTicketDetailPage() {
     >
       <BackButton />
       <Stack spacing={2}>
+        <Typography variant={'h4'}>
+          {t('adminTicketOverview.editTicket')}
+        </Typography>
+        <Divider sx={{ width: '100%' }} />
+      </Stack>
+      <Stack spacing={2} sx={{ marginTop: '2rem' }}>
         <Stack
           direction="row"
           spacing={2}

@@ -10,6 +10,7 @@ import {
   MenuItem,
   InputAdornment,
   CircularProgress,
+  Divider,
 } from '@mui/material'
 import { useCreateFaq } from '../../hooks/useCreateFaq'
 import { useFaqCategories } from '../../hooks/useFaqCategories'
@@ -65,6 +66,8 @@ export function AdminFaqCreatePage() {
     >
       <Stack spacing={3} style={{ alignItems: 'start' }}>
         <BackButton />
+        <Typography variant="h4">{t('faq.createNewQuestion')}</Typography>
+        <Divider sx={{ width: '100%' }} />
         {/* question */}
         <TextField
           label={t('faq.questionLabel')}
@@ -112,7 +115,6 @@ export function AdminFaqCreatePage() {
         <Button
           variant="contained"
           onClick={handleSubmit}
-          fullWidth
           disabled={
             loading || categoryId === null || !question.trim() || !answer.trim()
           }

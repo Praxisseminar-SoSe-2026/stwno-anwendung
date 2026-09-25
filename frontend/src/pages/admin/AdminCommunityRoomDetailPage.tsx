@@ -8,6 +8,7 @@ import {
   Button,
   TextField,
   CircularProgress,
+  Divider,
 } from '@mui/material'
 import {
   getCommunityRooms,
@@ -85,6 +86,8 @@ export function AdminCommunityRoomDetailPage() {
       <Stack spacing={3} style={{ alignItems: 'start' }}>
         <BackButton />
         <Typography variant="h4">{t('infrastructure.editRoom')}</Typography>
+
+        <Divider sx={{ width: '100%' }} />
 
         {/* Name */}
         <TextField

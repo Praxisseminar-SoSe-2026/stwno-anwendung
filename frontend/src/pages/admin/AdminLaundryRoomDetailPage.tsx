@@ -1,7 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
-import { Stack, Typography, Paper, Button, TextField } from '@mui/material'
+import {
+  Stack,
+  Typography,
+  Paper,
+  Button,
+  TextField,
+  Divider,
+} from '@mui/material'
 import {
   getLaundryRooms,
   updateLaundryRoom,
@@ -73,15 +80,14 @@ export function AdminLaundryRoomDetailPage() {
     >
       <Stack spacing={3} style={{ alignItems: 'start' }}>
         <BackButton />
-        <Typography>{t('infrastructure.editRoom')}</Typography>
-
+        <Typography variant={'h4'}>{t('infrastructure.editRoom')}</Typography>
+        <Divider sx={{ width: '100%' }} />
         {/* Name */}
         <TextField
           label={t('infrastructure.name')}
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
-
         <Stack direction="row" spacing={2}>
           <Button
             variant="contained"
@@ -99,7 +105,6 @@ export function AdminLaundryRoomDetailPage() {
             {t('common.delete')}
           </Button>
         </Stack>
-
         {error && <Typography color="error">{error}</Typography>}
       </Stack>
     </Paper>

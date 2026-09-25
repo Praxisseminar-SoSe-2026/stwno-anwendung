@@ -14,6 +14,7 @@ import {
   FormControl,
   InputLabel,
   Select,
+  Divider,
 } from '@mui/material'
 import { useAnnouncement } from '../../hooks/useAnnouncement'
 import { useDeleteAnnouncement } from '../../hooks/useDeleteAnnouncement'
@@ -24,6 +25,7 @@ import UploadIcon from '@mui/icons-material/Upload'
 import { useHasRole } from '../../hooks/useHasRole.ts'
 import { EDITOR_ROLES } from '../../constants/roles.ts'
 import { Loading } from '../../components/Loading'
+import { BackButton } from '../../components/BackButton.tsx'
 
 const GLOBAL_VALUE = 'global'
 
@@ -121,7 +123,11 @@ export function AnnouncementDetailPage() {
         gap: 2,
       }}
     >
-      <Button onClick={() => navigate(-1)}>{t('common.back')}</Button>
+      <BackButton />
+      <Stack spacing={2} sx={{ marginBottom: '2rem' }}>
+        <Typography variant="h4">{t('bulletinBoard.announcement')}</Typography>
+        <Divider sx={{ width: '100%' }} />
+      </Stack>
       <Stack spacing={2}>
         {editing ? (
           <>

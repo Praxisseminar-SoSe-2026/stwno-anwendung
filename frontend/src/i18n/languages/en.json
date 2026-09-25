@@ -22,7 +22,8 @@
     "scope": "Visibility of the announcement",
     "scopeGlobal": "All dormitories",
     "uploadImage": "Upload a new image",
-    "removeImage": "Remove image"
+    "removeImage": "Remove image",
+    "announcement": "Announcement"
   },
   "common": {
     "save": "Save",
@@ -55,7 +56,9 @@
     "categoryLabel": "Category",
     "createFaqError": "New question could not be created.",
     "updateFaqError": "Question could not be edited.",
-    "deleteFaqError": "Question could not be deleted."
+    "deleteFaqError": "Question could not be deleted.",
+    "createNewQuestion": "Create new question",
+    "editQuestion": "Edit Question"
   },
   "laundry": {
     "title": "Washroom",
@@ -116,7 +119,8 @@
     "title": "Ticket Overview (Repair and Room Booking Requests)",
     "titleShort": "Ticket Overview",
     "notAuthorized": "You are not authorized to use this page.",
-    "empty": "no tickets"
+    "empty": "no tickets",
+    "editTicket": "edit ticket"
   },
   "userList": {
     "title": "User List",

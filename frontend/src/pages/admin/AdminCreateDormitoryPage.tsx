@@ -1,6 +1,13 @@
 import { useState } from 'react'
 import { createDormitory } from '../../api/dormitories.ts'
-import { Button, Paper, Stack, TextField, Typography } from '@mui/material'
+import {
+  Button,
+  Divider,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { BackButton } from '../../components/BackButton'
 
@@ -45,8 +52,8 @@ export function AdminCreateDormitoryPage() {
     >
       <Stack spacing={3} style={{ alignItems: 'start' }}>
         <BackButton />
-        <Typography>{t('dormitory.createDorm')}</Typography>
-
+        <Typography variant="h4">{t('dormitory.createDorm')}</Typography>
+        <Divider sx={{ width: '100%' }} />
         {/* Name */}
         <TextField
           label={t('dormitory.name')}
@@ -80,7 +87,6 @@ export function AdminCreateDormitoryPage() {
           variant="contained"
           onClick={handleSubmit}
           disabled={saving || !name}
-          fullWidth
         >
           {t('common.create')}
         </Button>

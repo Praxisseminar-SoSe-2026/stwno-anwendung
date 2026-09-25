@@ -1,7 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
-import { Stack, Typography, Paper, Button, TextField } from '@mui/material'
+import {
+  Stack,
+  Typography,
+  Paper,
+  Button,
+  TextField,
+  Divider,
+} from '@mui/material'
 import {
   getDormitories,
   updateDormitory,
@@ -81,6 +88,7 @@ export function AdminDormitoryDetailPage() {
       <Stack spacing={3} style={{ alignItems: 'start' }}>
         <BackButton />
         <Typography variant="h4">{t('dormitory.editDorm')}</Typography>
+        <Divider sx={{ width: '100%' }} />
 
         {/* Name */}
         <TextField

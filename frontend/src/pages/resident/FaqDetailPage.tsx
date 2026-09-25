@@ -8,6 +8,7 @@ import {
   Button,
   TextField,
   MenuItem,
+  Divider,
 } from '@mui/material'
 import { useFaq } from '../../hooks/useFaq'
 import { useHasRole } from '../../hooks/useHasRole.ts'
@@ -97,6 +98,8 @@ export function FaqDetailPage() {
     >
       <BackButton />
       <Stack spacing={2}>
+        <Typography variant="h4">{t('faq.editQuestion')}</Typography>
+        <Divider sx={{ width: '100%' }} />
         {editing ? (
           <>
             {/* question */}

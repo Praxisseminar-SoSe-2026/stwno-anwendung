@@ -10,6 +10,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Divider,
 } from '@mui/material'
 import {
   createLaundryMachine,
@@ -59,7 +60,10 @@ export function AdminCreateLaundryMachinePage() {
     >
       <Stack spacing={3} style={{ alignItems: 'start' }}>
         <BackButton />
-        <Typography>{t('infrastructure.createMachine')}</Typography>
+        <Typography variant={'h4'}>
+          {t('infrastructure.createMachine')}
+        </Typography>
+        <Divider sx={{ width: '100%' }} />
 
         {/* Device type */}
         <FormControl fullWidth>
@@ -90,12 +94,7 @@ export function AdminCreateLaundryMachinePage() {
           </Select>
         </FormControl>
 
-        <Button
-          variant="contained"
-          onClick={handleSubmit}
-          disabled={saving}
-          fullWidth
-        >
+        <Button variant="contained" onClick={handleSubmit} disabled={saving}>
           {t('common.create')}
         </Button>
 

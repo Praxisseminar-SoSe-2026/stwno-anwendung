@@ -11,6 +11,7 @@ import {
   Select,
   MenuItem,
   CircularProgress,
+  Divider,
 } from '@mui/material'
 import {
   getLaundryMachineById,
@@ -94,7 +95,11 @@ export function AdminLaundryMachineDetailPage() {
     >
       <Stack spacing={3} style={{ alignItems: 'start' }}>
         <BackButton />
-        <Typography>{t('infrastructure.editMachine')}</Typography>
+        <Typography variant={'h4'}>
+          {t('infrastructure.editMachine')}
+        </Typography>
+        <Divider sx={{ width: '100%' }} />
+
         <Typography>{machine.label}</Typography>
 
         {/* Device type */}
