@@ -26,6 +26,7 @@ import { useHasRole } from '../../hooks/useHasRole.ts'
 import { EDITOR_ROLES } from '../../constants/roles.ts'
 import { Loading } from '../../components/Loading'
 import { BackButton } from '../../components/BackButton.tsx'
+import { Confirmation } from '../../components/Confirmation.tsx'
 
 const GLOBAL_VALUE = 'global'
 
@@ -57,6 +58,7 @@ export function AnnouncementDetailPage() {
   const [text, setText] = useState('')
   const [imageRemoved, setImageRemoved] = useState(false)
   const [scope, setScope] = useState<string>(GLOBAL_VALUE)
+  const [confirmOpen, setConfirmOpen] = useState(false)
 
   const actionLoading = updateLoading || deleteLoading
   const actionError = updateError || deleteError
@@ -286,7 +288,7 @@ export function AnnouncementDetailPage() {
                 <Button
                   variant="contained"
                   color="error"
-                  onClick={handleDelete}
+                  onClick={() => setConfirmOpen(true)}
                   disabled={actionLoading}
                 >
                   {actionLoading ? t('common.deleting') : t('common.delete')}
@@ -295,7 +297,14 @@ export function AnnouncementDetailPage() {
             )}
           </>
         )}
-
+        <Confirmation
+          open={confirmOpen}
+          onConfirm={() => {
+            setConfirmOpen(false)
+            handleDelete()
+          }}
+          onClose={() => setConfirmOpen(false)}
+        />
         {actionError && <Typography color="error">{actionError}</Typography>}
       </Stack>
     </Paper>

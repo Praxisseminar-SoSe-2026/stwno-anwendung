@@ -37,7 +37,9 @@
     "creating": "wird erstellt..",
     "saving": "wird gespeichert...",
     "deleting": "wird gelöscht...",
-    "ending": "wird beendet..."
+    "ending": "wird beendet...",
+    "confirmation": "Bestätigung erforderlich",
+    "areYouSure": "Sicher unwiederruflich löschen?"
   },
   "faq": {
     "title": "Häufig gestellte Fragen",

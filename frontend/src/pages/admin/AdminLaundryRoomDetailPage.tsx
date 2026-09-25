@@ -17,6 +17,7 @@ import {
 } from '../../api/infrastructure'
 import { Loading } from '../../components/Loading'
 import { BackButton } from '../../components/BackButton'
+import { Confirmation } from '../../components/Confirmation.tsx'
 
 export function AdminLaundryRoomDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -28,6 +29,7 @@ export function AdminLaundryRoomDetailPage() {
   const [name, setName] = useState('')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [confirmOpen, setConfirmOpen] = useState(false)
 
   useEffect(() => {
     getLaundryRooms()
@@ -99,12 +101,21 @@ export function AdminLaundryRoomDetailPage() {
           <Button
             variant="contained"
             color="error"
-            onClick={handleDelete}
+            onClick={() => setConfirmOpen(true)}
             disabled={saving}
           >
             {t('common.delete')}
           </Button>
         </Stack>
+
+        <Confirmation
+          open={confirmOpen}
+          onConfirm={() => {
+            setConfirmOpen(false)
+            handleDelete()
+          }}
+          onClose={() => setConfirmOpen(false)}
+        />
         {error && <Typography color="error">{error}</Typography>}
       </Stack>
     </Paper>

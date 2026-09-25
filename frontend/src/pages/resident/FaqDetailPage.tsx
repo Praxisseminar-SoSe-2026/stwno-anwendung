@@ -18,6 +18,7 @@ import { useUpdateFaq } from '../../hooks/useUpdateFaq'
 import { useFaqCategories } from '../../hooks/useFaqCategories'
 import { Loading } from '../../components/Loading'
 import { BackButton } from '../../components/BackButton'
+import { Confirmation } from '../../components/Confirmation.tsx'
 
 export function FaqDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -30,6 +31,7 @@ export function FaqDetailPage() {
   const [answer, setAnswer] = useState('')
 
   const [categoryId, setCategoryId] = useState<number | null>(null)
+  const [confirmOpen, setConfirmOpen] = useState(false)
 
   const canEdit = useHasRole(EDITOR_ROLES)
 
@@ -171,7 +173,7 @@ export function FaqDetailPage() {
                 <Button
                   variant="contained"
                   color="error"
-                  onClick={handleDelete}
+                  onClick={() => setConfirmOpen(true)}
                   disabled={actionLoading}
                 >
                   {actionLoading ? t('common.deleting') : t('common.delete')}
@@ -180,7 +182,14 @@ export function FaqDetailPage() {
             )}
           </>
         )}
-
+        <Confirmation
+          open={confirmOpen}
+          onConfirm={() => {
+            setConfirmOpen(false)
+            handleDelete()
+          }}
+          onClose={() => setConfirmOpen(false)}
+        />
         {actionError && <Typography color="error">{actionError}</Typography>}
       </Stack>
     </Paper>
