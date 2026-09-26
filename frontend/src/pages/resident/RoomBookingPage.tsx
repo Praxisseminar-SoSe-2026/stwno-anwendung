@@ -26,7 +26,7 @@ import { useRoomBookings } from '../../hooks/useRoomBookings'
 
 import { Loading } from '../../components/Loading'
 import { useHasRole } from '../../hooks/useHasRole.ts'
-import { STAFF_ROLES, EDITOR_ROLES } from '../../constants/roles.ts'
+import { STAFF_ROLES } from '../../constants/roles.ts'
 import { useDormitoryFilter } from '../../contexts/DormitoryFilterContext.tsx'
 
 import { Divider } from '@mui/material'
@@ -79,7 +79,6 @@ export function RoomBookingPage() {
 
   const { dormitoryFilter } = useDormitoryFilter()
   const isStaff = useHasRole(STAFF_ROLES)
-  const canEdit = useHasRole(EDITOR_ROLES)
   const [roomId, setRoomId] = useState<number | null>(null)
 
   const visibleRooms = useMemo(() => {
@@ -139,12 +138,12 @@ export function RoomBookingPage() {
           ))}
         </TextField>
 
-        {canEdit && (
+        {isStaff && (
           <IconButton component={Link} to="/gemeinschaftsraum/neu">
             <AddIcon />
           </IconButton>
         )}
-        {canEdit && roomId && (
+        {isStaff && roomId && (
           <IconButton component={Link} to={`/gemeinschaftsraum/${roomId}`}>
             <EditIcon />
           </IconButton>

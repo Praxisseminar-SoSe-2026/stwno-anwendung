@@ -228,7 +228,7 @@ export function AnnouncementDetailPage() {
               <Button
                 variant="contained"
                 onClick={handleSave}
-                disabled={actionLoading}
+                disabled={actionLoading || !title.trim()}
               >
                 {actionLoading ? t('common.saving') : t('common.save')}
               </Button>

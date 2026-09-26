@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 import { useFaq } from '../../hooks/useFaq'
 import { useHasRole } from '../../hooks/useHasRole.ts'
-import { EDITOR_ROLES } from '../../constants/roles.ts'
+import { STAFF_ROLES } from '../../constants/roles.ts'
 import { useDeleteFaq } from '../../hooks/useDeleteFaq'
 import { useUpdateFaq } from '../../hooks/useUpdateFaq'
 import { useFaqCategories } from '../../hooks/useFaqCategories'
@@ -30,7 +30,7 @@ export function FaqDetailPage() {
 
   const [categoryId, setCategoryId] = useState<number | null>(null)
 
-  const canEdit = useHasRole(EDITOR_ROLES)
+  const canEdit = useHasRole(STAFF_ROLES)
 
   const {
     submitDeleteFaq,
