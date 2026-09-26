@@ -38,6 +38,7 @@ import { AdminCreateDormitoryPage } from './pages/admin/AdminCreateDormitoryPage
 import { AdminDormitoryDetailPage } from './pages/admin/AdminDormitoryDetailPage.tsx'
 import { AdminUserListPage } from './pages/admin/AdminUserListPage.tsx'
 import { AdminUserListDetailPage } from './pages/admin/AdminUserListDetailPage.tsx'
+import { TicketsPage } from './pages/resident/TicketPage.tsx'
 
 function App() {
   return (
@@ -63,6 +64,7 @@ function App() {
             path="/gemeinschaftsraum/anfrage/:id"
             element={<RoomBookingCreatePage />}
           />
+          <Route path="/meine-tickets" element={<TicketsPage />} />
           {/* admin routes */}
           <Route path="/admin" element={<AdminIndexPage />} />
           <Route path="/admin/tickets" element={<AdminTicketOverviewPage />} />
