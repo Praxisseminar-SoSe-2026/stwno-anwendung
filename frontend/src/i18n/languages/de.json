@@ -172,7 +172,8 @@
       "in_progress": "In Bearbeitung",
       "closed": "Geschlossen",
       "denied": "Abgelehnt",
-      "closed/denied": "Abgelehnt/Geschlossen"
+      "closed/denied": "Abgelehnt/Geschlossen",
+      "closed_room_booking": "Angenommen"
     },
     "exportPdf": "PDF erstellen",
     "author": "Gemeldet von",

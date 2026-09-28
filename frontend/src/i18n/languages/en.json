@@ -173,7 +173,8 @@
       "in_progress": "In progress",
       "closed": "Closed",
       "denied": "Denied",
-      "closed/denied": "Closed/Denied"
+      "closed/denied": "Closed/Denied",
+      "closed_room_booking": "Accepted"
     },
     "author": "Reported by",
     "proposedSlots": "Proposed times",

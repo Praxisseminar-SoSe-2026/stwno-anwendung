@@ -81,7 +81,9 @@ export function TicketsPage() {
                 {ticketTitle(ticket)}
               </Typography>
               <Chip
-                label={t(`request.status.${ticket.status}`)}
+                label={t(`request.status.${ticket.status}`, {
+                  context: ticket.type === 'room' ? 'room_booking' : undefined,
+                })}
                 color={STATUS_COLOR[ticket.status] ?? 'default'}
                 size="small"
               />
