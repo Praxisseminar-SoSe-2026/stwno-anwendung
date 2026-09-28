@@ -23,7 +23,7 @@ import { useTranslation } from 'react-i18next'
 import { useAuth } from '../contexts/AuthContext'
 import { useLogout } from '../hooks/useLogout.ts'
 import { useHasRole } from '../hooks/useHasRole.ts'
-import { ADMIN_ROLES, STAFF_ROLES } from '../constants/roles.ts'
+import { ADMIN_ROLES, STAFF_ROLES, RESIDENT_ROLES } from '../constants/roles.ts'
 import { useDormitoryFilter } from '../contexts/DormitoryFilterContext'
 import { useDormitories } from '../hooks/useDormitories'
 import AddIcon from '@mui/icons-material/Add'
@@ -50,6 +50,7 @@ export function Header() {
     { to: '/gemeinschaftsraum', label: t('roomBooking.title') },
   ]
 
+  const canViewOwnTickets = useHasRole(RESIDENT_ROLES)
   const canViewTickets = useHasRole(STAFF_ROLES) && !loading
   const isAdmin = useHasRole(ADMIN_ROLES) && !loading
 
@@ -76,7 +77,12 @@ export function Header() {
     </Button>
   )
 
-  const generalItems = [...links]
+  const generalItems = [
+    ...links,
+    ...(canViewOwnTickets
+      ? [{ to: '/meine-tickets', label: t('request.myTickets') }]
+      : []),
+  ]
 
   const adminItems = [
     ...(canViewTickets
