@@ -7,6 +7,7 @@ import {
   TextField,
   Typography,
   Stack,
+  Divider,
 } from '@mui/material'
 import { useRegistration } from '../../hooks/useRegistration.ts'
 import { useNavigate } from 'react-router'
@@ -46,7 +47,13 @@ export function RegistrationPage() {
           gap: 2,
         }}
       >
-        <Box component="form" onSubmit={handleSubmit}>
+        <Typography variant="h4">{t('registration.create_account')}</Typography>
+        <Divider />
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}
+        >
           <FormControl>
             <TextField
               id="personNumber"
@@ -60,7 +67,12 @@ export function RegistrationPage() {
               required
             />
           </FormControl>
-          <Button type="submit" disabled={submitting}>
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={submitting}
+            sx={{ marginTop: '1rem' }}
+          >
             {submitting ? t('common.loading') : t('registration.next_button')}
           </Button>
           {error && <Typography color="error">{error}</Typography>}

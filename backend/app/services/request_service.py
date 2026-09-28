@@ -268,7 +268,7 @@ def create_room_request(
 
     if (
         not payload.regular_key_exchange_possible
-        and payload.alternative_key_exchange_date < now_utc().today()
+        and payload.alternative_key_exchange_date < now_utc().date()
     ):
         raise DateInPastError("Date can not be in the past")
 
@@ -289,7 +289,7 @@ def create_room_request(
     if first_booked_day > last_booked_day:
         raise RoomBookingTimeConflictError("Start date must be before end date")
 
-    if first_booked_day < now_utc().today():
+    if first_booked_day < now_utc().date():
         raise DateInPastError("Date can not be in the past")
 
     # check if booking is on weekend to book whole weekend, made with tutorial [https://www.geeksforgeeks.org/python/weekday-function-of-datetime-date-class-in-python/]

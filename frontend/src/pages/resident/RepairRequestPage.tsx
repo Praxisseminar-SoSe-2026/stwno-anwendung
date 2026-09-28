@@ -17,6 +17,7 @@ import {
   Alert,
   Stack,
   CircularProgress,
+  Divider,
 } from '@mui/material'
 import UploadIcon from '@mui/icons-material/Upload'
 import CloseIcon from '@mui/icons-material/Close'
@@ -56,7 +57,7 @@ function isValidSlot(value: string): boolean {
   )
 }
 
-export function RepairRequest() {
+export function RepairRequestPage() {
   const { t } = useTranslation()
   const { user } = useAuth()
   const { submitRepairRequest, loading, error } = useCreateRepairRequest()
@@ -137,7 +138,9 @@ export function RepairRequest() {
         gap: 2,
       }}
     >
-      <Typography variant="h2">{t('repairRequest.title')}</Typography>
+      <Typography variant="h4">{t('repairRequest.title')}</Typography>
+
+      <Divider />
 
       <Box
         component="form"

@@ -8,7 +8,7 @@ import { IndexPage } from './pages/resident/IndexPage'
 import { FaqPage } from './pages/resident/FaqPage'
 import { LaundryMachinesPage } from './pages/resident/LaundryMachinesPage'
 import { LaundryBookingCreatePage } from './pages/resident/LaundryBookingCreatePage'
-import { RepairRequest } from './pages/resident/RepairRequest.tsx'
+import { RepairRequestPage } from './pages/resident/RepairRequestPage.tsx'
 import { RoomBookingPage } from './pages/resident/RoomBookingPage'
 import { AnnouncementDetailPage } from './pages/resident/AnnouncementDetailPage'
 import { AdminTicketDetailPage } from './pages/admin/AdminTicketDetailPage.tsx'
@@ -38,6 +38,7 @@ import { AdminCreateDormitoryPage } from './pages/admin/AdminCreateDormitoryPage
 import { AdminDormitoryDetailPage } from './pages/admin/AdminDormitoryDetailPage.tsx'
 import { AdminUserListPage } from './pages/admin/AdminUserListPage.tsx'
 import { AdminUserListDetailPage } from './pages/admin/AdminUserListDetailPage.tsx'
+import { TicketsPage } from './pages/resident/TicketPage.tsx'
 
 function App() {
   return (
@@ -56,13 +57,14 @@ function App() {
             path="/waschmaschinen/nutzen/:id"
             element={<LaundryBookingCreatePage />}
           />
-          <Route path="/reparaturanfrage" element={<RepairRequest />} />
+          <Route path="/reparaturanfrage" element={<RepairRequestPage />} />
           <Route path="/gemeinschaftsraum" element={<RoomBookingPage />} />
           <Route path="/aushang/:id" element={<AnnouncementDetailPage />} />
           <Route
             path="/gemeinschaftsraum/anfrage/:id"
             element={<RoomBookingCreatePage />}
           />
+          <Route path="/meine-tickets" element={<TicketsPage />} />
           {/* admin routes */}
           <Route path="/admin" element={<AdminIndexPage />} />
           <Route path="/admin/tickets" element={<AdminTicketOverviewPage />} />

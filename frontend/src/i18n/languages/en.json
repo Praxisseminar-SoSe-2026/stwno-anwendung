@@ -2,6 +2,10 @@
   "index": {
     "title": "Welcome to the STWNO application"
   },
+  "header": {
+    "stwnoStaffContent": "STWNO staff content",
+    "dormitorySettings": "dormitory settings:"
+  },
   "healthcheck": {
     "desc": "The backend ",
     "isAvailable": "is available.",
@@ -22,7 +26,8 @@
     "scope": "Visibility of the announcement",
     "scopeGlobal": "All dormitories",
     "uploadImage": "Upload a new image",
-    "removeImage": "Remove image"
+    "removeImage": "Remove image",
+    "announcement": "Announcement"
   },
   "common": {
     "save": "Save",
@@ -36,7 +41,9 @@
     "creating": "creating..",
     "saving": "saving...",
     "deleting": "deleting...",
-    "ending": "ending..."
+    "ending": "ending...",
+    "confirmation": "Confirmation required",
+    "areYouSure": "Are you sure you want to delete this permanently?"
   },
   "faq": {
     "title": "Frequently Asked Questions",
@@ -55,7 +62,9 @@
     "categoryLabel": "Category",
     "createFaqError": "New question could not be created.",
     "updateFaqError": "Question could not be edited.",
-    "deleteFaqError": "Question could not be deleted."
+    "deleteFaqError": "Question could not be deleted.",
+    "createNewQuestion": "Create new question",
+    "editQuestion": "Edit Question"
   },
   "laundry": {
     "title": "Washroom",
@@ -116,7 +125,8 @@
     "title": "Ticket Overview (Repair and Room Booking Requests)",
     "titleShort": "Ticket Overview",
     "notAuthorized": "You are not authorized to use this page.",
-    "empty": "no tickets"
+    "empty": "no tickets",
+    "editTicket": "edit ticket"
   },
   "userList": {
     "title": "User List",
@@ -154,8 +164,8 @@
     "end": "End",
     "location": "Location",
     "type": {
-      "repair": "repair request",
-      "room": "room request"
+      "repair": "Repair request",
+      "room": "Room request"
     },
     "exportPdf": "Create PDF",
     "status": {
@@ -163,7 +173,8 @@
       "in_progress": "In progress",
       "closed": "Closed",
       "denied": "Denied",
-      "closed/denied": "Closed/Denied"
+      "closed/denied": "Done",
+      "closed_room_booking": "Accepted"
     },
     "author": "Reported by",
     "proposedSlots": "Proposed times",
@@ -178,7 +189,9 @@
     "chooseSlot": "Choose a time slot",
     "setEntryTime": "Set entry time",
     "actionError": "Action failed.",
-    "entryTimeSet": "set the entry time to {{time}}"
+    "entryTimeSet": "set the entry time to {{time}}",
+    "myTickets": "My tickets",
+    "empty": "No tickets yet"
   },
   "login": {
     "title": "Log into STWNO-Anwendung",

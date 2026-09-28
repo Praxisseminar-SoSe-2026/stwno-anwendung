@@ -8,6 +8,7 @@ import {
   Button,
   TextField,
   CircularProgress,
+  Divider,
 } from '@mui/material'
 import {
   getCommunityRooms,
@@ -16,6 +17,7 @@ import {
   type CommunityRoom,
 } from '../../api/infrastructure'
 import { BackButton } from '../../components/BackButton'
+import { Confirmation } from '../../components/Confirmation.tsx'
 
 export function AdminCommunityRoomDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -28,6 +30,7 @@ export function AdminCommunityRoomDetailPage() {
   const [description, setDescription] = useState('')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [confirmOpen, setConfirmOpen] = useState(false)
 
   useEffect(() => {
     getCommunityRooms()
@@ -86,6 +89,8 @@ export function AdminCommunityRoomDetailPage() {
         <BackButton />
         <Typography variant="h4">{t('infrastructure.editRoom')}</Typography>
 
+        <Divider sx={{ width: '100%' }} />
+
         {/* Name */}
         <TextField
           label={t('infrastructure.name')}
@@ -112,12 +117,21 @@ export function AdminCommunityRoomDetailPage() {
           <Button
             variant="contained"
             color="error"
-            onClick={handleDelete}
+            onClick={() => setConfirmOpen(true)}
             disabled={saving}
           >
             {t('common.delete')}
           </Button>
         </Stack>
+
+        <Confirmation
+          open={confirmOpen}
+          onConfirm={() => {
+            setConfirmOpen(false)
+            handleDelete()
+          }}
+          onClose={() => setConfirmOpen(false)}
+        />
 
         {error && <Typography color="error">{error}</Typography>}
       </Stack>

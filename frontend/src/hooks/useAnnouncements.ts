@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { getAnnouncements, type Announcement } from '../api/announcements'
 import { useAuth } from '../contexts/AuthContext'
 
-const UNRESTRICTED_ROLES = ['admin']
+const UNRESTRICTED_ROLES = ['admin', 'mitarbeiter']
 
 export function useAnnouncements() {
   const [announcements, setAnnouncements] = useState<Announcement[]>([])

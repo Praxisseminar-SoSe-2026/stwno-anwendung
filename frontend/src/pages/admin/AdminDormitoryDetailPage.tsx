@@ -1,7 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
-import { Stack, Typography, Paper, Button, TextField } from '@mui/material'
+import {
+  Stack,
+  Typography,
+  Paper,
+  Button,
+  TextField,
+  Divider,
+} from '@mui/material'
 import {
   getDormitories,
   updateDormitory,
@@ -9,6 +16,7 @@ import {
   type Dormitory,
 } from '../../api/dormitories'
 import { BackButton } from '../../components/BackButton.tsx'
+import { Confirmation } from '../../components/Confirmation.tsx'
 
 export function AdminDormitoryDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -21,6 +29,7 @@ export function AdminDormitoryDetailPage() {
   const [zipCode, setZipCode] = useState('')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [confirmOpen, setConfirmOpen] = useState(false)
 
   useEffect(() => {
     getDormitories()
@@ -81,6 +90,7 @@ export function AdminDormitoryDetailPage() {
       <Stack spacing={3} style={{ alignItems: 'start' }}>
         <BackButton />
         <Typography variant="h4">{t('dormitory.editDorm')}</Typography>
+        <Divider sx={{ width: '100%' }} />
 
         {/* Name */}
         <TextField
@@ -122,12 +132,21 @@ export function AdminDormitoryDetailPage() {
           <Button
             variant="contained"
             color="error"
-            onClick={handleDelete}
+            onClick={() => setConfirmOpen(true)}
             disabled={saving}
           >
             {t('common.delete')}
           </Button>
         </Stack>
+
+        <Confirmation
+          open={confirmOpen}
+          onConfirm={() => {
+            setConfirmOpen(false)
+            handleDelete()
+          }}
+          onClose={() => setConfirmOpen(false)}
+        />
 
         {error && <Typography color="error">{error}</Typography>}
       </Stack>

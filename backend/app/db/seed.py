@@ -15,6 +15,7 @@ from app.core.status import LaundryStatus, RequestStatus
 from app.core.time import now_utc
 from app.db.database import SessionLocal
 from app.models import (
+    AccessTimeSlotProposal,
     Announcement,
     CommunityRoom,
     Dormitory,
@@ -45,10 +46,11 @@ def seed() -> None:
             name="hausmeister", description="Hausmeister / Facility Manager"
         )
         role_resident = Role(name="bewohner", description="Wohnheim-Bewohner")
-        db.add_all([role_worker, role_admin, role_facility_manager, role_resident])
+        role_tutor = Role(name="tutor", description="Tutor:in")
+        db.add_all([role_worker, role_admin, role_facility_manager, role_resident,
+                    role_tutor])
         db.flush()
 
-        # ToDo: add missing permissions
         perm_manage_requests = Permission(
             name="manage_requests", description="Anfragen bearbeiten"
         )
@@ -84,7 +86,6 @@ def seed() -> None:
         )
         db.flush()
 
-        # TODO: add announcement permissions for other roles
         db.add_all(
             [
                 RolePermission(
@@ -98,6 +99,23 @@ def seed() -> None:
                     role_id=role_admin.id, permission_id=perm_edit_announcement.id
                 ),
                 RolePermission(
+                    role_id=role_facility_manager.id,
+                    permission_id=perm_post_announcement.id,
+                ),
+                RolePermission(
+                    role_id=role_facility_manager.id,
+                    permission_id=perm_edit_announcement.id,
+                ),
+                RolePermission(
+                    role_id=role_worker.id, permission_id=perm_post_announcement.id
+                ),
+                RolePermission(
+                    role_id=role_worker.id, permission_id=perm_edit_announcement.id
+                ),
+                RolePermission(
+                    role_id=role_tutor.id, permission_id=perm_post_announcement.id
+                ),
+                RolePermission(
                     role_id=role_admin.id, permission_id=perm_manage_users.id
                 ),
                 RolePermission(
@@ -105,6 +123,10 @@ def seed() -> None:
                 ),
                 RolePermission(
                     role_id=role_facility_manager.id,
+                    permission_id=perm_manage_infrastructure.id,
+                ),
+                RolePermission(
+                    role_id=role_worker.id,
                     permission_id=perm_manage_infrastructure.id,
                 ),
                 RolePermission(role_id=role_admin.id, permission_id=perm_manage_faq.id),
@@ -163,6 +185,23 @@ def seed() -> None:
             person_number="A0004",
             dormitory_id=dorm.id,
         )
+        worker = User(
+            first_name="Zita",
+            last_name="Hölzl",
+            email="zita.hölzl@mail.de",
+            password_hash=hash_password("password"),
+            person_number="A0005",
+        )
+        tutor = User(
+            first_name="Sophia",
+            last_name="Beispiel",
+            email="sophia@mail.com",
+            password_hash=hash_password("password"),
+            person_number="A0006",
+            flat_number="1G",
+            contract_end=date.today() + timedelta(days=180),
+            dormitory_id=dorm.id,
+        )
         resident = User(
             first_name="Lena",
             last_name="Beispiel",
@@ -183,7 +222,8 @@ def seed() -> None:
             contract_end=date.today() + timedelta(days=180),
             dormitory_id=dorm2.id,
         )
-        db.add_all([admin, admin2, admin3, hausmeister, resident, resident2])
+        db.add_all([admin, admin2, admin3, hausmeister, worker, tutor, resident,
+                    resident2])
         db.flush()
 
         db.add_all(
@@ -192,6 +232,8 @@ def seed() -> None:
                 UserRole(user_id=admin2.id, role_id=role_admin.id),
                 UserRole(user_id=admin3.id, role_id=role_admin.id),
                 UserRole(user_id=hausmeister.id, role_id=role_facility_manager.id),
+                UserRole(user_id=worker.id, role_id=role_worker.id),
+                UserRole(user_id=tutor.id, role_id=role_tutor.id),
                 UserRole(user_id=resident.id, role_id=role_resident.id),
                 UserRole(user_id=resident2.id, role_id=role_resident.id),
                 DormitoryFacilityManager(dormitory_id=dorm.id, user_id=hausmeister.id),
@@ -216,22 +258,28 @@ def seed() -> None:
 
         laundry_machine1 = LaundryMachine(
             laundry_room_id=laundry_room.id,
-            label="Maschine 1",
+            label="Maschine 4",
             type="Dryer",
             status=LaundryStatus.FREE,
         )
         laundry_machine2 = LaundryMachine(
             laundry_room_id=laundry_room.id,
-            label="Maschine 2",
-            status=LaundryStatus.OCCUPIED,
+            label="Maschine 1",
+            status=LaundryStatus.FREE,
         )
         laundry_machine3 = LaundryMachine(
             laundry_room_id=laundry_room.id,
-            label="Maschine 3",
+            label="Maschine 2",
             status=LaundryStatus.OCCUPIED,
         )
+        laundry_machine4 = LaundryMachine(
+            laundry_room_id=laundry_room.id,
+            label="Maschine 3",
+            status=LaundryStatus.UNKNOWN,
+        )
 
-        db.add_all([laundry_machine1, laundry_machine2, laundry_machine3])
+        db.add_all([laundry_machine1, laundry_machine2, laundry_machine3,
+                    laundry_machine4])
         db.flush()
 
         db.add_all(
@@ -382,22 +430,30 @@ def seed() -> None:
             description="Die Heizung geht nicht",
             location=resident.flat_number,
             assigned_dormitory_id=dorm.id,
+            entry_permission=True,
         )
         repair_confirmed = RepairRequest(
             resident_id=resident.id,
-            status=RequestStatus.IN_PROGRESS,
+            status=RequestStatus.OPEN,
             description="Es kommt kein warmes Wasser",
             location=resident.flat_number,
             assigned_dormitory_id=dorm.id,
+            time_slot_proposals=[
+                AccessTimeSlotProposal(
+                    start_time=now_utc() + timedelta(days=2, hours=1),
+                    end_time=now_utc() + timedelta(days=2, hours=3),
+                ),
+                AccessTimeSlotProposal(
+                    start_time=now_utc() + timedelta(days=3, hours=1),
+                    end_time=now_utc() + timedelta(days=3, hours=3),
+                ),
+                AccessTimeSlotProposal(
+                    start_time=now_utc() + timedelta(days=4, hours=1),
+                    end_time=now_utc() + timedelta(days=4, hours=3),
+                ),
+            ],
         )
-        repair_closed = RepairRequest(
-            resident_id=resident.id,
-            status=RequestStatus.CLOSED,
-            description="Lampe im Flur defekt",
-            location="Flur, 2. OG",
-            assigned_dormitory_id=dorm.id,
-        )
-        db.add_all([repair_open, repair_confirmed, repair_closed])
+        db.add_all([repair_open, repair_confirmed])
 
         room_open = RoomRequest(
             resident_id=resident.id,
@@ -406,16 +462,7 @@ def seed() -> None:
             start_datetime=now_utc(),
             end_datetime=now_utc() + timedelta(days=1),
         )
-        room_confirmed = RoomRequest(
-            resident_id=resident.id,
-            status=RequestStatus.IN_PROGRESS,
-            community_room_id=community_room.id,
-            start_datetime=now_utc() + timedelta(days=5),
-            end_datetime=now_utc() + timedelta(days=6),
-            decided_by_id=admin.id,
-            decided_at=now_utc(),
-        )
-        db.add_all([room_open, room_confirmed])
+        db.add_all([room_open])
         db.flush()
 
         db.commit()

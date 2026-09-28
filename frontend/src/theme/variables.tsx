@@ -26,11 +26,12 @@ export const colorVariables = {
 export const typoVariables = {
   fontFamily: 'Roboto',
   sizes: {
-    h1: 55,
-    h2: 40,
-    body1: 22,
-    body2: 67,
-    caption: 67,
+    h1: 45,
+    h2: 35,
+    h3: 30,
+    h4: 25,
+    body1: 20,
+    body2: 18,
   },
 } as const
 

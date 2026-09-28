@@ -17,7 +17,7 @@ import type { Faq } from '../../api/faqs.ts'
 import { useState } from 'react'
 import { Link } from 'react-router'
 import { useHasRole } from '../../hooks/useHasRole.ts'
-import { EDITOR_ROLES } from '../../constants/roles.ts'
+import { STAFF_ROLES } from '../../constants/roles.ts'
 import { Loading } from '../../components/Loading'
 
 // creates list of all categories with their associated questions
@@ -45,7 +45,7 @@ export function FaqPage() {
     )
   })
 
-  const canEdit = useHasRole(EDITOR_ROLES)
+  const canEdit = useHasRole(STAFF_ROLES)
 
   const groupedFaqs = groupByCategory(filteredFaqs)
 
@@ -103,7 +103,15 @@ export function FaqPage() {
                       spacing={2}
                       sx={{ alignItems: 'center', width: '100%', pr: 1 }}
                     >
-                      <Typography color={'primary'} sx={{ flexGrow: 1 }}>
+                      <Typography
+                        color={'primary'}
+                        lang="de"
+                        sx={{
+                          flexGrow: 1,
+                          hyphens: 'auto',
+                          overflowWrap: 'break-word',
+                        }}
+                      >
                         {faq.question}
                       </Typography>
                       <Link

@@ -18,3 +18,4 @@ pyjwt~=2.13.0
 uliweb-alembic
 aiosmtplib~=3.0.2
 python-multipart
+httpx

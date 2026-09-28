@@ -20,14 +20,20 @@ export type FaqInput = {
   category_id: number
 }
 
-// Todo: Add authentication
-
 async function handleResponse<T>(res: Response): Promise<T> {
   if (!res.ok) {
     const errorBody = await res.json().catch(() => null)
     throw new Error(errorBody?.detail ?? 'Request failed')
   }
   return res.json()
+}
+
+function authHeaders(): HeadersInit {
+  const token = localStorage.getItem('access_token')
+  return {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  }
 }
 
 export async function getFaqCategories(): Promise<FaqCategory[]> {
@@ -48,7 +54,7 @@ export async function getFaq(id: number): Promise<Faq> {
 export async function createFaq(data: FaqInput): Promise<Faq> {
   const res = await apiFetch(`${BASE_URL}/faq`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: authHeaders(),
     body: JSON.stringify(data),
   })
   return handleResponse(res)
@@ -60,7 +66,7 @@ export async function updateFaq(
 ): Promise<Faq> {
   const res = await apiFetch(`${BASE_URL}/faq/${id}`, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    headers: authHeaders(),
     body: JSON.stringify(data),
   })
   return handleResponse(res)
@@ -69,6 +75,7 @@ export async function updateFaq(
 export async function deleteFaq(id: number): Promise<void> {
   const res = await apiFetch(`${BASE_URL}/faq/${id}`, {
     method: 'DELETE',
+    headers: authHeaders(),
   })
   if (!res.ok) {
     const errorBody = await res.json().catch(() => null)

@@ -304,6 +304,11 @@ def delete_laundry_machine(db: Session, machine_id: int) -> None:
         raise LaundryMachineNotFoundError(
             f"No Machine entry found " f"with id {machine_id}"
         )
+
+    db.query(LaundryBooking).filter(
+        LaundryBooking.laundry_machine_id == machine_id
+    ).delete(synchronize_session=False)
+
     db.delete(entry)
     db.commit()
 

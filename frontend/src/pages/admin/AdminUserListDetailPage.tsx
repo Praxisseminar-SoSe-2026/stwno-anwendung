@@ -90,8 +90,8 @@ export function AdminUserListDetailPage() {
       }}
     >
       <Stack spacing={3}>
-        <Typography variant="h1">{t('userList.editUser')}</Typography>
-        <Divider sx={{ width: '75%' }} />
+        <Typography variant="h4">{t('userList.editUser')}</Typography>
+        <Divider sx={{ width: '100%' }} />
         {/* Person number */}
         <Typography>
           {t('userList.personNumber')}: {user.person_number}

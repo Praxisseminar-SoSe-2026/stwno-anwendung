@@ -23,7 +23,7 @@ import { useTranslation } from 'react-i18next'
 import { useAuth } from '../contexts/AuthContext'
 import { useLogout } from '../hooks/useLogout.ts'
 import { useHasRole } from '../hooks/useHasRole.ts'
-import { ADMIN_ROLES, STAFF_ROLES } from '../constants/roles.ts'
+import { ADMIN_ROLES, STAFF_ROLES, RESIDENT_ROLES } from '../constants/roles.ts'
 import { useDormitoryFilter } from '../contexts/DormitoryFilterContext'
 import { useDormitories } from '../hooks/useDormitories'
 import AddIcon from '@mui/icons-material/Add'
@@ -50,6 +50,7 @@ export function Header() {
     { to: '/gemeinschaftsraum', label: t('roomBooking.title') },
   ]
 
+  const canViewOwnTickets = useHasRole(RESIDENT_ROLES)
   const canViewTickets = useHasRole(STAFF_ROLES) && !loading
   const isAdmin = useHasRole(ADMIN_ROLES) && !loading
 
@@ -76,7 +77,12 @@ export function Header() {
     </Button>
   )
 
-  const generalItems = [...links]
+  const generalItems = [
+    ...links,
+    ...(canViewOwnTickets
+      ? [{ to: '/meine-tickets', label: t('request.myTickets') }]
+      : []),
+  ]
 
   const adminItems = [
     ...(canViewTickets
@@ -166,6 +172,7 @@ export function Header() {
             {canViewTickets && (
               <>
                 <Divider sx={{ my: 1 }} />
+                <Typography>{t('header.dormitorySettings')}</Typography>
                 <Stack spacing={1} sx={{ px: 1 }}>
                   {dormitorySelect}
                   {dormitoryActions}
@@ -176,7 +183,7 @@ export function Header() {
             {user && (
               <>
                 <Divider sx={{ my: 1 }} />
-                <Stack spacing={1} alignItems="center">
+                <Stack spacing={1} style={{ alignItems: 'center' }}>
                   {userSection}
                 </Stack>
               </>
@@ -190,40 +197,68 @@ export function Header() {
   // Desktop
 
   return (
-    <AppBar position="sticky" color="default">
-      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Stack direction="row" spacing={3} alignItems="center">
+    <AppBar position="sticky" color="default" elevation={1}>
+      {/* admin and staff features */}
+      {(isAdmin || canViewTickets) && (
+        <Toolbar
+          sx={{
+            color: 'background.paper',
+            border: 1,
+            borderColor: 'divider',
+            bgcolor: 'secondary.main',
+            py: 1,
+            // css selector made with help of AI (claude)
+            '& .MuiButton-root, & .MuiInputBase-root, & .MuiSelect-icon': {
+              color: 'inherit',
+            },
+            '& .MuiDivider-root, & fieldset': {
+              borderColor: 'currentColor !important',
+            },
+          }}
+        >
+          <Stack spacing={3} direction={'row'} style={{ alignItems: 'center' }}>
+            <Typography>{t('header.stwnoStaffContent')}</Typography>
+            {adminItems.map((item) => (
+              <Button
+                key={item.to}
+                component={Link}
+                to={item.to}
+                sx={{ color: 'background.paper' }}
+              >
+                {item.label}
+              </Button>
+            ))}
+
+            {/* Dorm selection */}
+            {canViewTickets && (
+              <>
+                <Divider
+                  orientation="vertical"
+                  flexItem
+                  sx={{ my: 1, color: 'background.paper' }}
+                />
+                <Typography variant={'body2'}>
+                  {t('header.dormitorySettings')}
+                </Typography>
+                {dormitorySelect}
+                {dormitoryActions}
+              </>
+            )}
+          </Stack>
+        </Toolbar>
+      )}
+      {/* general navigation */}
+      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', py: 1 }}>
+        <Stack spacing={3} direction={'row'} style={{ alignItems: 'center' }}>
           {generalItems.map((item) => (
             <Button key={item.to} component={Link} to={item.to}>
               {item.label}
             </Button>
           ))}
-
-          {adminItems.length > 0 && (
-            <Divider orientation="vertical" flexItem sx={{ my: 1 }} />
-          )}
-
-          {adminItems.map((item) => (
-            <Button key={item.to} component={Link} to={item.to}>
-              {item.label}
-            </Button>
-          ))}
-
-          {/* Dorm selection */}
-          {canViewTickets && (
-            <>
-              <Divider orientation="vertical" flexItem sx={{ my: 1 }} />
-              {dormitorySelect}
-              {dormitoryActions}
-            </>
-          )}
         </Stack>
 
-        <Divider orientation="vertical" flexItem sx={{ my: 1 }} />
         {/* Username + Logout */}
-        <Stack alignItems="center">
-          {userSection}
-        </Stack>
+        <Stack style={{ alignItems: 'center' }}>{userSection}</Stack>
       </Toolbar>
     </AppBar>
   )

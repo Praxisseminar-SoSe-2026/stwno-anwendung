@@ -8,15 +8,17 @@ import {
   Button,
   TextField,
   MenuItem,
+  Divider,
 } from '@mui/material'
 import { useFaq } from '../../hooks/useFaq'
 import { useHasRole } from '../../hooks/useHasRole.ts'
-import { EDITOR_ROLES } from '../../constants/roles.ts'
+import { STAFF_ROLES } from '../../constants/roles.ts'
 import { useDeleteFaq } from '../../hooks/useDeleteFaq'
 import { useUpdateFaq } from '../../hooks/useUpdateFaq'
 import { useFaqCategories } from '../../hooks/useFaqCategories'
 import { Loading } from '../../components/Loading'
 import { BackButton } from '../../components/BackButton'
+import { Confirmation } from '../../components/Confirmation.tsx'
 
 export function FaqDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -29,8 +31,9 @@ export function FaqDetailPage() {
   const [answer, setAnswer] = useState('')
 
   const [categoryId, setCategoryId] = useState<number | null>(null)
+  const [confirmOpen, setConfirmOpen] = useState(false)
 
-  const canEdit = useHasRole(EDITOR_ROLES)
+  const canEdit = useHasRole(STAFF_ROLES)
 
   const {
     submitDeleteFaq,
@@ -97,6 +100,8 @@ export function FaqDetailPage() {
     >
       <BackButton />
       <Stack spacing={2}>
+        <Typography variant="h4">{t('faq.editQuestion')}</Typography>
+        <Divider sx={{ width: '100%' }} />
         {editing ? (
           <>
             {/* question */}
@@ -168,7 +173,7 @@ export function FaqDetailPage() {
                 <Button
                   variant="contained"
                   color="error"
-                  onClick={handleDelete}
+                  onClick={() => setConfirmOpen(true)}
                   disabled={actionLoading}
                 >
                   {actionLoading ? t('common.deleting') : t('common.delete')}
@@ -177,7 +182,14 @@ export function FaqDetailPage() {
             )}
           </>
         )}
-
+        <Confirmation
+          open={confirmOpen}
+          onConfirm={() => {
+            setConfirmOpen(false)
+            handleDelete()
+          }}
+          onClose={() => setConfirmOpen(false)}
+        />
         {actionError && <Typography color="error">{actionError}</Typography>}
       </Stack>
     </Paper>

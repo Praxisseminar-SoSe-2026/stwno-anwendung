@@ -138,6 +138,12 @@ export function AdminTicketDetailPage() {
     >
       <BackButton />
       <Stack spacing={2}>
+        <Typography variant={'h4'}>
+          {t('adminTicketOverview.editTicket')}
+        </Typography>
+        <Divider sx={{ width: '100%' }} />
+      </Stack>
+      <Stack spacing={2} sx={{ marginTop: '2rem' }}>
         <Stack
           direction="row"
           spacing={2}
@@ -152,7 +158,12 @@ export function AdminTicketDetailPage() {
             color={request.type === 'repair' ? 'primary' : 'secondary'}
           />
           <Typography>{`# ${request.id}`}</Typography>
-          <Chip label={t(`request.status.${request.status}`)} />
+          <Chip
+            // different stati labeling for room booking requests made with the help of AI (claude)
+            label={t(`request.status.${request.status}`, {
+              context: request.type === 'room' ? 'room_booking' : undefined,
+            })}
+          />
           <Button
             variant="outlined"
             startIcon={<PrintIcon />}
@@ -294,7 +305,12 @@ export function AdminTicketDetailPage() {
                             ).toLocaleString(),
                           })
                         : t('request.statusChanged', {
-                            status: t(`request.status.${item.entry.status}`),
+                            status: t(`request.status.${item.entry.status}`, {
+                              context:
+                                request.type === 'room'
+                                  ? 'room_booking'
+                                  : undefined,
+                            }),
                           })}
                     {' · '}
                     {item.at && new Date(item.at).toLocaleString()}
@@ -331,7 +347,10 @@ export function AdminTicketDetailPage() {
             >
               {REQUEST_STATUSES.map((status) => (
                 <MenuItem key={status} value={status}>
-                  {t(`request.status.${status}`)}
+                  {t(`request.status.${status}`, {
+                    context:
+                      request.type === 'room' ? 'room_booking' : undefined,
+                  })}
                 </MenuItem>
               ))}
             </TextField>

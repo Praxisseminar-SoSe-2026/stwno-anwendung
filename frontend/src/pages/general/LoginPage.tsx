@@ -12,6 +12,7 @@ import {
   FormControl,
   TextField,
   Stack,
+  Divider,
 } from '@mui/material'
 
 export function LoginPage() {
@@ -99,6 +100,7 @@ export function LoginPage() {
         }}
       >
         <Typography variant="h2">{t('login.title')}</Typography>
+        <Divider />
 
         {sessionExpired && (
           <Typography color={'error'}>{t('login.sessionExpired')}</Typography>
