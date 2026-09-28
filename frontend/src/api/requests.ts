@@ -9,6 +9,11 @@ export type ResidentInfo = {
   flat_number: string | null
 }
 
+export type CommunityRoomInfo = {
+  id: number
+  name: string
+}
+
 export type AccessTimeSlot = {
   id: number
   start_time: string
@@ -64,7 +69,7 @@ export type TicketRequest = {
   access_time_slot_history: AccessTimeSlotHistoryEntry[]
   comments: Comment[]
   status_history: StatusHistoryEntry[]
-  community_room_id: number | null
+  community_room: CommunityRoomInfo | null
   start_datetime: string | null
   end_datetime: string | null
 }
