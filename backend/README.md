@@ -5,6 +5,7 @@ FastAPI backend of the STWNO application.
 - Docker
 
 ## Setup
+> Be sure to be in the `backend` directory
 
 ### 1. Set up environment variables:
 
@@ -21,6 +22,7 @@ cp .env.example .env
 Then adjust the values in [.env](.env) to your own setup. See [Environment variables](#environment-variables) below for what each one does.
 
 ### 2. Start backend & database:
+> Make sure that Docker is running
 ```bash
 docker compose up -d --build
 ```
