@@ -42,6 +42,8 @@ export default function Calendar({ events }: { events: RoomBookingEvent[] }) {
   return (
     <FullCalendar
       plugins={[themePlugin, dayGridPlugin]}
+      // made with documentation [https://fullcalendar.io/docs/timeZone]
+      timeZone="UTC"
       initialView="dayGridMonth"
       events={events}
       headerToolbar={{
@@ -122,7 +124,7 @@ export function RoomBookingPage() {
       <Typography variant="h1">{t('roomBooking.title')}</Typography>
       <Divider />
       {/* select community room */}
-      <Stack direction="row" spacing={1} alignItems="center">
+      <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
         <TextField
           select
           label={t('roomBooking.selectCommunityRoom')}
