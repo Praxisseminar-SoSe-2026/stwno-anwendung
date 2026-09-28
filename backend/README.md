@@ -9,12 +9,6 @@ FastAPI backend of the STWNO application.
 
 ### 1. Set up environment variables:
 
-**Windows:**
-```bash
-copy .env.example .env
-```
-
-**macOS / Linux:**
 ```bash
 cp .env.example .env
 ```
@@ -149,14 +143,33 @@ Images (e.g. for announcements) can be uploaded via `POST /uploads/images` and p
 
 ## Project structure
 ```
-app/
-  core/       Configuration, security, permissions, logging
-  data/       Static mock data (e.g. Studentenwerk registration mock)
-  db/         Database connection (Engine, Session, Base) and seed script
-  models/     SQLAlchemy models (DB tables)
-  schemas/    Pydantic schemas (API request/response)
-  services/   Business logic / DB access
-  routers/    FastAPI endpoints
-  main.py     App entry point
-tests/        Pytest suite (isolated SQLite test database)
+.
+├── Dockerfile
+├── README.md
+├── alembic
+│   ├── README
+│   ├── __pycache__
+│   ├── env.py
+│   ├── script.py.mako
+│   └── versions
+├── alembic.ini
+├── app
+│   ├── __init__.py
+│   ├── __pycache__
+│   ├── core        Configuration, security, permissions, logging
+│   ├── data        Static mock data (e.g. Studentenwerk registration mock)
+│   ├── db          Database connection (Engine, Session, Base) and seed script
+│   ├── main.py     App entry point
+│   ├── models      SQLAlchemy models (DB tables)
+│   ├── routers     FastAPI endpoints
+│   ├── schemas     Pydantic schemas (API request/response)
+│   └── services    Business logic / DB access
+├── docker-compose.yml
+├── logs
+├── pyproject.toml
+├── pytest.ini
+├── requirements-dev.txt
+├── requirements.txt
+├── tests            Pytest suite (isolated SQLite test database)
+└── uploads
 ```

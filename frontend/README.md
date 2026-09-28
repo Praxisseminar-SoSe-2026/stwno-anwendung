@@ -1,21 +1,22 @@
 # Frontend
+React frontend of the STWNO application
 
 ## Setup
 > Be sure to be in the `frontend` directory
 
 ### Prerequisites
 
-- Node v24.18.0
+- Node v24.18.0 (or higher)
 
 ### Install Dependencies
 
-```
+```bash
 npm install
 ```
 
 ### Set environment variables
 
-```
+```bash
 cp .env.example .env
 ```
 
@@ -23,11 +24,11 @@ Set `VITE_API_BASE_URL` in [.env](.env) to the backend URL
 
 ## Running
 
-```
+```bash
 npm run dev
 ```
 
-now it the frontend is available at http://localhost:5173/
+Done, the frontend is available at http://localhost:5173/
 
 ## Linting and Formatting
 
@@ -78,3 +79,29 @@ npm run format
 | `/admin/users/:id` | Edit user (roles, dormitory, etc.) |
 
 All routes except `/login`, `/registration`, and `/set-password` require authentication (see [ProtectedRoute.tsx](src/components/ProtectedRoute.tsx)).
+
+## Project structure
+
+```
+.
+├── README.md
+├── eslint.config.js
+├── index.html
+├── node_modules
+├── src
+│   ├── App.css
+│   ├── App.tsx
+│   ├── api
+│   ├── components
+│   ├── constants
+│   ├── contexts
+│   ├── hooks
+│   ├── i18n
+│   ├── main.tsx
+│   ├── pages
+│   └── theme
+├── tsconfig.app.json
+├── tsconfig.json
+├── tsconfig.node.json
+└── vite.config.ts
+```
