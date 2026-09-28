@@ -24,6 +24,7 @@ from app.schemas.request import (
     RoomBookings,
     RoomRequestCreate,
 )
+from app.core.status import RequestStatus
 
 STAFF_ROLES = {"admin", "mitarbeiter"}
 
@@ -327,11 +328,11 @@ def create_room_request(
         else None
     )
 
-    # Todo: time conflict should only affect accepted booking requests
     time_conflict = (
         db.query(RoomRequest)
         .filter(
             RoomRequest.community_room_id == payload.community_room_id,
+            RoomRequest.status == RequestStatus.CLOSED,
             RoomRequest.start_datetime <= last_booked_day_datetime,
             RoomRequest.end_datetime >= first_booked_day_datetime,
         )
