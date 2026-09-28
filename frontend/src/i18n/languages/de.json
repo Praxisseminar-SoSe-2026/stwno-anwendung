@@ -2,6 +2,10 @@
   "index": {
     "title": "Willkommen in der STWNO-Anwendung"
   },
+  "header": {
+    "stwnoStaffContent": "STWNO-Mitarbeiterbereich",
+    "dormitorySettings": "Einstellungen Wohnheim:"
+  },
   "healthcheck": {
     "desc": "Das Backend ",
     "isAvailable": "ist erreichbar.",

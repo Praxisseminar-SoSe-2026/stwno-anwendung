@@ -2,6 +2,10 @@
   "index": {
     "title": "Welcome to the STWNO application"
   },
+  "header": {
+    "stwnoStaffContent": "STWNO staff content",
+    "dormitorySettings": "dormitory settings:"
+  },
   "healthcheck": {
     "desc": "The backend ",
     "isAvailable": "is available.",
