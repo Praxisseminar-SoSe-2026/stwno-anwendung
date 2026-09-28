@@ -164,8 +164,8 @@
     "end": "End",
     "location": "Location",
     "type": {
-      "repair": "repair request",
-      "room": "room request"
+      "repair": "Repair request",
+      "room": "Room request"
     },
     "exportPdf": "Create PDF",
     "status": {
@@ -188,7 +188,9 @@
     "chooseSlot": "Choose a time slot",
     "setEntryTime": "Set entry time",
     "actionError": "Action failed.",
-    "entryTimeSet": "set the entry time to {{time}}"
+    "entryTimeSet": "set the entry time to {{time}}",
+    "myTickets": "My tickets",
+    "empty": "No tickets yet"
   },
   "login": {
     "title": "Log into STWNO-Anwendung",

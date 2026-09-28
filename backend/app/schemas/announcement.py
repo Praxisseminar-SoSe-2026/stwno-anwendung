@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_validator
 
 
 class AnnouncementCreate(BaseModel):
@@ -17,6 +17,13 @@ class AnnouncementUpdate(BaseModel):
     image_url: str | None = None
     important: bool | None = None
     dormitory_id: int | None = None
+
+    @field_validator("title")
+    @classmethod
+    def title_not_empty(cls, v: str | None) -> str | None:
+        if v is not None and not v.strip():
+            raise ValueError("Title cannot be empty")
+        return v
 
 
 # The announcement will contain this

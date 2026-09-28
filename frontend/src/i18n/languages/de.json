@@ -188,7 +188,9 @@
     "chooseSlot": "Termin auswählen",
     "setEntryTime": "Termin festlegen",
     "actionError": "Aktion fehlgeschlagen.",
-    "entryTimeSet": "hat den Zutrittstermin auf {{time}} festgelegt"
+    "entryTimeSet": "hat den Zutrittstermin auf {{time}} festgelegt",
+    "myTickets": "Meine Anfragen",
+    "empty": "Keine Anfragen bisher"
   },
   "login": {
     "title": "Bei STWNO-Anwendung anmelden",

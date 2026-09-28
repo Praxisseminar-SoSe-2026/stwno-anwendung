@@ -25,7 +25,7 @@ import { useImageUpload } from '../../hooks/useImageUpload.ts'
 import UploadIcon from '@mui/icons-material/Upload'
 import CloseIcon from '@mui/icons-material/Close'
 import { useHasRole } from '../../hooks/useHasRole.ts'
-import { STAFF_ROLES } from '../../constants/roles.ts'
+import { EDITOR_ROLES } from '../../constants/roles.ts'
 
 const GLOBAL_VALUE = 'global'
 
@@ -41,7 +41,7 @@ export function AdminCreateAnnouncementPage() {
   const [scope, setScope] = useState<string>(GLOBAL_VALUE)
   const { submitAnnouncement, loading, error } = useCreateAnnouncement()
 
-  const canView = useHasRole(STAFF_ROLES)
+  const canView = useHasRole(EDITOR_ROLES)
 
   if (!canView) {
     return <Typography>{t('adminTicketOverview.notAuthorized')}</Typography>
