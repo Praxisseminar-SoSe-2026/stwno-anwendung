@@ -15,6 +15,7 @@ from app.core.status import LaundryStatus, RequestStatus
 from app.core.time import now_utc
 from app.db.database import SessionLocal
 from app.models import (
+    AccessTimeSlotProposal,
     Announcement,
     CommunityRoom,
     Dormitory,
@@ -32,7 +33,6 @@ from app.models import (
     RoomRequest,
     User,
     UserRole,
-    AccessTimeSlotProposal,
 )
 
 
@@ -278,7 +278,10 @@ def seed() -> None:
             status=LaundryStatus.UNKNOWN,
         )
 
-        db.add_all([laundry_machine1, laundry_machine2, laundry_machine3, laundry_machine4])
+        db.add_all([laundry_machine1,
+                    laundry_machine2,
+                    laundry_machine3,
+                    laundry_machine4])
         db.flush()
 
         db.add_all(
