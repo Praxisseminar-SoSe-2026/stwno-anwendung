@@ -3,6 +3,7 @@ from datetime import UTC, datetime, time, timedelta
 from sqlalchemy.orm import Session
 
 from app.core.permission import get_user_role
+from app.core.status import RequestStatus
 from app.core.time import now_utc
 from app.models import RoomRequestStatusHistory
 from app.models.access_time_slot import AccessTimeSlot
@@ -24,7 +25,6 @@ from app.schemas.request import (
     RoomBookings,
     RoomRequestCreate,
 )
-from app.core.status import RequestStatus
 
 STAFF_ROLES = {"admin", "mitarbeiter"}
 
