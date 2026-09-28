@@ -2,182 +2,174 @@
 FastAPI backend of the STWNO application.
 
 ## Prerequisites
-- Python 3.12
 - Docker
-- PostgreSQL (local or remote)
 
 ## Setup
+> Be sure to be in the `backend` directory
 
-1. Create and activate a virtual environment:
+### 1. Set up environment variables:
 
-**Windows:**
-```bash
-   python -m venv .venv
-   .venv\Scripts\Activate.ps1
-```
-
-**macOS / Linux:**
-```bash
-   python3 -m venv .venv
-   source .venv/bin/activate
-```
-
-2. Set up environment variables:
-
-**Windows:**
-```bash
-copy .env.example .env
-```
-
-**macOS / Linux:**
 ```bash
 cp .env.example .env
 ```
 
-Then adjust `DATABASE_URL` in `.env` to your own instance.
+Then adjust the values in [.env](.env) to your own setup. See [Environment variables](#environment-variables) below for what each one does.
 
-There are two ways to run the backend:
-
-### Option A: Backend & database entirely via Docker
-
-1. Start backend & database:
+### 2. Start backend & database:
+> Make sure that Docker is running
 ```bash
-    docker compose up -d --build
+docker compose up -d --build
 ```
 
-2. Done – the app runs at http://127.0.0.1:8000, code changes are picked up automatically thanks to `--reload`.
-
-### Option B: Database via Docker, backend running locally
-
-1. Start the database (Docker):
-```bash
-    docker compose up -d db
-```
-
-2. Install dependencies:
-```bash
-    pip install -r requirements.txt
-```  
-
-3. Start the application:
-```bash
-    uvicorn app.main:app --reload
-```
-
-## Endpoints
-- API-Dokumentation: http://127.0.0.1:8000/docs
-- Health-Check: http://127.0.0.1:8000/health
-
-## Tests
-**Option A (Docker):**
-```bash
-docker compose exec backend pytest
-```
-
-**Option B (local):**
-Activate the virtual environment (see Setup Option B), then:
-```bash
-pytest
-```
-
-## Database migrations (Alembic)
-Generate a new migration after a model has been changed/added:
-
-**Option A (Docker):**
-```bash
-docker compose exec backend alembic revision --autogenerate -m "short description"
-```
-
-**Option B (local):**
-```bash
-alembic revision --autogenerate -m "short description"
-```
-
-Review the generated file in `alembic/versions/` before applying it – autogenerate doesn't reliably detect everything (e.g. renames).
-
-Apply migration:
-
-**Option A (Docker):**
+### 3. Apply a Alembic migration (more information in [Database migrations](#Database-migrations))
 ```bash
 docker compose exec backend alembic upgrade head
 ```
 
-**Option B (local):**
+### 4. Seed the data (more information in [Seed data](#Seed-data))
+```
+docker compose exec backend python -m app.db.seed
+```
+
+Done, the app runs at http://127.0.0.1:8000.
+
+## Environment variables
+
+| Variable | Description |
+|---|---|
+| `DATABASE_URL` | Postgres connection string (`postgresql+pg8000://...`) |
+| `FRONTEND_URL` | Allowed origin for CORS |
+| `ENVIRONMENT` | `development` or `production` (affects log format) |
+| `LOG_LEVEL` | `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL` |
+| `JWT_SECRET_KEY` | Secret used to sign access tokens (≥32 bytes recommended) |
+| `JWT_ALGORITHM` | JWT signing algorithm, default `HS256` |
+| `ACCESS_TOKEN_EXPIRE_MINUTES` | Session inactivity timeout in minutes |
+| `POSTGRES_USER` / `POSTGRES_PASSWORD` / `POSTGRES_DB` | Credentials used by the `db` service (Postgres container); must match `DATABASE_URL` |
+| `SMTP_HOST` / `SMTP_PORT` | Mail server (use `mailhog` for local dev) |
+| `SMTP_USERNAME` / `SMTP_PASSWORD` | Mail credentials (leave empty for Mailhog) |
+| `SMTP_USE_TLS` | `true` for providers requiring STARTTLS (e.g. Gmail) |
+| `SMTP_FROM_EMAIL` | Sender address for outgoing emails |
+| `BACKEND_URL` | Base URL used to build public URLs for uploaded files |
+
+## API overview
+
+- **Permissions** (`/permissions`) – list available permissions
+- **Requests** (`/requests`) – repair tickets and room booking requests
+- **Registration** (`/registration`) – verify a person number against the STWNO mock interface and create an account
+- **Announcements** (`/announcements`) – bulletin board posts/announcements
+- **Email** (`/email`) - email sending
+- **Dormitories** (`/dormitories`) – CRUD for dormitories
+- **Auth** (`/auth`) – login, set-password, current-user
+- **FAQ** (`/faq`) – frequently asked questions, grouped by category
+- **Infrastructure** (`/infrastructure`) – community rooms, laundry rooms, and laundry machines
+- **Uploads** (`/uploads`) – image uploads for announcements and repair requests
+- **Laundry booking** (`/laundry`) – reserve and end laundry machine bookings
+- **Users** (`/users`) – admin management of accounts, roles, and dormitory assignments
+- **Health** (`/health`) - check backend status
+
+Full interactive documentation is available at http://127.0.0.1:8000/docs once the backend is running.
+
+## Database migrations
+Apply migration:
 ```bash
-alembic upgrade head
+docker compose exec backend alembic upgrade head
 ```
 
 Roll back the last migration:
-
-**Option A (Docker):**
 ```bash
 docker compose exec backend alembic downgrade -1
 ```
 
-**Option B (local):**
-```bash
-alembic downgrade -1
-```
-
 Check the current migration status:
-
-**Option A (Docker):**
 ```bash
 docker compose exec backend alembic current
 ```
 
-**Option B (local):**
+Generate a new migration after a model has been changed/added:
 ```bash
-alembic current
+docker compose exec backend alembic revision --autogenerate -m "short description"
 ```
 
 ## Seed data
-Populate the database with test data (roles, dormitories, users, sample repair/room requests, etc.). Run this **after** `alembic upgrade head`.
+Populate the database with test data (roles, permissions, dormitories, users,
+sample repair/room requests, announcements, FAQ entries, etc.). Run this
+**after** `alembic upgrade head`.
 
-**Option A (Docker):**
 ```bash
 docker compose exec backend python -m app.db.seed
 ```
 
-**Option B (local):**
+All accounts use the password `password`.
+
+| Email                                      | Role | Dormitory |
+|--------------------------------------------|---|---|
+| raffael.eger@web.de                        | admin | – |
+| maximilian.auberger@stud.uni-regensburg.de | admin | – |
+| jonas.haller@stud.uni-regensburg.de        | admin | – |
+| hausmeister@mail.de                        | hausmeister | Franz-Mayer-Straße |
+| zita.hölzl@mail.de                         | mitarbeiter | – |
+| sophia@mail.com                            | tutor | Franz-Mayer-Straße |
+| lena@mail.com                              | bewohner | Franz-Mayer-Straße |
+| lukas@mail.com                             | bewohner | Fort-Skelly-Straße |
+
+## Tests
 ```bash
-python -m app.db.seed
+docker compose exec backend pytest
 ```
 
-Additionally test mock data for the registration of new accounts is defined in `app/data/stwno_mock_data.json`
+Tests run against an isolated in-memory SQLite database (see [conftest.py](tests/conftest.py))
+and don't require a running Postgres instance.
 
 ## Linting & Formatting
-
-**Option A (Docker):**
 ```bash
-docker compose exec backend black app
 docker compose exec backend ruff check app  
 ```
 
-**Option B (local):**
-```bash
-black app
-ruff check app 
-```
-
 ## Logging
-Logging is configured centrally in `app/core/logging.py`. Every request is logged automatically via a middleware, including method, path, status code, and response time.
+Logging is configured centrally in [logging.py](app/core/logging.py) and availably in [app.log](logs/app.log). 
+Every request is logged automatically via a middleware, including method, path, status code, and response time. 
+Log level and format (human-readable vs. JSON) are controlled via `LOG_LEVEL` and `ENVIRONMENT` in [.env](.env).
 
-## Email Notification
+## Email Notifications
 
 Emails are sent asynchronously via SMTP using a background task, so requests don't block while the email is being delivered.
 
 For local development, emails are caught by Mailhog instead of being delivered.
-View sent emails at http://127.0.0.1:8025 and configer settings in `.env`.
+View sent emails at http://127.0.0.1:8025 and configure settings in [.env](.env).
+
+## File uploads
+
+Images (e.g. for announcements) can be uploaded via `POST /uploads/images` and persist across container restarts.
 
 ## Project structure
 ```
-app/
-  core/       Konfiguration (Settings)
-  db/         Datenbankverbindung (Engine, Session, Base)
-  models/     SQLAlchemy-Models (DB-Tabellen)
-  schemas/    Pydantic-Schemas (API Request/Response)
-  services/   Business-Logik / DB-Zugriffe
-  routers/    FastAPI-Endpunkte
-  main.py     App-Einstiegspunkt
+.
+├── Dockerfile
+├── README.md
+├── alembic
+│   ├── README
+│   ├── __pycache__
+│   ├── env.py
+│   ├── script.py.mako
+│   └── versions
+├── alembic.ini
+├── app
+│   ├── __init__.py
+│   ├── __pycache__
+│   ├── core        Configuration, security, permissions, logging
+│   ├── data        Static mock data (e.g. Studentenwerk registration mock)
+│   ├── db          Database connection (Engine, Session, Base) and seed script
+│   ├── main.py     App entry point
+│   ├── models      SQLAlchemy models (DB tables)
+│   ├── routers     FastAPI endpoints
+│   ├── schemas     Pydantic schemas (API request/response)
+│   └── services    Business logic / DB access
+├── docker-compose.yml
+├── logs
+├── pyproject.toml
+├── pytest.ini
+├── requirements-dev.txt
+├── requirements.txt
+├── tests            Pytest suite (isolated SQLite test database)
+└── uploads
 ```
