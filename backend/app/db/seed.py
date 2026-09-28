@@ -32,6 +32,7 @@ from app.models import (
     RoomRequest,
     User,
     UserRole,
+    AccessTimeSlotProposal,
 )
 
 
@@ -419,22 +420,30 @@ def seed() -> None:
             description="Die Heizung geht nicht",
             location=resident.flat_number,
             assigned_dormitory_id=dorm.id,
+            entry_permission=True,
         )
         repair_confirmed = RepairRequest(
             resident_id=resident.id,
-            status=RequestStatus.IN_PROGRESS,
+            status=RequestStatus.OPEN,
             description="Es kommt kein warmes Wasser",
             location=resident.flat_number,
             assigned_dormitory_id=dorm.id,
+            time_slot_proposals=[
+                AccessTimeSlotProposal(
+                    start_time=now_utc() + timedelta(days=2, hours=1),
+                    end_time=now_utc() + timedelta(days=2, hours=3),
+                ),
+                AccessTimeSlotProposal(
+                    start_time=now_utc() + timedelta(days=3, hours=1),
+                    end_time=now_utc() + timedelta(days=3, hours=3),
+                ),
+                AccessTimeSlotProposal(
+                    start_time=now_utc() + timedelta(days=4, hours=1),
+                    end_time=now_utc() + timedelta(days=4, hours=3),
+                ),
+            ],
         )
-        repair_closed = RepairRequest(
-            resident_id=resident.id,
-            status=RequestStatus.CLOSED,
-            description="Lampe im Flur defekt",
-            location="Flur, 2. OG",
-            assigned_dormitory_id=dorm.id,
-        )
-        db.add_all([repair_open, repair_confirmed, repair_closed])
+        db.add_all([repair_open, repair_confirmed])
 
         room_open = RoomRequest(
             resident_id=resident.id,
@@ -443,16 +452,7 @@ def seed() -> None:
             start_datetime=now_utc(),
             end_datetime=now_utc() + timedelta(days=1),
         )
-        room_confirmed = RoomRequest(
-            resident_id=resident.id,
-            status=RequestStatus.IN_PROGRESS,
-            community_room_id=community_room.id,
-            start_datetime=now_utc() + timedelta(days=5),
-            end_datetime=now_utc() + timedelta(days=6),
-            decided_by_id=admin.id,
-            decided_at=now_utc(),
-        )
-        db.add_all([room_open, room_confirmed])
+        db.add_all([room_open])
         db.flush()
 
         db.commit()
