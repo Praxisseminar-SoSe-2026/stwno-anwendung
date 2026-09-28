@@ -234,6 +234,10 @@ export function AdminTicketDetailPage() {
         {request.type === 'room' && (
           <>
             <Typography>
+              <strong>{t('request.communityRoom')}:</strong>{' '}
+              {request.community_room?.name}
+            </Typography>
+            <Typography>
               <strong>{t('request.start')}:</strong>{' '}
               {request.start_datetime &&
                 new Date(request.start_datetime).toLocaleDateString()}

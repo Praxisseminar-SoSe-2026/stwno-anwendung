@@ -191,7 +191,8 @@
     "actionError": "Action failed.",
     "entryTimeSet": "set the entry time to {{time}}",
     "myTickets": "My tickets",
-    "empty": "No tickets yet"
+    "empty": "No tickets yet",
+    "communityRoom": "Community room"
   },
   "login": {
     "title": "Log into STWNO-Anwendung",

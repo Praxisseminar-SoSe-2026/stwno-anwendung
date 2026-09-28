@@ -191,7 +191,8 @@
     "actionError": "Aktion fehlgeschlagen.",
     "entryTimeSet": "hat den Zutrittstermin auf {{time}} festgelegt",
     "myTickets": "Meine Anfragen",
-    "empty": "Keine Anfragen bisher"
+    "empty": "Keine Anfragen bisher",
+    "communityRoom": "Gemeinschaftsraum"
   },
   "login": {
     "title": "Bei STWNO-Anwendung anmelden",
