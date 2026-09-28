@@ -125,6 +125,10 @@ def seed() -> None:
                     role_id=role_facility_manager.id,
                     permission_id=perm_manage_infrastructure.id,
                 ),
+                RolePermission(
+                    role_id=role_worker.id,
+                    permission_id=perm_manage_infrastructure.id,
+                ),
                 RolePermission(role_id=role_admin.id, permission_id=perm_manage_faq.id),
                 RolePermission(
                     role_id=role_facility_manager.id, permission_id=perm_manage_faq.id
@@ -254,22 +258,27 @@ def seed() -> None:
 
         laundry_machine1 = LaundryMachine(
             laundry_room_id=laundry_room.id,
-            label="Maschine 1",
+            label="Maschine 4",
             type="Dryer",
             status=LaundryStatus.FREE,
         )
         laundry_machine2 = LaundryMachine(
             laundry_room_id=laundry_room.id,
-            label="Maschine 2",
-            status=LaundryStatus.OCCUPIED,
+            label="Maschine 1",
+            status=LaundryStatus.FREE,
         )
         laundry_machine3 = LaundryMachine(
             laundry_room_id=laundry_room.id,
-            label="Maschine 3",
+            label="Maschine 2",
             status=LaundryStatus.OCCUPIED,
         )
+        laundry_machine4 = LaundryMachine(
+            laundry_room_id=laundry_room.id,
+            label="Maschine 3",
+            status=LaundryStatus.UNKNOWN,
+        )
 
-        db.add_all([laundry_machine1, laundry_machine2, laundry_machine3])
+        db.add_all([laundry_machine1, laundry_machine2, laundry_machine3, laundry_machine4])
         db.flush()
 
         db.add_all(
