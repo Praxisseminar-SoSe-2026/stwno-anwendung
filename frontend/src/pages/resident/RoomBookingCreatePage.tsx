@@ -12,6 +12,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  Divider,
 } from '@mui/material'
 import { useCreateRoomBooking } from '../../hooks/useCreateRoomBooking'
 import { useCommunityRooms } from '../../hooks/useCommunityRooms'
@@ -66,11 +67,12 @@ export function RoomBookingCreatePage() {
     >
       <Stack spacing={2}>
         {/* community room */}
-        <Typography>
+        <Typography variant={'h4'}>
           {t('roomBooking.bookCommunityRoom', {
             communityRoomName: selectedRoom?.name ?? '',
           })}
         </Typography>
+        <Divider />
         {/* startDate */}
         <TextField
           label={t('roomBooking.startDate')}

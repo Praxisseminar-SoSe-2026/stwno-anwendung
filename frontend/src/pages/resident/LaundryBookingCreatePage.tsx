@@ -8,6 +8,7 @@ import {
   Button,
   TextField,
   InputAdornment,
+  Divider,
 } from '@mui/material'
 import { useCreateLaundryBooking } from '../../hooks/useCreateLaundryBooking'
 import { useLaundryMachine } from '../../hooks/useLaundryMachine'
@@ -61,11 +62,12 @@ export function LaundryBookingCreatePage() {
       }}
     >
       <Stack spacing={2}>
-        <Typography>
+        <Typography variant={'h4'}>
           {t('laundry.communicateLaundryMachineUsage', {
             laundryMachineLabel: laundryMachine?.label ?? '',
           })}
         </Typography>
+        <Divider />
 
         {/* duration */}
         <TextField

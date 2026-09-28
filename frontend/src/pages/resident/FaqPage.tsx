@@ -103,7 +103,15 @@ export function FaqPage() {
                       spacing={2}
                       sx={{ alignItems: 'center', width: '100%', pr: 1 }}
                     >
-                      <Typography color={'primary'} sx={{ flexGrow: 1 }}>
+                      <Typography
+                        color={'primary'}
+                        lang="de"
+                        sx={{
+                          flexGrow: 1,
+                          hyphens: 'auto',
+                          overflowWrap: 'break-word',
+                        }}
+                      >
                         {faq.question}
                       </Typography>
                       <Link

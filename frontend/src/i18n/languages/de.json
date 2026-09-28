@@ -2,6 +2,10 @@
   "index": {
     "title": "Willkommen in der STWNO-Anwendung"
   },
+  "header": {
+    "stwnoStaffContent": "STWNO-Mitarbeiterbereich",
+    "dormitorySettings": "Einstellungen Wohnheim:"
+  },
   "healthcheck": {
     "desc": "Das Backend ",
     "isAvailable": "ist erreichbar.",
@@ -22,7 +26,8 @@
     "scope": "Sichtbarkeit der Ankündigung",
     "scopeGlobal": "Für alle Wohnheime",
     "uploadImage": "Neues Bild hochladen",
-    "removeImage": "Bild entfernen"
+    "removeImage": "Bild entfernen",
+    "announcement": "Ankündigung"
   },
   "common": {
     "save": "Speichern",
@@ -36,7 +41,9 @@
     "creating": "wird erstellt..",
     "saving": "wird gespeichert...",
     "deleting": "wird gelöscht...",
-    "ending": "wird beendet..."
+    "ending": "wird beendet...",
+    "confirmation": "Bestätigung erforderlich",
+    "areYouSure": "Sicher unwiederruflich löschen?"
   },
   "faq": {
     "title": "Häufig gestellte Fragen",
@@ -55,7 +62,9 @@
     "categoryLabel": "Kategorie",
     "createFaqError": "Neue Frage konnte nicht erstellt werden.",
     "updateFaqError": "Frage konnte nicht bearbeitet werden.",
-    "deleteFaqError": "Frage konnte nicht gelöscht werden."
+    "deleteFaqError": "Frage konnte nicht gelöscht werden.",
+    "createNewQuestion": "Neue Frage erstellen",
+    "editQuestion": "Frage bearbeiten"
   },
   "laundry": {
     "title": "Waschküche",
@@ -98,7 +107,7 @@
     "imageError": "Bild konnte nicht hochgeladen werden."
   },
   "roomBooking": {
-    "title": "Gemeinschaftsraumbuchung",
+    "title": "Gemeinschafts\u00ADraum\u00ADbuchung",
     "selectCommunityRoom": "Gemeinschaftsraum auswählen",
     "createCommunityRoomBooking": "Gemeinschaftsraum buchen",
     "occupied": "Belegt",
@@ -116,7 +125,8 @@
     "title": "Ticket Übersicht (Reparatur- und Raumbuchungsanfragen)",
     "titleShort": "Ticket Übersicht",
     "notAuthorized": "Du hast keinen Zugriff auf diese Seite.",
-    "empty": "keine Tickets"
+    "empty": "keine Tickets",
+    "editTicket": "Ticket bearbeiten"
   },
   "userList": {
     "title": "Nutzer:innen Liste",

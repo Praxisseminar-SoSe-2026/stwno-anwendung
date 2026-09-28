@@ -1,7 +1,14 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { useTranslation } from 'react-i18next'
-import { Stack, Typography, Paper, Button, TextField } from '@mui/material'
+import {
+  Stack,
+  Typography,
+  Paper,
+  Button,
+  TextField,
+  Divider,
+} from '@mui/material'
 import { createCommunityRoom } from '../../api/infrastructure'
 import { useDormitoryFilter } from '../../contexts/DormitoryFilterContext'
 import { BackButton } from '../../components/BackButton'
@@ -46,7 +53,8 @@ export function AdminCreateCommunityRoomPage() {
     >
       <Stack spacing={3} style={{ alignItems: 'start' }}>
         <BackButton />
-        <Typography>{t('infrastructure.createRoom')}</Typography>
+        <Typography variant="h4">{t('infrastructure.createRoom')}</Typography>
+        <Divider sx={{ width: '100%' }} />
         {/* Name */}
         <TextField
           label={t('infrastructure.name')}

@@ -17,6 +17,7 @@ import {
   Alert,
   Stack,
   CircularProgress,
+  Divider,
 } from '@mui/material'
 import UploadIcon from '@mui/icons-material/Upload'
 import CloseIcon from '@mui/icons-material/Close'
@@ -137,7 +138,9 @@ export function RepairRequestPage() {
         gap: 2,
       }}
     >
-      <Typography variant="h2">{t('repairRequest.title')}</Typography>
+      <Typography variant="h4">{t('repairRequest.title')}</Typography>
+
+      <Divider />
 
       <Box
         component="form"

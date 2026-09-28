@@ -20,9 +20,10 @@ export const theme = createTheme({
     fontFamily: typoVariables.fontFamily,
     h1: { fontSize: typoVariables.sizes.h1 },
     h2: { fontSize: typoVariables.sizes.h2 },
+    h3: { fontSize: typoVariables.sizes.h3 },
+    h4: { fontSize: typoVariables.sizes.h4 },
     body1: { fontSize: typoVariables.sizes.body1 },
     body2: { fontSize: typoVariables.sizes.body2 },
-    caption: { fontSize: typoVariables.sizes.caption },
   },
   spacing: spacingUnit,
   shape: {
