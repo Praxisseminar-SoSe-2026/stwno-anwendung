@@ -183,7 +183,7 @@ def seed() -> None:
         worker = User(
             first_name="Zita",
             last_name="Hölzl",
-            email="zita.hölzl@stud.uni-regensburg.de",
+            email="zita.hölzl@mail",
             password_hash=hash_password("password"),
             person_number="A0005",
         )
