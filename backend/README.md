@@ -107,7 +107,7 @@ All accounts use the password `password`.
 | maximilian.auberger@stud.uni-regensburg.de | admin | – |
 | jonas.haller@stud.uni-regensburg.de        | admin | – |
 | hausmeister@mail.de                        | hausmeister | Franz-Mayer-Straße |
-| zita.hölzl@mail.de                         | mitarbeiter | – |
+| zita.hoelzl@mail.de                        | mitarbeiter | – |
 | sophia@mail.com                            | tutor | Franz-Mayer-Straße |
 | lena@mail.com                              | bewohner | Franz-Mayer-Straße |
 | lukas@mail.com                             | bewohner | Fort-Skelly-Straße |
