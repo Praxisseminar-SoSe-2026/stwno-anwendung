@@ -36,7 +36,7 @@ function ticketTitle(ticket: TicketRequest): string {
   if (ticket.type === 'repair') {
     return `${ticket.location}: ${ticket.description}`
   }
-  return ` ${
+  return ` ${ticket.community_room?.name}: ${
     ticket.start_datetime &&
     new Date(ticket.start_datetime).toLocaleDateString()
   } -> ${
