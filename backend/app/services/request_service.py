@@ -3,6 +3,7 @@ from datetime import UTC, datetime, time, timedelta
 from sqlalchemy.orm import Session
 
 from app.core.permission import get_user_role
+from app.core.status import RequestStatus
 from app.core.time import now_utc
 from app.models import RoomRequestStatusHistory
 from app.models.access_time_slot import AccessTimeSlot
@@ -302,6 +303,9 @@ def create_room_request(
         raise RoomBookingTimeConflictError(
             "Bookings outside the weekend cant be longer than 2 days"
         )
+    # check if last booked day is a friday to book the whole weekend
+    elif last_booked_day.weekday() >= 4:
+        last_booked_day = last_booked_day + timedelta(days=2)
 
     if (
         not payload.regular_key_exchange_possible
@@ -327,11 +331,11 @@ def create_room_request(
         else None
     )
 
-    # Todo: time conflict should only affect accepted booking requests
     time_conflict = (
         db.query(RoomRequest)
         .filter(
             RoomRequest.community_room_id == payload.community_room_id,
+            RoomRequest.status == RequestStatus.CLOSED,
             RoomRequest.start_datetime <= last_booked_day_datetime,
             RoomRequest.end_datetime >= first_booked_day_datetime,
         )

@@ -278,7 +278,9 @@ def seed() -> None:
             status=LaundryStatus.UNKNOWN,
         )
 
-        db.add_all([laundry_machine1, laundry_machine2, laundry_machine3,
+        db.add_all([laundry_machine1,
+                    laundry_machine2,
+                    laundry_machine3,
                     laundry_machine4])
         db.flush()
 
