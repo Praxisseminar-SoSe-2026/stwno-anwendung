@@ -1,5 +1,6 @@
 import logging
 from email.message import EmailMessage as MimeEmailMessage
+from typing import List
 
 import aiosmtplib
 
@@ -29,3 +30,8 @@ async def send_email(message: EmailMessage) -> None:
         logger.info("Email sent to %s (subject: %s)", message.receiver, message.subject)
     except Exception:
         logger.exception("Failed to send email to %s", message.receiver)
+
+async def send_emails(messages: List[EmailMessage]) -> None:
+    """Send multiple emails via SMTP."""
+    for message in messages:
+        await send_email(message)
