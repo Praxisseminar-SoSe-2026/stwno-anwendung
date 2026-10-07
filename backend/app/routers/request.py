@@ -230,6 +230,8 @@ def edit_room_booking_request(
         raise HTTPException(status_code=403, detail=str(exc)) from exc
     except RequestNotFoundError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except RoomBookingTimeConflictError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
 
     background_tasks.add_task(
         send_emails, request_status_changed_emails(room_request, current_user)
