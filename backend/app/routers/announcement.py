@@ -1,7 +1,7 @@
 import logging
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.core.dependencies import get_current_user, require_permission
@@ -20,6 +20,8 @@ from app.services.announcement_service import (
     list_announcements,
     update_announcement,
 )
+from app.services.email_service import send_emails
+from app.services.notification_service import announcement_emails
 
 logger = logging.getLogger(__name__)
 
@@ -29,10 +31,13 @@ router = APIRouter(prefix="/announcements", tags=["announcements"])
 @router.post("", response_model=AnnouncementResponse, status_code=201)
 def create(
     payload: AnnouncementCreate,
+    background_tasks: BackgroundTasks,
     db: Annotated[Session, Depends(get_db)],
     current_user: Annotated[User, Depends(require_permission("post_announcement"))],
 ):
-    return create_announcement(db, current_user.id, payload)
+    announcement = create_announcement(db, current_user.id, payload)
+    background_tasks.add_task(send_emails, announcement_emails(db, announcement))
+    return announcement
 
 
 @router.get("", response_model=list[AnnouncementResponse])
