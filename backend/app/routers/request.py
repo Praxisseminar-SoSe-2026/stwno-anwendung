@@ -16,8 +16,11 @@ from app.schemas.request import (
     RoomRequestCreate,
 )
 from app.services.email_service import send_emails
-from app.services.notification_service import request_status_changed_emails, request_entry_time_set_emails, \
-    request_comment_added_emails
+from app.services.notification_service import (
+    request_comment_added_emails,
+    request_entry_time_set_emails,
+    request_status_changed_emails,
+)
 from app.services.request_service import (
     DateInPastError,
     InvalidTimeSlotProposalError,

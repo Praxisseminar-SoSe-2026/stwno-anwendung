@@ -5,7 +5,7 @@ from pydantic import ValidationError
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
-from app.models import User, Request, RepairRequest, UserRole, Role, Announcement
+from app.models import Announcement, RepairRequest, Request, Role, User, UserRole
 from app.schemas.email import EmailMessage
 
 logger = logging.getLogger("app.notification_service")
