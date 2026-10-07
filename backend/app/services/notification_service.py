@@ -24,15 +24,15 @@ TEXTS = {
         },
         "greeting": "Hallo {name}",
         "signature": "Viele Grüße,\nDein Studentenwerk-Team",
-        "status_subject:": "Ticket #{id}: Status geändert",
+        "status_subject": "Ticket #{id}: Status geändert",
         "status_body": 'der Status deiner {type} #{id} wurde auf "{status}" geändert.',
         "comment_subject": "Ticket #{id}: Neuer Kommentar",
-        "comment_body": "{author} hat deine {type} #{id} kommentiert: \n\n{comment}",
+        "comment_body": "{author} hat deine {type} #{id} kommentiert:\n\n{comment}",
         "entry_time_subject": "Ticket #{id}: Zutrittstermin festgelegt",
         "entry_time_body": (
             "für deine {type} #{id} wurde der Zutrittstermin festgelegt:\n\n{slot} Uhr"
         ),
-        "announcement_subject": "Neue Ankündigung {title}",
+        "announcement_subject": "Neue Ankündigung: {title}",
         "announcement_subject_important": "Wichtige Ankündigung: {title}",
         "announcement_body": (
             "es gibt eine neue Ankündigung:\n\n{title}\n\n{text}"
@@ -104,7 +104,7 @@ def request_status_changed_emails(request: Request, actor: User) -> list[EmailMe
     texts = _texts(resident)
     return _compose(
         resident,
-        texts["status_subject"].format(id=resident.id),
+        texts["status_subject"].format(id=request.id),
         texts["status_body"].format(
             type=texts["request_type"][request.type],
             id=request.id,
@@ -123,7 +123,7 @@ def request_comment_added_emails(
     texts = _texts(resident)
     return _compose(
         resident,
-        texts["comment_subject"].format(id=resident.id),
+        texts["comment_subject"].format(id=request.id),
         texts["comment_body"].format(
             author=f"{actor.first_name} {actor.last_name}",
             type=texts["request_type"][request.type],
