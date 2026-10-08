@@ -211,9 +211,16 @@
   "registration": {
     "register": "Register new account?",
     "person_number": "Please enter person number",
+    "email": "Please enter email address",
     "next_button": "Next",
     "password": "Password",
-    "create_account": "Create Account"
+    "password_hint": "At least 6 characters",
+    "create_account": "Create Account",
+    "set_password_title": "Set password",
+    "check_mail": "We sent an email to {{email}}. Use the link in the email to set your password and complete the registration.",
+    "back_to_login": "Back to login",
+    "missing_token": "The registration link is incomplete or invalid. Please start the registration again.",
+    "start_again": "Start registration again"
   },
   "notFound": {
     "title": "404 - This page unfortunately doesn't exist :("
