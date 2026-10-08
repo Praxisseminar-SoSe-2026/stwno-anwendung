@@ -5,7 +5,15 @@ from pydantic import ValidationError
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
-from app.models import Announcement, RepairRequest, Request, Role, User, UserRole
+from app.models import (
+    Announcement,
+    RepairRequest,
+    Request,
+    ResidentMasterData,
+    Role,
+    User,
+    UserRole,
+)
 from app.schemas.email import EmailMessage
 
 logger = logging.getLogger("app.notification_service")
@@ -37,6 +45,14 @@ TEXTS = {
         "announcement_body": (
             "es gibt eine neue Ankündigung:\n\n{title}\n\n{text}"
         ),
+        "registration_subject": "Registrierung abschließen",
+        "registration_body": (
+            "du möchtest dich im Wohnheimportal registrieren. Über diesen Link "
+            "legst du dein Passwort fest und schließt die Registrierung ab:\n\n"
+            "{link}\n\n"
+            "Der Link ist {hours} Stunden gültig. Falls du dich nicht registrieren "
+            "wolltest, kannst du diese E-Mail ignorieren."
+        ),
     },
     "en": {
         "request_type": {"repair": "repair request", "room": "room booking request"},
@@ -60,6 +76,14 @@ TEXTS = {
         "announcement_subject_important": "Important announcement: {title}",
         "announcement_body": (
             "there is a new announcement:\n\n{title}\n\n{text}\n\n"
+        ),
+        "registration_subject": "Complete your registration",
+        "registration_body": (
+            "you requested to register for the dormitory portal. Use this link to "
+            "set your password and complete the registration:\n\n"
+            "{link}\n\n"
+            "The link is valid for {hours} hours. If you did not request this, "
+            "you can ignore this email."
         ),
     }
 }
@@ -186,3 +210,32 @@ def announcement_emails(db: Session, announcement: Announcement) -> list[EmailMe
             ),
         )
     return messages
+
+
+def registration_email(
+    master_data: ResidentMasterData, token: str, language: str | None = None
+) -> list[EmailMessage]:
+    lang = (language or DEFAULT_LANGUAGE).split("-")[0].lower()
+    texts = TEXTS.get(lang, TEXTS[DEFAULT_LANGUAGE])
+    link = f"{settings.frontend_url.rstrip('/')}/set-password?token={token}"
+    body = texts["registration_body"].format(
+        link=link, hours=settings.registration_token_expire_hours
+    )
+    text = (
+        f"{texts['greeting'].format(name=master_data.first_name)}\n\n"
+        f"{body}\n\n{texts['signature']}"
+    )
+    try:
+        return [
+            EmailMessage(
+                receiver=master_data.email,
+                subject=texts["registration_subject"],
+                text=text,
+            )
+        ]
+    except ValidationError:
+        logger.warning(
+            "Skipping registration mail for master data %s: invalid email",
+            master_data.id,
+        )
+        return []
