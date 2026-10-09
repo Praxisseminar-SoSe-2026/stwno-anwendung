@@ -220,7 +220,41 @@
     "check_mail": "We sent an email to {{email}}. Use the link in the email to set your password and complete the registration.",
     "back_to_login": "Back to login",
     "missing_token": "The registration link is incomplete or invalid. Please start the registration again.",
-    "start_again": "Start registration again"
+    "start_again": "Start registration again",
+    "consent_label": "I have read the privacy notice and consent to the processing of my data for the use of the dormitory portal.",
+    "privacy_link": "Read privacy notice",
+    "privacy_title": "Privacy notice and consent",
+    "privacy_close": "Close",
+    "privacy_sections": [
+      {
+        "title": "Controller",
+        "text": "Studentenwerk Niederbayern/Oberpfalz, [address and contact of the data protection officer]."
+      },
+      {
+        "title": "Data we process",
+        "text": "Name, email address, person number, dormitory and flat number, and your content in the portal (repair requests with comments and photos, room bookings, laundry bookings)."
+      },
+      {
+        "title": "Purposes",
+        "text": "Providing the dormitory portal (login, repair requests, room bookings, laundry overview, bulletin board) and email notifications about your requests and new announcements."
+      },
+      {
+        "title": "Recipients",
+        "text": "Staff of the Studentenwerk and the caretaker of your dormitory, as far as needed to process requests. No disclosure to third parties."
+      },
+      {
+        "title": "Retention",
+        "text": "[Duration of the tenancy plus retention period]."
+      },
+      {
+        "title": "Your rights",
+        "text": "Access, rectification, erasure, restriction of processing, objection, data portability, and a complaint to the [competent supervisory authority]."
+      },
+      {
+        "title": "Withdrawal",
+        "text": "You can withdraw your consent at any time with effect for the future: [contact]."
+      }
+    ]
   },
   "notFound": {
     "title": "404 - This page unfortunately doesn't exist :("
