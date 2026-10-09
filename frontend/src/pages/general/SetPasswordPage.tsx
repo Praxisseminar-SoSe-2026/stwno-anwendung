@@ -3,8 +3,15 @@ import {
   Alert,
   Box,
   Button,
+  Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Divider,
   FormControl,
+  FormControlLabel,
+  Link as MuiLink,
   Paper,
   Stack,
   TextField,
@@ -13,6 +20,9 @@ import {
 import { Link, useNavigate, useSearchParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { useSetPassword } from '../../hooks/useSetPassword.ts'
+import { PRIVACY_POLICY_VERSION } from '../../constants/privacy.ts'
+
+type PrivacySection = { title: string; text: string }
 
 export function SetPasswordPage() {
   const [searchParams] = useSearchParams()
@@ -22,10 +32,21 @@ export function SetPasswordPage() {
 
   const token = searchParams.get('token') ?? ''
   const [password, setPassword] = useState('')
+  const [consent, setConsent] = useState(false)
+  const [privacyOpen, setPrivacyOpen] = useState(false)
+
+  const privacySections = t('registration.privacy_sections', {
+    returnObjects: true,
+  }) as unknown as PrivacySection[]
 
   const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault()
-    const success = await submitSetPassword({ token, password })
+    const success = await submitSetPassword({
+      token,
+      password,
+      consent,
+      policy_version: PRIVACY_POLICY_VERSION,
+    })
     if (success) {
       navigate('/login')
     }
@@ -86,13 +107,71 @@ export function SetPasswordPage() {
                 disabled={loading}
               />
             </FormControl>
-            <Button type="submit" variant="contained" disabled={loading}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={consent}
+                  onChange={(e) => setConsent(e.target.checked)}
+                  disabled={loading}
+                  required
+                />
+              }
+              label={
+                <>
+                  {t('registration.consent_label')}{' '}
+                  <MuiLink
+                    component="button"
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      setPrivacyOpen(true)
+                    }}
+                  >
+                    {t('registration.privacy_link')}
+                  </MuiLink>
+                </>
+              }
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={loading || !consent}
+            >
               {loading ? t('common.creating') : t('registration.create_account')}
             </Button>
             {error && <Typography color="error">{error}</Typography>}
           </Box>
         )}
       </Paper>
+
+      <Dialog
+        open={privacyOpen}
+        onClose={() => setPrivacyOpen(false)}
+        scroll="paper"
+        maxWidth="sm"
+        fullWidth
+        aria-labelledby="privacy-dialog-title"
+      >
+        <DialogTitle id="privacy-dialog-title">
+          {t('registration.privacy_title')}
+        </DialogTitle>
+        <DialogContent dividers>
+          {Array.isArray(privacySections) &&
+            privacySections.map((section) => (
+              <Box key={section.title} sx={{ mb: 2 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+                  {section.title}
+                </Typography>
+                <Typography>{section.text}</Typography>
+              </Box>
+            ))}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setPrivacyOpen(false)}>
+            {t('registration.privacy_close')}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Stack>
   )
 }

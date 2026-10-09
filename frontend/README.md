@@ -44,7 +44,7 @@ npm run format
 |---|-----------------------------------------------------------|
 | `/login` | Login                                                     |
 | `/registration` | Registration (person number and email verification)       |
-| `/set-password` | Set password through the link from the confirmation email |
+| `/set-password` | Set password and accept the privacy notice (link from the confirmation email) |
 
 ### Resident
 | Path | Page |

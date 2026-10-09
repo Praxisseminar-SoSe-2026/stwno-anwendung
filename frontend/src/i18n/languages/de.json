@@ -220,7 +220,41 @@
     "check_mail": "Wir haben dir eine E-Mail an {{email}} geschickt. Über den Link in der Mail legst du dein Passwort fest und schließt die Registrierung ab.",
     "back_to_login": "Zurück zur Anmeldung",
     "missing_token": "Der Registrierungslink ist unvollständig oder ungültig. Bitte starte die Registrierung neu.",
-    "start_again": "Registrierung neu starten"
+    "start_again": "Registrierung neu starten",
+    "consent_label": "Ich habe die Datenschutzhinweise gelesen und willige in die Verarbeitung meiner Daten zur Nutzung des Wohnheimportals ein.",
+    "privacy_link": "Datenschutzhinweise lesen",
+    "privacy_title": "Datenschutzhinweise und Einwilligung",
+    "privacy_close": "Schließen",
+    "privacy_sections": [
+      {
+        "title": "Verantwortlich",
+        "text": "Studentenwerk Niederbayern/Oberpfalz, [Anschrift und Kontakt der bzw. des Datenschutzbeauftragten]."
+      },
+      {
+        "title": "Verarbeitete Daten",
+        "text": "Name, E-Mail-Adresse, Personennummer, Wohnheim und Wohnungsnummer sowie deine Inhalte im Portal (Reparaturanfragen mit Kommentaren und Fotos, Raumbuchungen, Waschmaschinenbuchungen)."
+      },
+      {
+        "title": "Zwecke",
+        "text": "Bereitstellung des Wohnheimportals (Anmeldung, Reparaturanfragen, Raumbuchungen, Waschmaschinenübersicht, Schwarzes Brett) sowie E-Mail-Benachrichtigungen zu deinen Anfragen und neuen Aushängen."
+      },
+      {
+        "title": "Empfänger",
+        "text": "Mitarbeitende des Studentenwerks und der Hausmeister deines Wohnheims, soweit zur Bearbeitung nötig. Keine Weitergabe an Dritte."
+      },
+      {
+        "title": "Speicherdauer",
+        "text": "[Dauer des Mietverhältnisses plus Aufbewahrungsfrist]."
+      },
+      {
+        "title": "Deine Rechte",
+        "text": "Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Widerspruch, Datenübertragbarkeit sowie Beschwerde bei der [zuständigen Aufsichtsbehörde]."
+      },
+      {
+        "title": "Widerruf",
+        "text": "Du kannst deine Einwilligung jederzeit mit Wirkung für die Zukunft widerrufen: [Kontakt]."
+      }
+    ]
   },
   "notFound": {
     "title": "404 - Diese Seite gibts leider nicht :("
