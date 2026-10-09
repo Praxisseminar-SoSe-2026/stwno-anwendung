@@ -55,7 +55,6 @@ Done, the app runs at http://127.0.0.1:8000.
 
 - **Permissions** (`/permissions`) – list available permissions
 - **Requests** (`/requests`) – repair tickets and room booking requests
-- **Registration** (`/registration`) – verify a person number against the STWNO mock interface and create an account
 - **Announcements** (`/announcements`) – bulletin board posts/announcements
 - **Email** (`/email`) - email sending
 - **Dormitories** (`/dormitories`) – CRUD for dormitories
@@ -66,7 +65,7 @@ Done, the app runs at http://127.0.0.1:8000.
 - **Laundry booking** (`/laundry`) – reserve and end laundry machine bookings
 - **Users** (`/users`) – admin management of accounts, roles, and dormitory assignments
 - **Health** (`/health`) - check backend status
-- **Registration** (`/registration`) – verify person number and email against the imported resident master data, send a confirmation link, and create the account once the password is set
+- **Registration** (`/registration`) – verify person number and email against the imported resident master data, send a confirmation link, and create the account once the password is set and the privacy notice is accepted (consent is stored in `privacy_consents`)
 
 Full interactive documentation is available at http://127.0.0.1:8000/docs once the backend is running.
 
@@ -158,7 +157,6 @@ Images (e.g. for announcements) can be uploaded via `POST /uploads/images` and p
 │   ├── __init__.py
 │   ├── __pycache__
 │   ├── core        Configuration, security, permissions, logging
-│   ├── data        Static mock data (e.g. Studentenwerk registration mock)
 │   ├── db          Database connection (Engine, Session, Base) and seed script
 │   ├── main.py     App entry point
 │   ├── models      SQLAlchemy models (DB tables)
