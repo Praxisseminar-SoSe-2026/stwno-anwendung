@@ -59,13 +59,14 @@ Done, the app runs at http://127.0.0.1:8000.
 - **Announcements** (`/announcements`) – bulletin board posts/announcements
 - **Email** (`/email`) - email sending
 - **Dormitories** (`/dormitories`) – CRUD for dormitories
-- **Auth** (`/auth`) – login, set-password, current-user
+- **Auth** (`/auth`) – login, current-user
 - **FAQ** (`/faq`) – frequently asked questions, grouped by category
 - **Infrastructure** (`/infrastructure`) – community rooms, laundry rooms, and laundry machines
 - **Uploads** (`/uploads`) – image uploads for announcements and repair requests
 - **Laundry booking** (`/laundry`) – reserve and end laundry machine bookings
 - **Users** (`/users`) – admin management of accounts, roles, and dormitory assignments
 - **Health** (`/health`) - check backend status
+- **Registration** (`/registration`) – verify person number and email against the imported resident master data, send a confirmation link, and create the account once the password is set
 
 Full interactive documentation is available at http://127.0.0.1:8000/docs once the backend is running.
 

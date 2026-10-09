@@ -211,9 +211,16 @@
   "registration": {
     "register": "Neuen Account registrieren?",
     "person_number": "Bitte Personen-Nummer eingeben",
+    "email": "Bitte E-Mail-Adresse eingeben",
     "next_button": "Weiter",
     "password": "Passwort",
-    "create_account": "Account erstellen"
+    "password_hint": "Mindestens 6 Zeichen",
+    "create_account": "Account erstellen",
+    "set_password_title": "Passwort festlegen",
+    "check_mail": "Wir haben dir eine E-Mail an {{email}} geschickt. Über den Link in der Mail legst du dein Passwort fest und schließt die Registrierung ab.",
+    "back_to_login": "Zurück zur Anmeldung",
+    "missing_token": "Der Registrierungslink ist unvollständig oder ungültig. Bitte starte die Registrierung neu.",
+    "start_again": "Registrierung neu starten"
   },
   "notFound": {
     "title": "404 - Diese Seite gibts leider nicht :("

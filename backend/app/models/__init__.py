@@ -19,6 +19,7 @@ from app.models.repair_request import RepairRequest
 from app.models.repair_request_status_history import RepairRequestStatusHistory
 from app.models.request import Request
 from app.models.request_comment import RequestComment
+from app.models.resident_master_data import ResidentMasterData
 from app.models.role import Role
 from app.models.role_permission import RolePermission
 from app.models.room_request import RoomRequest
@@ -36,6 +37,7 @@ __all__ = [
     "DormitoryFacilityManager",
     "Request",
     "RepairRequest",
+    "ResidentMasterData",
     "RoomRequest",
     "AccessTimeSlot",
     "AccessTimeSlotHistory",

@@ -28,6 +28,7 @@ from app.models import (
     LaundryRoom,
     Permission,
     RepairRequest,
+    ResidentMasterData,
     Role,
     RolePermission,
     RoomRequest,
@@ -154,6 +155,45 @@ def seed() -> None:
         )
         db.add_all([dorm, dorm2])
         db.flush()
+
+        db.add_all(
+            [
+                # already registered
+                ResidentMasterData(
+                    person_number="S1001",
+                    email="lena@mail.com",
+                    first_name="Lena",
+                    last_name="Beispiel",
+                    dormitory_id=dorm.id,
+                    flat_number="12A",
+                ),
+                ResidentMasterData(
+                    person_number="S1002",
+                    email="lukas@mail.com",
+                    first_name="Lukas",
+                    last_name="Beispiel",
+                    dormitory_id=dorm2.id,
+                    flat_number="12B",
+                ),
+                # not yet registered
+                ResidentMasterData(
+                    person_number="1340074",
+                    email="meyer@stwno.de",
+                    first_name="Theo",
+                    last_name="Tester",
+                    dormitory_id=dorm.id,
+                    flat_number="14C",
+                ),
+                ResidentMasterData(
+                    person_number="1340075",
+                    email="mia@mail.com",
+                    first_name="Mia",
+                    last_name="Muster",
+                    dormitory_id=dorm2.id,
+                    flat_number="3B",
+                ),
+            ]
+        )
 
         # User
         admin = User(
