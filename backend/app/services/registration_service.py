@@ -2,12 +2,13 @@ from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
+from app.core.privacy import PRIVACY_POLICY_VERSION
 from app.core.security import (
     InvalidTokenError,
     decode_registration_token,
     hash_password,
 )
-from app.models import ResidentMasterData, Role, UserRole
+from app.models import PrivacyConsent, ResidentMasterData, Role, UserRole
 from app.models.user import User
 
 
@@ -20,6 +21,9 @@ class VerificationFailedError(Exception):
 
 
 class InvalidRegistrationTokenError(Exception):
+    pass
+
+class PolicyVersionMismatchError(Exception):
     pass
 
 
@@ -54,7 +58,13 @@ def start_registration(
     return master_data
 
 
-def complete_registration(db: Session, token: str, password: str) -> User:
+def complete_registration(
+    db: Session, token: str, password: str, policy_version: str
+) -> User:
+    if policy_version != PRIVACY_POLICY_VERSION:
+        raise PolicyVersionMismatchError(
+            "The privacy notice has changed. Please reload the page and try again"
+        )
     try:
         master_data_id = decode_registration_token(token)
     except InvalidTokenError as exc:
@@ -80,6 +90,7 @@ def complete_registration(db: Session, token: str, password: str) -> User:
     db.add(user)
     db.flush()
     db.add(UserRole(user_id=user.id, role_id=resident_role.id))
+    db.add(PrivacyConsent(user_id=user.id, policy_version=policy_version))
 
     try:
         db.commit()

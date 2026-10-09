@@ -19,3 +19,12 @@ class RegistrationStartedResponse(BaseModel):
 class CompleteRegistrationRequest(BaseModel):
     token: str
     password: str = Field(min_length=6)
+    consent: bool
+    policy_version: str
+
+    @field_validator("consent")
+    @classmethod
+    def consent_must_be_given(cls, v: bool) -> bool:
+        if not v:
+            raise ValueError("Consent to data processing is required")
+        return v

@@ -16,6 +16,7 @@ from app.services.notification_service import registration_email
 from app.services.registration_service import (
     DuplicateRegistrationError,
     InvalidRegistrationTokenError,
+    PolicyVersionMismatchError,
     VerificationFailedError,
     complete_registration,
     start_registration,
@@ -52,10 +53,14 @@ def start(
 @router.post("/complete", response_model=UserResponse, status_code=201)
 def complete(payload: CompleteRegistrationRequest, db: Session = Depends(get_db)):
     try:
-        user = complete_registration(db, payload.token, payload.password)
+        user = complete_registration(
+            db, payload.token, payload.password, payload.policy_version
+        )
     except InvalidRegistrationTokenError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     except DuplicateRegistrationError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+    except PolicyVersionMismatchError as exc:
         raise HTTPException(status_code=409, detail=str(exc)) from exc
 
     return user
