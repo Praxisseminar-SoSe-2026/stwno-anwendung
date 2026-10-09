@@ -15,6 +15,7 @@ from app.models.laundry_machine import LaundryMachine
 from app.models.laundry_room import LaundryRoom
 from app.models.notification import Notification
 from app.models.permission import Permission
+from app.models.privacy_consent import PrivacyConsent
 from app.models.repair_request import RepairRequest
 from app.models.repair_request_status_history import RepairRequestStatusHistory
 from app.models.request import Request
@@ -58,4 +59,5 @@ __all__ = [
     "LaundryBooking",
     "LaundryMachine",
     "LaundryRoom",
+    "PrivacyConsent",
 ]
