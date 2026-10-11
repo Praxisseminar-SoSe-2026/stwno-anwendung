@@ -141,6 +141,22 @@
     "contractEnd": "Contract end",
     "roles": "Roles"
   },
+  "residentImport": {
+    "title": "Resident data import",
+    "description": "Upload a CSV or JSON file with the resident data. New people are created, known person numbers are updated, nothing is deleted. If the file contains even one error, nothing is imported.",
+    "columns": "Required columns: Nr., Name, Vorname, E-Mail and VO Nummer (or Wohnheim).",
+    "selectFile": "Choose file",
+    "noFile": "No file selected",
+    "start": "Start import",
+    "importing": "Importing...",
+    "success": "Import successful: {{created}} created, {{updated}} updated, {{unchanged}} unchanged.",
+    "aborted": "Import aborted, nothing was imported. Invalid rows: {{errorCount}}",
+    "errors": "Errors",
+    "warnings": "Notes",
+    "row": "Row",
+    "message": "Message",
+    "failed": "The import failed"
+  },
   "infrastructure": {
     "createRoom": "Create room",
     "editRoom": "Edit room",
