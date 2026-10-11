@@ -23,6 +23,7 @@ class VerificationFailedError(Exception):
 class InvalidRegistrationTokenError(Exception):
     pass
 
+
 class PolicyVersionMismatchError(Exception):
     pass
 

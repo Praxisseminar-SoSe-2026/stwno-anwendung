@@ -9,7 +9,13 @@ REQUIRED_FIELDS = ("person_number", "first_name", "last_name", "email")
 # Accepted column names (lowercase) per field.
 # Add further aliases here if the real export uses other headers.
 FIELD_ALIASES: dict[str, tuple[str, ...]] = {
-    "person_number": ("person_number", "personennummer", "personen-nummer", "nr.", "nr"),
+    "person_number": (
+        "person_number",
+        "personennummer",
+        "personen-nummer",
+        "nr.",
+        "nr",
+    ),
     "first_name": ("first_name", "vorname"),
     "last_name": ("last_name", "name", "nachname"),
     "email": ("email", "e-mail", "e-mail-adresse", "mail"),

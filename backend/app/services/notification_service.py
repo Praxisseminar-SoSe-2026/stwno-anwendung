@@ -42,9 +42,7 @@ TEXTS = {
         ),
         "announcement_subject": "Neue Ankündigung: {title}",
         "announcement_subject_important": "Wichtige Ankündigung: {title}",
-        "announcement_body": (
-            "es gibt eine neue Ankündigung:\n\n{title}\n\n{text}"
-        ),
+        "announcement_body": ("es gibt eine neue Ankündigung:\n\n{title}\n\n{text}"),
         "registration_subject": "Registrierung abschließen",
         "registration_body": (
             "du möchtest dich im Wohnheimportal registrieren. Über diesen Link "
@@ -74,9 +72,7 @@ TEXTS = {
         ),
         "announcement_subject": "New announcement: {title}",
         "announcement_subject_important": "Important announcement: {title}",
-        "announcement_body": (
-            "there is a new announcement:\n\n{title}\n\n{text}\n\n"
-        ),
+        "announcement_body": ("there is a new announcement:\n\n{title}\n\n{text}\n\n"),
         "registration_subject": "Complete your registration",
         "registration_body": (
             "you requested to register for the dormitory portal. Use this link to "
@@ -85,7 +81,7 @@ TEXTS = {
             "The link is valid for {hours} hours. If you did not request this, "
             "you can ignore this email."
         ),
-    }
+    },
 }
 
 
@@ -105,7 +101,7 @@ def _compose(user: User, subject: str, body: str) -> list[EmailMessage]:
             EmailMessage(
                 receiver=user.email,
                 # collapse whitespace/newlines to prevent header problems
-                subject= " ".join(subject.split()),
+                subject=" ".join(subject.split()),
                 text=text,
             )
         ]
@@ -138,7 +134,7 @@ def request_status_changed_emails(request: Request, actor: User) -> list[EmailMe
 
 
 def request_comment_added_emails(
-        request: Request, actor: User, comment_text: str
+    request: Request, actor: User, comment_text: str
 ) -> list[EmailMessage]:
     resident = request.resident
     if resident.id == actor.id:

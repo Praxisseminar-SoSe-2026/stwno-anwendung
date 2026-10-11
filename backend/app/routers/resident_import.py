@@ -54,6 +54,12 @@ def import_resident_master_data_file(
         created=report.created,
         updated=report.updated,
         unchanged=report.unchanged,
-        errors=[RowIssueResponse(row_number=i.row_number, message=i.message) for i in report.errors],
-        warnings=[RowIssueResponse(row_number=i.row_number, message=i.message) for i in report.warnings],
+        errors=[
+            RowIssueResponse(row_number=i.row_number, message=i.message)
+            for i in report.errors
+        ],
+        warnings=[
+            RowIssueResponse(row_number=i.row_number, message=i.message)
+            for i in report.warnings
+        ],
     )
