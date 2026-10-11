@@ -22,6 +22,7 @@ from app.routers import (
     permission,
     registration,
     request,
+    resident_import,
     upload,
     user,
 )
@@ -56,6 +57,7 @@ app.include_router(infrastructure.router)
 app.include_router(upload.router)
 app.include_router(laundry_booking.router)
 app.include_router(user.router)
+app.include_router(resident_import.router)
 
 
 @app.get("/health")
