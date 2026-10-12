@@ -3,6 +3,7 @@ from datetime import UTC, datetime, time, timedelta
 from sqlalchemy.orm import Session
 
 from app.core.permission import get_user_role
+from app.core.status import RequestStatus
 from app.core.time import now_utc
 from app.models import RoomRequestStatusHistory
 from app.models.access_time_slot import AccessTimeSlot
@@ -252,6 +253,24 @@ def create_repair_request(
     return repair_request
 
 
+def _find_booking_conflict(
+    db: Session,
+    community_room_id: int,
+    start_datetime: datetime,
+    end_datetime: datetime,
+    exclude_request_id: int | None = None,
+) -> RoomRequest | None:
+    query = db.query(RoomRequest).filter(
+        RoomRequest.community_room_id == community_room_id,
+        RoomRequest.status == RequestStatus.CLOSED,
+        RoomRequest.start_datetime <= end_datetime,
+        RoomRequest.end_datetime >= start_datetime,
+    )
+    if exclude_request_id is not None:
+        query = query.filter(RoomRequest.id != exclude_request_id)
+    return query.first()
+
+
 def create_room_request(
     db: Session, current_user: User, payload: RoomRequestCreate
 ) -> RoomRequest:
@@ -302,6 +321,9 @@ def create_room_request(
         raise RoomBookingTimeConflictError(
             "Bookings outside the weekend cant be longer than 2 days"
         )
+    # check if last booked day is a friday to book the whole weekend
+    elif last_booked_day.weekday() >= 4:
+        last_booked_day = last_booked_day + timedelta(days=2)
 
     if (
         not payload.regular_key_exchange_possible
@@ -327,15 +349,11 @@ def create_room_request(
         else None
     )
 
-    # Todo: time conflict should only affect accepted booking requests
-    time_conflict = (
-        db.query(RoomRequest)
-        .filter(
-            RoomRequest.community_room_id == payload.community_room_id,
-            RoomRequest.start_datetime <= last_booked_day_datetime,
-            RoomRequest.end_datetime >= first_booked_day_datetime,
-        )
-        .first()
+    time_conflict = _find_booking_conflict(
+        db,
+        payload.community_room_id,
+        first_booked_day_datetime,
+        last_booked_day_datetime,
     )
 
     if time_conflict is not None:
@@ -367,6 +385,28 @@ def edit_room_request(
 
     if not can_edit_room_request(db, current_user, room_request):
         raise RequestAccessDeniedError("Not authorized to edit this request")
+
+    if (
+        payload.status == RequestStatus.CLOSED
+        and room_request.status != RequestStatus.CLOSED
+    ):
+        # room row is locked so approvals for the same room
+        # are processed one after another.
+        db.query(CommunityRoom).filter(
+            CommunityRoom.id == room_request.community_room_id
+        ).with_for_update().one()
+
+        conflict = _find_booking_conflict(
+            db,
+            room_request.community_room_id,
+            room_request.start_datetime,
+            room_request.end_datetime,
+            exclude_request_id=room_request.id,
+        )
+        if conflict is not None:
+            raise RoomBookingTimeConflictError(
+                "Community room is already booked for this timeslot"
+            )
 
     room_request.status = payload.status
     room_request.decided_by_id = current_user.id

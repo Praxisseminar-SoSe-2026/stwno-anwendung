@@ -28,6 +28,7 @@ from app.models import (
     LaundryRoom,
     Permission,
     RepairRequest,
+    ResidentMasterData,
     Role,
     RolePermission,
     RoomRequest,
@@ -47,8 +48,9 @@ def seed() -> None:
         )
         role_resident = Role(name="bewohner", description="Wohnheim-Bewohner")
         role_tutor = Role(name="tutor", description="Tutor:in")
-        db.add_all([role_worker, role_admin, role_facility_manager, role_resident,
-                    role_tutor])
+        db.add_all(
+            [role_worker, role_admin, role_facility_manager, role_resident, role_tutor]
+        )
         db.flush()
 
         perm_manage_requests = Permission(
@@ -155,6 +157,45 @@ def seed() -> None:
         db.add_all([dorm, dorm2])
         db.flush()
 
+        db.add_all(
+            [
+                # already registered
+                ResidentMasterData(
+                    person_number="S1001",
+                    email="lena@mail.com",
+                    first_name="Lena",
+                    last_name="Beispiel",
+                    dormitory_id=dorm.id,
+                    flat_number="12A",
+                ),
+                ResidentMasterData(
+                    person_number="S1002",
+                    email="lukas@mail.com",
+                    first_name="Lukas",
+                    last_name="Beispiel",
+                    dormitory_id=dorm2.id,
+                    flat_number="12B",
+                ),
+                # not yet registered
+                ResidentMasterData(
+                    person_number="1340074",
+                    email="meyer@stwno.de",
+                    first_name="Theo",
+                    last_name="Tester",
+                    dormitory_id=dorm.id,
+                    flat_number="14C",
+                ),
+                ResidentMasterData(
+                    person_number="1340075",
+                    email="mia@mail.com",
+                    first_name="Mia",
+                    last_name="Muster",
+                    dormitory_id=dorm2.id,
+                    flat_number="3B",
+                ),
+            ]
+        )
+
         # User
         admin = User(
             first_name="Raffael",
@@ -188,7 +229,7 @@ def seed() -> None:
         worker = User(
             first_name="Zita",
             last_name="Hölzl",
-            email="zita.hölzl@mail.de",
+            email="zita.hoelzl@mail.de",
             password_hash=hash_password("password"),
             person_number="A0005",
         )
@@ -222,8 +263,9 @@ def seed() -> None:
             contract_end=date.today() + timedelta(days=180),
             dormitory_id=dorm2.id,
         )
-        db.add_all([admin, admin2, admin3, hausmeister, worker, tutor, resident,
-                    resident2])
+        db.add_all(
+            [admin, admin2, admin3, hausmeister, worker, tutor, resident, resident2]
+        )
         db.flush()
 
         db.add_all(
@@ -278,8 +320,9 @@ def seed() -> None:
             status=LaundryStatus.UNKNOWN,
         )
 
-        db.add_all([laundry_machine1, laundry_machine2, laundry_machine3,
-                    laundry_machine4])
+        db.add_all(
+            [laundry_machine1, laundry_machine2, laundry_machine3, laundry_machine4]
+        )
         db.flush()
 
         db.add_all(

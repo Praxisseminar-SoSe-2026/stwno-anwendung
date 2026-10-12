@@ -19,3 +19,4 @@ uliweb-alembic
 aiosmtplib~=3.0.2
 python-multipart
 httpx
+tzdata

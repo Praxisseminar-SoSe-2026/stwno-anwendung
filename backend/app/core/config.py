@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     jwt_secret_key: str
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 30
+    registration_token_expire_hours: int = 24
 
     smtp_host: str = "mailhog"
     smtp_port: int = 1025

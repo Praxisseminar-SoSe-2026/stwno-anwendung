@@ -141,6 +141,22 @@
     "contractEnd": "Contract end",
     "roles": "Roles"
   },
+  "residentImport": {
+    "title": "Resident data import",
+    "description": "Upload a CSV or JSON file with the resident data. New people are created, known person numbers are updated, nothing is deleted. If the file contains even one error, nothing is imported.",
+    "columns": "Required columns: Nr., Name, Vorname, E-Mail and VO Nummer (or Wohnheim).",
+    "selectFile": "Choose file",
+    "noFile": "No file selected",
+    "start": "Start import",
+    "importing": "Importing...",
+    "success": "Import successful: {{created}} created, {{updated}} updated, {{unchanged}} unchanged.",
+    "aborted": "Import aborted, nothing was imported. Invalid rows: {{errorCount}}",
+    "errors": "Errors",
+    "warnings": "Notes",
+    "row": "Row",
+    "message": "Message",
+    "failed": "The import failed"
+  },
   "infrastructure": {
     "createRoom": "Create room",
     "editRoom": "Edit room",
@@ -191,7 +207,11 @@
     "actionError": "Action failed.",
     "entryTimeSet": "set the entry time to {{time}}",
     "myTickets": "My tickets",
-    "empty": "No tickets yet"
+    "empty": "No tickets yet",
+    "communityRoom": "Community room"
+  },
+  "ticket": {
+    "communityRoom": "Community Room"
   },
   "login": {
     "title": "Log into STWNO-Anwendung",
@@ -210,9 +230,50 @@
   "registration": {
     "register": "Register new account?",
     "person_number": "Please enter person number",
+    "email": "Please enter email address",
     "next_button": "Next",
     "password": "Password",
-    "create_account": "Create Account"
+    "password_hint": "At least 6 characters",
+    "create_account": "Create Account",
+    "set_password_title": "Set password",
+    "check_mail": "We sent an email to {{email}}. Use the link in the email to set your password and complete the registration.",
+    "back_to_login": "Back to login",
+    "missing_token": "The registration link is incomplete or invalid. Please start the registration again.",
+    "start_again": "Start registration again",
+    "consent_label": "I have read the privacy notice and consent to the processing of my data for the use of the dormitory portal.",
+    "privacy_link": "Read privacy notice",
+    "privacy_title": "Privacy notice and consent",
+    "privacy_close": "Close",
+    "privacy_sections": [
+      {
+        "title": "Controller",
+        "text": "Studentenwerk Niederbayern/Oberpfalz, [address and contact of the data protection officer]."
+      },
+      {
+        "title": "Data we process",
+        "text": "Name, email address, person number, dormitory and flat number, and your content in the portal (repair requests with comments and photos, room bookings, laundry bookings)."
+      },
+      {
+        "title": "Purposes",
+        "text": "Providing the dormitory portal (login, repair requests, room bookings, laundry overview, bulletin board) and email notifications about your requests and new announcements."
+      },
+      {
+        "title": "Recipients",
+        "text": "Staff of the Studentenwerk and the caretaker of your dormitory, as far as needed to process requests. No disclosure to third parties."
+      },
+      {
+        "title": "Retention",
+        "text": "[Duration of the tenancy plus retention period]."
+      },
+      {
+        "title": "Your rights",
+        "text": "Access, rectification, erasure, restriction of processing, objection, data portability, and a complaint to the [competent supervisory authority]."
+      },
+      {
+        "title": "Withdrawal",
+        "text": "You can withdraw your consent at any time with effect for the future: [contact]."
+      }
+    ]
   },
   "notFound": {
     "title": "404 - This page unfortunately doesn't exist :("

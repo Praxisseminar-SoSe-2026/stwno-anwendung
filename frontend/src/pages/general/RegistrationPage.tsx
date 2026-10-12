@@ -1,32 +1,38 @@
 import { type SubmitEventHandler, useState } from 'react'
 import {
+  Alert,
   Box,
   Button,
+  Divider,
   FormControl,
   Paper,
+  Stack,
   TextField,
   Typography,
-  Stack,
-  Divider,
 } from '@mui/material'
-import { useRegistration } from '../../hooks/useRegistration.ts'
-import { useNavigate } from 'react-router'
+import { Link } from 'react-router'
 import { useTranslation } from 'react-i18next'
+import { useRegistration } from '../../hooks/useRegistration.ts'
 
 export function RegistrationPage() {
   const { submitRegistration, submitting, error } = useRegistration()
-  const navigate = useNavigate()
   const [personNumber, setPersonNumber] = useState('')
-  const { t } = useTranslation()
+  const [email, setEmail] = useState('')
+  const [sentTo, setSentTo] = useState<string | null>(null)
+  const { t, i18n } = useTranslation()
 
   const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault()
-    const result = await submitRegistration({ person_number: personNumber })
+    const result = await submitRegistration({
+      person_number: personNumber,
+      email,
+      language: i18n.language,
+    })
     if (result) {
-      console.log(`${result.email}`)
-      navigate('/set-password', { state: { email: result.email } })
+      setSentTo(email)
     }
   }
+
   return (
     <Stack
       style={{
@@ -49,34 +55,52 @@ export function RegistrationPage() {
       >
         <Typography variant="h4">{t('registration.create_account')}</Typography>
         <Divider />
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}
-        >
-          <FormControl>
-            <TextField
-              id="personNumber"
-              name="personNumber"
-              placeholder={t('registration.person_number')}
-              value={personNumber}
-              onChange={(e) => setPersonNumber(e.target.value)}
-              style={{
-                width: '100%',
-              }}
-              required
-            />
-          </FormControl>
-          <Button
-            type="submit"
-            variant="contained"
-            disabled={submitting}
-            sx={{ marginTop: '1rem' }}
+        {sentTo ? (
+          <>
+            <Alert severity="success">
+              {t('registration.check_mail', { email: sentTo })}
+            </Alert>
+            <Link to="/login">{t('registration.back_to_login')}</Link>
+          </>
+        ) : (
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'start',
+              gap: 2,
+            }}
           >
-            {submitting ? t('common.loading') : t('registration.next_button')}
-          </Button>
-          {error && <Typography color="error">{error}</Typography>}
-        </Box>
+            <FormControl fullWidth>
+              <TextField
+                id="personNumber"
+                name="personNumber"
+                placeholder={t('registration.person_number')}
+                value={personNumber}
+                onChange={(e) => setPersonNumber(e.target.value)}
+                required
+              />
+            </FormControl>
+            <FormControl fullWidth>
+              <TextField
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                placeholder={t('registration.email')}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </FormControl>
+            <Button type="submit" variant="contained" disabled={submitting}>
+              {submitting ? t('common.loading') : t('registration.next_button')}
+            </Button>
+            {error && <Typography color="error">{error}</Typography>}
+          </Box>
+        )}
       </Paper>
     </Stack>
   )

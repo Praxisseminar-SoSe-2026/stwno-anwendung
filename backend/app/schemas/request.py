@@ -20,6 +20,11 @@ class ResidentInfo(BaseModel):
     flat_number: str | None = None
 
 
+class CommunityRoomInfo(BaseModel):
+    id: int
+    name: str
+
+
 # only start time because end time is auto generated
 class AccessTimeSlotProposalCreate(BaseModel):
     start_time: datetime
@@ -88,7 +93,7 @@ class RequestResponse(BaseModel):
     access_time_slot_history: list[AccessTimeSlotHistoryResponse] = []
 
     # room-specific
-    community_room_id: int | None = None
+    community_room: CommunityRoomInfo | None = None
     start_datetime: datetime | None = None
     end_datetime: datetime | None = None
     regular_key_exchange_possible: bool | None = None
@@ -174,7 +179,10 @@ class RequestResponse(BaseModel):
             )
         elif isinstance(request, RoomRequest):
             data.update(
-                community_room_id=request.community_room_id,
+                community_room=CommunityRoomInfo(
+                    id=request.community_room.id,
+                    name=request.community_room.name,
+                ),
                 start_datetime=request.start_datetime,
                 end_datetime=request.end_datetime,
                 regular_key_exchange_possible=request.regular_key_exchange_possible,

@@ -37,11 +37,11 @@ export function TicketsPage() {
     return `${t('request.type.room')} – ${new Date(ticket.created_at).toLocaleDateString()}`
   }
 
-  function communityRoomName(id: number | null): string {
-    if (id === null) return ''
+  function communityRoomName(name: string | null): string {
+    if (name === null) return ''
     return (
-      communityRooms.find((r) => r.id === id)?.name ??
-      `${t('faq.community room')} #${id}`
+      communityRooms.find((r) => r.name === name)?.name ??
+      `${t('ticket.communityRoom')} #${name}`
     )
   }
 
@@ -49,7 +49,7 @@ export function TicketsPage() {
     if (ticket.type === 'repair') {
       return `${ticket.location}: ${ticket.description}`
     }
-    return `${communityRoomName(ticket.community_room_id)}: ${t('request.start')} ${new Date(ticket.start_datetime).toLocaleDateString()} - ${t('request.end')} ${new Date(ticket.end_datetime).toLocaleDateString()}`
+    return `${communityRoomName(ticket.community_room?.name)}: ${t('request.start')} ${new Date(ticket.start_datetime).toLocaleDateString()} - ${t('request.end')} ${new Date(ticket.end_datetime).toLocaleDateString()}`
   }
 
   if (loading) return <Loading />

@@ -16,6 +16,7 @@ import { RoomBookingCreatePage } from './pages/resident/RoomBookingCreatePage'
 
 // admin pages
 import { AdminIndexPage } from './pages/admin/AdminIndexPage'
+import { AdminResidentImportPage } from './pages/admin/AdminResidentImportPage.tsx'
 import { AdminTicketOverviewPage } from './pages/admin/AdminTicketOverviewPage'
 import { AdminCreateAnnouncementPage } from './pages/admin/AdminCreateAnnouncementPage.tsx'
 
@@ -108,6 +109,7 @@ function App() {
             path="/admin/users/:id"
             element={<AdminUserListDetailPage />}
           />
+          <Route path="/admin/import" element={<AdminResidentImportPage />} />
           {/* general routes */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="*" element={<NotFoundPage />} />

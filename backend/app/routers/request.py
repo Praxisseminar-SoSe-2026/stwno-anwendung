@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.core.dependencies import get_current_user
@@ -14,6 +14,12 @@ from app.schemas.request import (
     RequestStatusUpdate,
     RoomBookings,
     RoomRequestCreate,
+)
+from app.services.email_service import send_emails
+from app.services.notification_service import (
+    request_comment_added_emails,
+    request_entry_time_set_emails,
+    request_status_changed_emails,
 )
 from app.services.request_service import (
     DateInPastError,
@@ -63,6 +69,7 @@ def create_repair(
 def update_repair_request_status(
     request_id: int,
     payload: RequestStatusUpdate,
+    background_tasks: BackgroundTasks,
     db: Annotated[Session, Depends(get_db)],
     current_user: Annotated[User, Depends(get_current_user)],
 ):
@@ -73,6 +80,10 @@ def update_repair_request_status(
     except RequestAccessDeniedError as exc:
         raise HTTPException(status_code=403, detail=str(exc)) from exc
 
+    background_tasks.add_task(
+        send_emails, request_status_changed_emails(repair_request, current_user)
+    )
+
     return RequestResponse.from_request(
         repair_request, can_edit=can_edit_request(db, current_user, repair_request)
     )
@@ -82,6 +93,7 @@ def update_repair_request_status(
 def select_repair_entry_time(
     request_id: int,
     payload: AccessTimeSlotSelect,
+    background_tasks: BackgroundTasks,
     db: Annotated[Session, Depends(get_db)],
     current_user: Annotated[User, Depends(get_current_user)],
 ):
@@ -94,6 +106,10 @@ def select_repair_entry_time(
     except TimeSlotProposalNotFoundError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
+    background_tasks.add_task(
+        send_emails, request_entry_time_set_emails(repair_request, current_user)
+    )
+
     return RequestResponse.from_request(
         repair_request, can_edit=can_edit_request(db, current_user, repair_request)
     )
@@ -103,6 +119,7 @@ def select_repair_entry_time(
 def add_request_comment(
     request_id: int,
     payload: CommentCreate,
+    background_tasks: BackgroundTasks,
     db: Annotated[Session, Depends(get_db)],
     current_user: Annotated[User, Depends(get_current_user)],
 ):
@@ -112,6 +129,11 @@ def add_request_comment(
         raise HTTPException(status_code=404, detail=str(exc)) from exc
     except RequestAccessDeniedError as exc:
         raise HTTPException(status_code=403, detail=str(exc)) from exc
+
+    background_tasks.add_task(
+        send_emails,
+        request_comment_added_emails(request, current_user, payload.text),
+    )
 
     return RequestResponse.from_request(
         request, can_edit=can_edit_request(db, current_user, request)
@@ -198,6 +220,7 @@ def get_one(
 def edit_room_booking_request(
     request_id: int,
     payload: RequestStatusUpdate,
+    background_tasks: BackgroundTasks,
     db: Annotated[Session, Depends(get_db)],
     current_user: Annotated[User, Depends(get_current_user)],
 ):
@@ -207,6 +230,12 @@ def edit_room_booking_request(
         raise HTTPException(status_code=403, detail=str(exc)) from exc
     except RequestNotFoundError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except RoomBookingTimeConflictError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+
+    background_tasks.add_task(
+        send_emails, request_status_changed_emails(room_request, current_user)
+    )
 
     return RequestResponse.from_request(
         room_request, can_edit=can_edit_request(db, current_user, room_request)

@@ -48,7 +48,7 @@ docker compose exec backend alembic upgrade head
 ```
 
 4. Seed the data (more information in [Seed data](#Seed-data))
-```
+```bash
 docker compose exec backend python -m app.db.seed
 ```
 
@@ -78,4 +78,5 @@ npm run dev
 
 Done, the frontend is available at http://localhost:5173/
 
-## Licence
+## License
+See [LICENSE](LICENSE)

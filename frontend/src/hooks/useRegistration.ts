@@ -1,7 +1,7 @@
 import {
   register,
   type RegistrationData,
-  type RegistrationResponse,
+  type RegistrationStartedResponse,
 } from '../api/registration.ts'
 import { useState } from 'react'
 
@@ -10,7 +10,7 @@ export function useRegistration() {
   const [error, setError] = useState<string | null>(null)
   const submitRegistration = async (
     data: RegistrationData
-  ): Promise<RegistrationResponse | null> => {
+  ): Promise<RegistrationStartedResponse | null> => {
     setSubmitting(true)
     setError(null)
     try {

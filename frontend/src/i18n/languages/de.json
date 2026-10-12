@@ -141,6 +141,22 @@
     "contractEnd": "Vertragsende",
     "roles": "Rollen"
   },
+  "residentImport": {
+    "title": "Stammdaten-Import",
+    "description": "Lade eine CSV- oder JSON-Datei mit den Bewohnerdaten hoch. Neue Personen werden angelegt, bekannte Personennummern aktualisiert, gelöscht wird nichts. Enthält die Datei auch nur einen Fehler, wird nichts übernommen.",
+    "columns": "Benötigte Spalten: Nr., Name, Vorname, E-Mail und VO Nummer (alternativ Wohnheim).",
+    "selectFile": "Datei auswählen",
+    "noFile": "Keine Datei ausgewählt",
+    "start": "Import starten",
+    "importing": "Import läuft...",
+    "success": "Import erfolgreich: {{created}} neu angelegt, {{updated}} aktualisiert, {{unchanged}} unverändert.",
+    "aborted": "Import abgebrochen, es wurde nichts übernommen. Fehlerhafte Zeilen: {{errorCount}}",
+    "errors": "Fehler",
+    "warnings": "Hinweise",
+    "row": "Zeile",
+    "message": "Meldung",
+    "failed": "Der Import ist fehlgeschlagen"
+  },
   "infrastructure": {
     "createRoom": "Raum erstellen",
     "editRoom": "Raum bearbeiten",
@@ -191,7 +207,11 @@
     "actionError": "Aktion fehlgeschlagen.",
     "entryTimeSet": "hat den Zutrittstermin auf {{time}} festgelegt",
     "myTickets": "Meine Anfragen",
-    "empty": "Keine Anfragen bisher"
+    "empty": "Keine Anfragen bisher",
+    "communityRoom": "Gemeinschaftsraum"
+  },
+  "ticket": {
+    "communityRoom": "Community Room"
   },
   "login": {
     "title": "Bei STWNO-Anwendung anmelden",
@@ -210,9 +230,50 @@
   "registration": {
     "register": "Neuen Account registrieren?",
     "person_number": "Bitte Personen-Nummer eingeben",
+    "email": "Bitte E-Mail-Adresse eingeben",
     "next_button": "Weiter",
     "password": "Passwort",
-    "create_account": "Account erstellen"
+    "password_hint": "Mindestens 6 Zeichen",
+    "create_account": "Account erstellen",
+    "set_password_title": "Passwort festlegen",
+    "check_mail": "Wir haben dir eine E-Mail an {{email}} geschickt. Über den Link in der Mail legst du dein Passwort fest und schließt die Registrierung ab.",
+    "back_to_login": "Zurück zur Anmeldung",
+    "missing_token": "Der Registrierungslink ist unvollständig oder ungültig. Bitte starte die Registrierung neu.",
+    "start_again": "Registrierung neu starten",
+    "consent_label": "Ich habe die Datenschutzhinweise gelesen und willige in die Verarbeitung meiner Daten zur Nutzung des Wohnheimportals ein.",
+    "privacy_link": "Datenschutzhinweise lesen",
+    "privacy_title": "Datenschutzhinweise und Einwilligung",
+    "privacy_close": "Schließen",
+    "privacy_sections": [
+      {
+        "title": "Verantwortlich",
+        "text": "Studentenwerk Niederbayern/Oberpfalz, [Anschrift und Kontakt der bzw. des Datenschutzbeauftragten]."
+      },
+      {
+        "title": "Verarbeitete Daten",
+        "text": "Name, E-Mail-Adresse, Personennummer, Wohnheim und Wohnungsnummer sowie deine Inhalte im Portal (Reparaturanfragen mit Kommentaren und Fotos, Raumbuchungen, Waschmaschinenbuchungen)."
+      },
+      {
+        "title": "Zwecke",
+        "text": "Bereitstellung des Wohnheimportals (Anmeldung, Reparaturanfragen, Raumbuchungen, Waschmaschinenübersicht, Schwarzes Brett) sowie E-Mail-Benachrichtigungen zu deinen Anfragen und neuen Aushängen."
+      },
+      {
+        "title": "Empfänger",
+        "text": "Mitarbeitende des Studentenwerks und der Hausmeister deines Wohnheims, soweit zur Bearbeitung nötig. Keine Weitergabe an Dritte."
+      },
+      {
+        "title": "Speicherdauer",
+        "text": "[Dauer des Mietverhältnisses plus Aufbewahrungsfrist]."
+      },
+      {
+        "title": "Deine Rechte",
+        "text": "Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Widerspruch, Datenübertragbarkeit sowie Beschwerde bei der [zuständigen Aufsichtsbehörde]."
+      },
+      {
+        "title": "Widerruf",
+        "text": "Du kannst deine Einwilligung jederzeit mit Wirkung für die Zukunft widerrufen: [Kontakt]."
+      }
+    ]
   },
   "notFound": {
     "title": "404 - Diese Seite gibts leider nicht :("

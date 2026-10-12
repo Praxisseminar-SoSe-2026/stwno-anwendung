@@ -40,11 +40,11 @@ npm run format
 ## Routes
 
 ### General
-| Path | Page |
-|---|---|
-| `/login` | Login |
-| `/registration` | Registration (person number verification) |
-| `/set-password` | Set password (second registration step) |
+| Path | Page                                                      |
+|---|-----------------------------------------------------------|
+| `/login` | Login                                                     |
+| `/registration` | Registration (person number and email verification)       |
+| `/set-password` | Set password and accept the privacy notice (link from the confirmation email) |
 
 ### Resident
 | Path | Page |
