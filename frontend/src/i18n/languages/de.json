@@ -95,10 +95,10 @@
     "no": "nein",
     "location": "Ort",
     "entryPermission": "Betreterlaubnis",
-    "chooseSlots": "Bitte mindestens 3 Termine wählen",
+    "chooseSlots": "Bitte 3 Terminvorschläge auswählen",
     "slot": "Termin {{number}}",
-    "noSlotWorks": "Keiner der Termine passt",
-    "proposedDate": "Terminvorschlag",
+    "noSlotWorks": "Terminvorschlag nicht möglich",
+    "proposedDate": "Alternativ Vorschlag",
     "submit": "Reparaturanfrage abschicken",
     "submitting": "wird gesendet...",
     "success": "Reparaturanfrage erfolgreich abgeschickt.",
@@ -180,7 +180,7 @@
     "end": "Ende",
     "location": "Ort",
     "type": {
-      "repair": "Reperaturanfrage",
+      "repair": "Reparaturanfrage",
       "room": "Gemeinschaftsraum"
     },
     "status": {

@@ -65,7 +65,7 @@ export function RepairRequestPage() {
   const [description, setDescription] = useState('')
   const [ownFlat, setOwnFlat] = useState<'yes' | 'no'>('yes')
   const [locationText, setLocationText] = useState('')
-  const [entryPermission, setEntryPermission] = useState<'yes' | 'no'>('yes')
+  const [entryPermission, setEntryPermission] = useState<'yes' | 'no'>('no')
   const [noSlotWorks, setNoSlotWorks] = useState(false)
   const [slots, setSlots] = useState<[string, string, string]>(['', '', ''])
   const [proposedDateNote, setProposedDateNote] = useState('')
