@@ -210,6 +210,9 @@
     "empty": "Keine Anfragen bisher",
     "communityRoom": "Gemeinschaftsraum"
   },
+  "ticket": {
+    "communityRoom": "Community Room"
+  },
   "login": {
     "title": "Bei STWNO-Anwendung anmelden",
     "titleShort": "Anmelden",

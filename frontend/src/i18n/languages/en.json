@@ -210,6 +210,9 @@
     "empty": "No tickets yet",
     "communityRoom": "Community room"
   },
+  "ticket": {
+    "communityRoom": "Community Room"
+  },
   "login": {
     "title": "Log into STWNO-Anwendung",
     "titleShort": "Login",
