@@ -89,6 +89,9 @@ export function Header() {
       ? [{ to: '/admin/tickets', label: t('adminTicketOverview.titleShort') }]
       : []),
     ...(isAdmin ? [{ to: '/admin/users', label: t('userList.title') }] : []),
+    ...(isAdmin
+      ? [{ to: '/admin/import', label: t('residentImport.title') }]
+      : []),
   ]
 
   const dormitorySelect = canViewTickets && (

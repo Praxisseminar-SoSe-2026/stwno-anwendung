@@ -30,6 +30,7 @@ async def send_email(message: EmailMessage) -> None:
     except Exception:
         logger.exception("Failed to send email to %s", message.receiver)
 
+
 async def send_emails(messages: list[EmailMessage]) -> None:
     """Send multiple emails via SMTP."""
     for message in messages:

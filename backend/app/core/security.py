@@ -8,6 +8,7 @@ from app.core.time import now_utc
 
 REGISTRATION_TOKEN_PURPOSE = "registration"
 
+
 # Build with Step 6 in:
 # https://www.geeksforgeeks.org/python/login-registration-system-with-jwt-in-fastapi/
 def hash_password(password: str) -> str:

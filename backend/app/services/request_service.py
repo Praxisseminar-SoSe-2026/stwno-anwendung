@@ -254,11 +254,11 @@ def create_repair_request(
 
 
 def _find_booking_conflict(
-        db: Session,
-        community_room_id: int,
-        start_datetime: datetime,
-        end_datetime: datetime,
-        exclude_request_id: int | None = None,
+    db: Session,
+    community_room_id: int,
+    start_datetime: datetime,
+    end_datetime: datetime,
+    exclude_request_id: int | None = None,
 ) -> RoomRequest | None:
     query = db.query(RoomRequest).filter(
         RoomRequest.community_room_id == community_room_id,

@@ -48,8 +48,9 @@ def seed() -> None:
         )
         role_resident = Role(name="bewohner", description="Wohnheim-Bewohner")
         role_tutor = Role(name="tutor", description="Tutor:in")
-        db.add_all([role_worker, role_admin, role_facility_manager, role_resident,
-                    role_tutor])
+        db.add_all(
+            [role_worker, role_admin, role_facility_manager, role_resident, role_tutor]
+        )
         db.flush()
 
         perm_manage_requests = Permission(
@@ -262,8 +263,9 @@ def seed() -> None:
             contract_end=date.today() + timedelta(days=180),
             dormitory_id=dorm2.id,
         )
-        db.add_all([admin, admin2, admin3, hausmeister, worker, tutor, resident,
-                    resident2])
+        db.add_all(
+            [admin, admin2, admin3, hausmeister, worker, tutor, resident, resident2]
+        )
         db.flush()
 
         db.add_all(
@@ -318,10 +320,9 @@ def seed() -> None:
             status=LaundryStatus.UNKNOWN,
         )
 
-        db.add_all([laundry_machine1,
-                    laundry_machine2,
-                    laundry_machine3,
-                    laundry_machine4])
+        db.add_all(
+            [laundry_machine1, laundry_machine2, laundry_machine3, laundry_machine4]
+        )
         db.flush()
 
         db.add_all(

@@ -20,8 +20,9 @@ class LaundryBooking(Base):
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     resident_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     laundry_machine_id: Mapped[int] = mapped_column(ForeignKey("laundry_machines.id"))
-    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True),
-                                                 default=now_utc)
+    started_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=now_utc
+    )
     ends_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     cancelled_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 

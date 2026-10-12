@@ -141,6 +141,22 @@
     "contractEnd": "Vertragsende",
     "roles": "Rollen"
   },
+  "residentImport": {
+    "title": "Stammdaten-Import",
+    "description": "Lade eine CSV- oder JSON-Datei mit den Bewohnerdaten hoch. Neue Personen werden angelegt, bekannte Personennummern aktualisiert, gelöscht wird nichts. Enthält die Datei auch nur einen Fehler, wird nichts übernommen.",
+    "columns": "Benötigte Spalten: Nr., Name, Vorname, E-Mail und VO Nummer (alternativ Wohnheim).",
+    "selectFile": "Datei auswählen",
+    "noFile": "Keine Datei ausgewählt",
+    "start": "Import starten",
+    "importing": "Import läuft...",
+    "success": "Import erfolgreich: {{created}} neu angelegt, {{updated}} aktualisiert, {{unchanged}} unverändert.",
+    "aborted": "Import abgebrochen, es wurde nichts übernommen. Fehlerhafte Zeilen: {{errorCount}}",
+    "errors": "Fehler",
+    "warnings": "Hinweise",
+    "row": "Zeile",
+    "message": "Meldung",
+    "failed": "Der Import ist fehlgeschlagen"
+  },
   "infrastructure": {
     "createRoom": "Raum erstellen",
     "editRoom": "Raum bearbeiten",
