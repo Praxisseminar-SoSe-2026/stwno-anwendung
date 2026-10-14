@@ -54,7 +54,7 @@ docker compose exec backend python -m app.db.seed
 
 Done, the app runs at http://127.0.0.1:8000.
 
-### Frontend (for more information see the backend [README.md](frontend/README.md))
+### Frontend (for more information see the frontend [README.md](frontend/README.md))
 In the `frontend` directory:
 1. Install Dependencies
 
