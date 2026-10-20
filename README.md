@@ -8,7 +8,7 @@ residents of dormitories by providing features like tracking washing machine
 usage, submitting repair requests, managing infrastructure, and more. All in
 one place, with an account system.
 
-*TODO Bilder*
+https://github.com/user-attachments/assets/b749cd4c-3294-46a7-8098-eb2b3e9a99ae
 
 ## Project Structure
 ```
